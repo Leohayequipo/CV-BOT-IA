@@ -15,6 +15,7 @@ def profile_data() -> dict[str, Any]:
     return {
         "basics": {
             "name": "Ada Example",
+            "photo": {"path": "assets/profile-photo.jpg", "alt": _both("Portrait of Ada")},
             "headline": _both("AI Engineer"),
             "focus": _both("RAG"),
             "location": _both("Argentina"),

@@ -5,6 +5,8 @@ from pathlib import Path
 from app.content.loader import load_case_study, load_content
 from app.content.privacy import find_contact_details
 
+TEXT_SUFFIXES = {".md", ".yaml", ".yml", ".json", ".txt"}
+
 
 def test_content_matches_the_schema(content_dir: Path) -> None:
     content = load_content(content_dir)
@@ -23,7 +25,7 @@ def test_published_files_have_no_contact_details(repo_root: Path) -> None:
         f"{path.relative_to(repo_root)}: {detail}"
         for folder in ("content", "evals")
         for path in sorted((repo_root / folder).rglob("*"))
-        if path.is_file()
+        if path.suffix in TEXT_SUFFIXES
         for detail in find_contact_details(path.read_text(encoding="utf-8"))
     ]
 

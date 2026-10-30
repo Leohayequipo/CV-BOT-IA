@@ -7,6 +7,11 @@
 
 basics:
   name: Leonardo Mannanice
+  photo:
+    path: assets/profile-photo.jpg
+    alt:
+      en: Portrait of Leonardo Mannanice
+      es: Retrato de Leonardo Mannanice
   headline:
     en: AI Engineer · Full Stack Developer
     es: AI Engineer · Desarrollador Full Stack

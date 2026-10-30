@@ -19,6 +19,8 @@ PartialDate = Annotated[str, StringConstraints(pattern=rf"^{_PARTIAL_DATE}$")]
 Year = Annotated[str, StringConstraints(pattern=r"^\d{4}$")]
 # A partial date, or a range of two joined by "/".
 Period = Annotated[str, StringConstraints(pattern=rf"^{_PARTIAL_DATE}(?:/{_PARTIAL_DATE})?$")]
+# An image in content/assets/; the pattern also keeps paths from leaving that folder.
+AssetPath = Annotated[str, StringConstraints(pattern=r"^assets/[a-z0-9-]+\.(?:jpg|png|webp|avif)$")]
 WorkMode = Literal["remote", "hybrid", "onsite"]
 
 REQUIRED_SECTIONS = (
@@ -49,8 +51,14 @@ class Links(ContentModel):
     github: HttpUrl
 
 
+class Photo(ContentModel):
+    path: AssetPath
+    alt: Localized
+
+
 class Basics(ContentModel):
     name: Text
+    photo: Photo
     headline: Localized
     focus: Localized
     location: Localized

@@ -16,6 +16,9 @@ _CODE_FENCE = "```"
 def load_content(content_dir: Path) -> Content:
     """Load the profile and every case study, and check the references between them."""
     profile = load_profile(content_dir / "profile.yaml")
+    photo = content_dir / profile.basics.photo.path
+    if not photo.is_file():
+        raise InvalidContentError(photo, "the profile photo doesn't exist")
     case_studies = tuple(
         load_case_study(path)
         for path in sorted((content_dir / "case-studies").glob("*.md"))
