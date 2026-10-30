@@ -91,7 +91,7 @@ skills:
     label: { en: "Backend", es: "Backend" }
     items:
       - Python (FastAPI)
-      - PHP (Laravel, Livewire, Inertia, FilamentPHP, Symfony, CodeIgniter)
+      - PHP (Laravel, Livewire, FilamentPHP, Symfony, CodeIgniter)
       - Node.js
       - { en: "REST APIs", es: "APIs REST" }
       - OAuth / JWT
@@ -125,7 +125,6 @@ skills:
       - CI/CD
       - Nginx
       - { en: "automated testing", es: "testing automatizado" }
-      - Sentry
       - Bash
       - { en: "web security (OWASP)", es: "seguridad web (OWASP)" }
   - id: automation
@@ -160,8 +159,10 @@ experience:
         highlights:
           - en: "Build AI-powered products and web applications as the company evolved from e-commerce development into an AI studio."
             es: "Desarrolla productos y aplicaciones web con IA, acompañando la evolución de la empresa del desarrollo de e-commerce a estudio de inteligencia artificial."
-          - en: "Develop web applications, management systems and e-commerce platforms, plus REST APIs and integrations with payment and logistics providers."
-            es: "Aplicaciones web, sistemas de gestión y e-commerce, además de APIs REST e integraciones con proveedores de pago y logística."
+          - en: "Develop web applications, management systems and e-commerce platforms, plus REST APIs and integrations with Tiendanube (e-commerce), MercadoPago (payments) and Andreani (shipping)."
+            es: "Aplicaciones web, sistemas de gestión y e-commerce, además de APIs REST e integraciones con Tiendanube (e-commerce), MercadoPago (pagos) y Andreani (envíos)."
+          - en: "Build n8n automation pipelines that act on Gmail, Google Sheets and Google Drive."
+            es: "Pipelines de automatización en n8n que ejecutan acciones en Gmail, Google Sheets y Google Drive."
           - en: "Cover the full cycle from system design to development and testing, proposing new features and solutions to product and client needs."
             es: "Ciclo completo, del diseño del sistema al desarrollo y las pruebas, proponiendo nuevas funcionalidades y soluciones."
 
@@ -176,8 +177,8 @@ experience:
         highlights:
           - en: "Research and development of AI-based solutions within the university's R&D team."
             es: "Investigación y desarrollo de soluciones basadas en inteligencia artificial en el equipo de I+D."
-          - en: "Built a RAG document assistant and an AI agent with tool use (Python, FastAPI, LangGraph, OpenAI, PostgreSQL), WhatsApp and Telegram chatbots, and n8n pipelines where LLMs extract, classify and route data from documents."
-            es: "Desarrolló un asistente de documentos con RAG y un agente de IA con herramientas (Python, FastAPI, LangGraph, OpenAI, PostgreSQL), chatbots de WhatsApp y Telegram, y pipelines en n8n donde los LLMs extraen, clasifican y derivan datos de documentos."
+          - en: "Built a RAG document assistant and an AI agent with tool use (Python, FastAPI, LangGraph, OpenAI, PostgreSQL), WhatsApp and Telegram chatbots, and n8n pipelines where LLMs extract, classify and route data from documents, with actions in Gmail, Google Sheets and Google Drive."
+            es: "Desarrolló un asistente de documentos con RAG y un agente de IA con herramientas (Python, FastAPI, LangGraph, OpenAI, PostgreSQL), chatbots de WhatsApp y Telegram, y pipelines en n8n donde los LLMs extraen, clasifican y derivan datos de documentos, con acciones en Gmail, Google Sheets y Google Drive."
 
   - id: servime
     company: ServiME
