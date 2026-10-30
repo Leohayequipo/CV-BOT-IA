@@ -19,6 +19,7 @@ backend/
 │   ├── schemas/           # Pydantic request/response and SSE event models
 │   ├── agents/            # LangGraph graph, nodes, state, tools
 │   ├── rag/               # ingestion, chunking, retrieval
+│   ├── content/           # schema and loader for content/ (profile, case studies)
 │   ├── prompts/           # prompt templates as .md files (see ai.md)
 │   ├── services/          # external clients: LLM, embeddings, email, DB
 │   └── core/              # errors, logging, rate limiting, security
@@ -37,7 +38,7 @@ Dependencies point inward: `api → agents/rag → services`. Routers never call
 
 ## Errors
 
-- Define domain errors in `app/core/errors.py` (`RateLimited`, `UpstreamUnavailable`, `InvalidContent`…) and map them to HTTP responses in one exception handler.
+- Define domain errors in `app/core/errors.py` (`RateLimitedError`, `UpstreamUnavailableError`, `InvalidContentError`…; ruff's N818 asks for the `Error` suffix) and map them to HTTP responses in one exception handler.
 - Response errors follow one shape: `{"error": {"code": "rate_limited", "message": "..."}}`. Never leak stack traces, SDK messages or prompts.
 - During streaming, a failure becomes an `error` SSE event followed by closing the stream, so the UI can show a retry button.
 - Retry upstream LLM calls only on transient errors (429, 5xx, timeouts), with backoff and a cap. Always set timeouts.

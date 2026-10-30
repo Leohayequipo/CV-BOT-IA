@@ -58,7 +58,7 @@ Goal: one reviewed source of truth that both the page and the assistant read. Th
   - [ ] LLM pipelines with n8n
   - [ ] Leading an 8-developer team at Universidad Atlántida
 - [x] 1.5 `evals/questions.yaml`: 30+ real recruiter questions with the facts a good answer must contain. These become the eval dataset in Phase 5
-- [ ] 1.6 Content schema + validation test (fails CI if `profile.yaml` breaks the schema or a case study misses a required section)
+- [x] 1.6 Content schema + validation test (fails CI if `profile.yaml` breaks the schema or a case study misses a required section)
 - [ ] 1.7 Assets: a professional profile photo and a cover image in high resolution, and the CV PDFs (EN/ES) for download without the phone number
 
 **Done when:** Leonardo has reviewed every fact and the validation test passes.
@@ -87,7 +87,7 @@ Goal: decide how the product looks and feels before writing interface code. Recr
 Goal: an empty "hello world" travels from a push on `main` to production automatically.
 
 - [ ] 3.1 Monorepo layout: `frontend/`, `backend/`, `content/`, `evals/`, `docs/`
-- [ ] 3.2 Backend: FastAPI with `/health`, `uv`, ruff, mypy (strict), pytest, typed settings
+- [ ] 3.2 Backend: FastAPI with `/health` and typed settings, on the Python project from 1.6 (`uv`, ruff, mypy strict, pytest)
 - [ ] 3.3 Frontend: Vite + React + TypeScript (strict), Tailwind, ESLint, Prettier, Vitest + Testing Library
 - [ ] 3.4 pre-commit hooks (format, lint, secret scanning)
 - [ ] 3.5 GitHub Actions CI: lint, type-check, test and build for both apps on every PR
