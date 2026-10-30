@@ -36,7 +36,7 @@ Goal: the idea, the decisions and the quality bar are written down before any co
 
 - [x] 0.1 Roadmap (this file)
 - [x] 0.2 Quality standards skill + `CLAUDE.md`
-- [ ] 0.3 `docs/DECISIONS.md`: one short entry per decision taken so far (chat-first, two services instead of microservices, two-tier context + RAG, multi-agent with LangGraph, hosting split, third-person assistant, live avatar out of scope, privacy rules)
+- [x] 0.3 `docs/DECISIONS.md`: one short entry per decision taken so far (chat-first, two services instead of microservices, two-tier context + RAG, multi-agent with LangGraph, hosting split, third-person assistant, live avatar out of scope, privacy rules)
 - [ ] 0.4 Buy the personal domain
 - [ ] 0.5 Create accounts and API keys: Anthropic, Railway, Supabase, Langfuse, embeddings provider, email provider. Keys go to a password manager and to platform secrets, never to the repo
 - [ ] 0.6 GitHub repo settings: public, branch protection on `main` (PR + green CI required)
