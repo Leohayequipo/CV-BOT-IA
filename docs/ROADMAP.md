@@ -90,7 +90,7 @@ Goal: an empty "hello world" travels from a push on `main` to production automat
 - [ ] 3.2 Backend: FastAPI with `/health` and typed settings, on the Python project from 1.6 (`uv`, ruff, mypy strict, pytest)
 - [ ] 3.3 Frontend: Vite + React + TypeScript (strict), Tailwind, ESLint, Prettier, Vitest + Testing Library
 - [ ] 3.4 pre-commit hooks (format, lint, secret scanning)
-- [ ] 3.5 GitHub Actions CI: lint, type-check, test and build for both apps on every PR
+- [ ] 3.5 GitHub Actions CI: add the frontend job (lint, type-check, test, build) next to the backend job from 1.6
 - [ ] 3.6 Deploy: frontend to Hostinger by FTP, backend to Railway, both on merge to `main`
 - [ ] 3.7 DNS: domain → Hostinger, `api.` subdomain → Railway, HTTPS on both
 - [ ] 3.8 PR template + issue templates

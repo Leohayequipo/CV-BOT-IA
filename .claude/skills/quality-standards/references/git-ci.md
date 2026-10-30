@@ -33,15 +33,14 @@ Merge with a merge commit (GitHub's default button) and merge stacked PRs in ord
 
 ## CI (GitHub Actions)
 
-`ci.yml` runs on every PR and push to `main`, with path filters so each job runs only when its app changed:
+`ci.yml` runs on every PR and push to `main`:
 
-1. `backend`: uv sync → ruff format check → ruff → mypy → pytest with coverage
-2. `frontend`: npm ci → prettier check → eslint → tsc → vitest → build
-3. `content`: schema validation tests
-4. `security`: secret scanning (gitleaks) and dependency audit
-5. `evals` (only when `backend/app/prompts`, `backend/app/agents`, `backend/app/rag` or `content/` change): run the eval suite and compare it with the thresholds
+1. `backend` (since step 1.6): uv sync → ruff format check → ruff → mypy → pytest. The content tests run here, so a broken fact in `content/` fails CI.
+2. `frontend` (step 3.5): npm ci → prettier check → eslint → tsc → vitest → build
+3. `security` (step 7.4): secret scanning (gitleaks) and dependency audit
+4. `evals` (step 7.1, only when `backend/app/prompts`, `backend/app/agents`, `backend/app/rag` or `content/` change): run the eval suite and compare it with the thresholds
 
-Cache dependencies. Keep the whole pipeline under ~5 minutes.
+Don't put path filters on the whole workflow: once branch protection requires a check, a workflow that never runs leaves the PR waiting forever. To skip a job, use a job-level condition, which reports the job as skipped. Cache dependencies. Keep the whole pipeline under ~5 minutes.
 
 ## Deploy
 
