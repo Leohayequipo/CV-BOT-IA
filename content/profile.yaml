@@ -183,6 +183,7 @@ experience:
   - id: servime
     company: ServiME
     description: { en: "AI digital menu and chat SaaS for restaurants", es: "SaaS de menú digital y chat con IA para gastronomía" }
+    url: https://servime.net
     roles:
       - title: { en: "Lead Developer", es: "Desarrollador principal" }
         start: "2026-08"
