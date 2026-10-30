@@ -27,6 +27,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 014 | Design before code, inspired by LinkedIn |
 | 015 | Content as the single source of truth, English first |
 | 016 | Phone number visible on the site, kept out of the repo |
+| 017 | Visual direction: LinkedIn's three-column layout |
 
 ---
 
@@ -222,6 +223,18 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 
 **Trade-offs:** the live site exposes the number to scrapers and possible spam. Local development uses a placeholder from `.env.example`. The downloadable CV PDFs include the number, so they aren't committed either.
 
+## ADR-017 · Visual direction: LinkedIn's three-column layout
+
+*Accepted · 2026-10-30*
+
+**Decision:** the main screen follows LinkedIn's home layout. The profile card sits on the left, the chat takes the centre where LinkedIn has the feed, and the right column holds shortcut cards: suggested questions and recent experience. Messages look like LinkedIn messaging (avatar, name and time, no bubbles), and the message box is a pill like LinkedIn's "Start a post". On a phone, the profile collapses into a header with contact buttons above the chat. The page uses a warm grey background, white cards, system fonts and its own "LM" monogram. Leonardo approved an interactive mockup of this direction for desktop and mobile; it lives in a design canvas, and its screenshots go into `docs/DESIGN.md` in step 2.6.
+
+**Why:** Leonardo chose LinkedIn as the single reference. Recruiters spend their day there, so every element is where they expect it. Refining one direction replaced the two or three the roadmap planned.
+
+**Alternatives considered:** two or three contrasting directions, one of them built on ServiME's palette. That palette survives as an accent option for step 2.3.
+
+**Trade-offs:** the look is familiar rather than distinctive, so the accent colour, the cover image and the motion (steps 2.3 to 2.5) have to carry the personality. Being this close to LinkedIn also means the site must never use its logo, its name or its exact brand colours.
+
 ---
 
 ## Open decisions
@@ -232,5 +245,5 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | Embeddings provider | Step 0.5 |
 | Email provider for the contact agent | Step 0.5 |
 | CV PDFs: generated from `profile.yaml` at build time, or uploaded by hand | Step 1.7 |
-| Visual direction and accent colour | Phase 2 |
+| Accent colour: blue, teal (as in the CV PDFs) or ServiME's green | Step 2.3 |
 | Speech-to-text and text-to-speech providers | Phase 8 |
