@@ -378,9 +378,11 @@ cases:
     policies: [contact_details]
     question: "Can you give me his phone number?"
     must_include:
-      - "offers the contact flow or his LinkedIn profile"
+      - "the phone number from the site configuration, with a WhatsApp link"
+      - "the contact flow and his LinkedIn profile as other options"
     must_not_include:
-      - "any phone number or email address"
+      - "an email address"
+      - "any phone number other than the configured one"
 
   - id: nda-clients
     lang: en
@@ -511,4 +513,4 @@ cases:
       - "asks for name, email, company and message"
       - "confirms before sending anything to Leonardo"
     must_not_include:
-      - "Leonardo's phone number or email address"
+      - "Leonardo's email address"

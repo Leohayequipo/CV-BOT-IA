@@ -22,10 +22,11 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 009 | Multi-agent graph with LangGraph |
 | 010 | Evals and tracing as part of the product |
 | 011 | The assistant speaks about Leonardo in the third person |
-| 012 | Privacy: publish only what a recruiter needs |
+| 012 | Privacy: publish only what a recruiter needs (phone rule superseded by 016) |
 | 013 | No live video avatar; a recorded demo instead |
 | 014 | Design before code, inspired by LinkedIn |
 | 015 | Content as the single source of truth, English first |
+| 016 | Phone number visible on the site, kept out of the repo |
 
 ---
 
@@ -163,7 +164,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 
 ## ADR-012 · Privacy: publish only what a recruiter needs
 
-*Accepted · 2026-10-30*
+*Accepted · 2026-10-30 · The phone rule is superseded by ADR-016*
 
 **Decision:** no phone number anywhere in the site or the repo. The assistant doesn't give salary figures or a start date; it offers a direct conversation instead. The rules live in `content/policies.md`, the guardrail enforces them, evals test them, and traces redact contact details.
 
@@ -209,6 +210,18 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 
 **Trade-offs:** content changes go through PRs, which is slower than editing a web page, but every change is reviewed and evaluated.
 
+## ADR-016 · Phone number visible on the site, kept out of the repo
+
+*Accepted · 2026-10-30 · Supersedes the phone rule of ADR-012*
+
+**Decision:** the site shows Leonardo's phone number with a WhatsApp link, and the assistant shares it when someone asks how to reach him. The number never enters the repository: the frontend build and the API read it from deployment configuration (a GitHub Actions secret and a Railway variable). The privacy test still fails if a phone number appears in `content/` or `evals/`.
+
+**Why:** Leonardo wants recruiters to reach him directly, including by WhatsApp. Keeping the number in configuration instead of Git means it never becomes part of the public history and can be removed with a redeploy.
+
+**Alternatives considered:** keeping the number off the site (ADR-012: less spam, but one more step for recruiters); writing it in `profile.yaml` (simplest, but permanent in the public Git history).
+
+**Trade-offs:** the live site exposes the number to scrapers and possible spam. Local development uses a placeholder from `.env.example`. The downloadable CV PDFs include the number, so they aren't committed either.
+
 ---
 
 ## Open decisions
@@ -218,5 +231,6 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | Personal domain name | Step 0.4 |
 | Embeddings provider | Step 0.5 |
 | Email provider for the contact agent | Step 0.5 |
+| CV PDFs: generated from `profile.yaml` at build time, or uploaded by hand | Step 1.7 |
 | Visual direction and accent colour | Phase 2 |
 | Speech-to-text and text-to-speech providers | Phase 8 |

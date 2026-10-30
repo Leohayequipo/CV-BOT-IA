@@ -61,7 +61,7 @@ Goal: one reviewed source of truth that both the page and the assistant read. Th
 - [x] 1.6 Content schema + validation test (fails CI if `profile.yaml` breaks the schema or a case study misses a required section)
 - [ ] 1.7 Assets:
   - [x] Professional profile photo (`content/assets/profile-photo.jpg`, without metadata)
-  - [ ] CV PDFs (EN/ES) for download, without the phone number
+  - [ ] CV PDFs (EN/ES) for download. They include the phone number, so they stay out of the repo (ADR-016)
 
 **Done when:** Leonardo has reviewed every fact and the validation test passes.
 
@@ -93,7 +93,7 @@ Goal: an empty "hello world" travels from a push on `main` to production automat
 - [ ] 3.3 Frontend: Vite + React + TypeScript (strict), Tailwind, ESLint, Prettier, Vitest + Testing Library
 - [ ] 3.4 pre-commit hooks (format, lint, secret scanning)
 - [ ] 3.5 GitHub Actions CI: add the frontend job (lint, type-check, test, build) next to the backend job from 1.6
-- [ ] 3.6 Deploy: frontend to Hostinger by FTP, backend to Railway, both on merge to `main`
+- [ ] 3.6 Deploy: frontend to Hostinger by FTP, backend to Railway, both on merge to `main`; the phone number reaches both from deployment secrets (ADR-016)
 - [ ] 3.7 DNS: domain → Hostinger, `api.` subdomain → Railway, HTTPS on both
 - [ ] 3.8 PR template + issue templates
 
