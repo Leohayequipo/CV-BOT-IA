@@ -29,7 +29,7 @@ Use `.github/pull_request_template.md`:
 - **Evals:** before/after scores if prompts, content or retrieval changed.
 - **Checklist:** the Definition of Done from `SKILL.md`.
 
-Squash-merge so `main` has one clean commit per step. The squash commit takes the PR title, so PR titles follow the commit format above.
+Merge with a merge commit (GitHub's default button) and merge stacked PRs in order. Steps are often prepared ahead as stacked branches, each starting from the previous one, and only a merge commit keeps the next branches valid; squash and rebase merges rewrite the commits they build on. PR titles follow the commit format above, since they appear in the history.
 
 ## CI (GitHub Actions)
 
