@@ -47,7 +47,7 @@ Goal: the idea, the decisions and the quality bar are written down before any co
 
 Goal: one reviewed source of truth that both the page and the assistant read. The assistant can never be better than this content.
 
-- [ ] 1.1 `content/profile.yaml`: unified CV in EN/ES (fixes the inconsistencies between the two PDFs, no phone number)
+- [x] 1.1 `content/profile.yaml`: unified CV in EN/ES (fixes the inconsistencies between the two PDFs, no phone number)
 - [ ] 1.2 `content/policies.md`: how the assistant handles sensitive topics (salary, start date, citizenship, concurrent roles, English level, NDA work, unknown answers)
 - [ ] 1.3 `content/case-studies/_TEMPLATE.md`
 - [ ] 1.4 Case studies, one per PR. Leonardo drafts in Spanish, then we edit them into English together:

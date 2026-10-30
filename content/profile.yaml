@@ -1,0 +1,285 @@
+# Leonardo's professional profile: the single source of truth for the profile card,
+# the cards in the chat and the assistant's core context (ADR-007, ADR-015).
+#
+# Public file: never add a phone number, email address, salary or start date (ADR-012).
+# Every text a visitor can read has an English (en) and a Spanish (es) version.
+# Dates are "YYYY-MM", or "YYYY" when the month isn't known; `end: null` means present.
+
+basics:
+  name: Leonardo Mannanice
+  headline:
+    en: AI Engineer · Full Stack Developer
+    es: AI Engineer · Desarrollador Full Stack
+  focus:
+    en: RAG, AI agents and voice AI · Python, Laravel, React
+    es: RAG, agentes y voz con IA · Python, Laravel, React
+  location:
+    en: Argentina
+    es: Argentina
+  citizenship:
+    en: Italian (EU)
+    es: Italiana (UE)
+  work_authorization:
+    en: EU citizen, no visa sponsorship required to work in the EU
+    es: Ciudadano de la UE, sin necesidad de visado para trabajar en la UE
+  work_preference:
+    en: Remote from Argentina, or hybrid with relocation within the EU
+    es: Remoto desde Argentina, o híbrido con reubicación en la UE
+  links:
+    linkedin: https://www.linkedin.com/in/licmannanice
+    github: https://github.com/Leohayequipo
+
+summary:
+  en: >-
+    AI engineer and full stack developer with 10+ years building web platforms, SaaS and
+    e-commerce, focused since 2023 on shipping AI into real products: RAG systems, AI agents,
+    LLM data pipelines and real-time voice and video avatars.
+
+    Currently developing AI products at Simbel IA Studio and doing AI R&D at Universidad
+    Tecnológica Nacional. Lead developer of ServiME, an AI digital menu SaaS in production.
+    Former project leader of an 8-developer team and certified teacher, used to turning
+    business needs into working systems and explaining trade-offs to non-technical people.
+  es: >-
+    AI Engineer y desarrollador full stack con más de 10 años construyendo plataformas web,
+    SaaS y e-commerce, enfocado desde 2023 en llevar la IA a productos reales: sistemas RAG,
+    agentes de IA, pipelines de datos con LLMs y avatares de voz y video en tiempo real.
+
+    Hoy desarrolla productos de IA en Simbel IA Studio y hace I+D en IA en la Universidad
+    Tecnológica Nacional. Desarrollador principal de ServiME, un SaaS de menú digital con IA
+    en producción. Fue líder de proyecto de un equipo de 8 desarrolladores y es profesor de
+    educación: está acostumbrado a convertir necesidades de negocio en sistemas que funcionan
+    y a explicar decisiones técnicas a perfiles no técnicos.
+
+# Items are plain strings when they read the same in both languages.
+skills:
+  - id: ai
+    label: { en: "LLMs & AI", es: "LLMs e IA" }
+    items:
+      - OpenAI
+      - Anthropic Claude
+      - Gemini
+      - { en: "local models (Ollama)", es: "modelos locales (Ollama)" }
+      - Hugging Face
+      - RAG
+      - embeddings
+      - { en: "vector databases", es: "bases vectoriales" }
+      - LangChain
+      - LlamaIndex
+      - LangGraph
+      - MCP
+      - fine-tuning
+      - evals
+      - prompt engineering
+      - { en: "cost optimization (prompt caching)", es: "optimización de costos (prompt caching)" }
+      - { en: "AI security (prompt injection, guardrails)", es: "seguridad en IA (prompt injection, guardrails)" }
+      - { en: "text classification", es: "clasificación de texto" }
+      - Text-to-SQL
+  - id: voice-vision
+    label: { en: "Voice & vision", es: "Voz y visión" }
+    items:
+      - { en: "Whisper (speech-to-text)", es: "Whisper (transcripción)" }
+      - { en: "ElevenLabs (text-to-speech)", es: "ElevenLabs (síntesis de voz)" }
+      - LiveAvatar
+      - OCR
+  - id: backend
+    label: { en: "Backend", es: "Backend" }
+    items:
+      - Python (FastAPI)
+      - PHP (Laravel, Livewire, Inertia, FilamentPHP, Symfony, CodeIgniter)
+      - Node.js
+      - { en: "REST APIs", es: "APIs REST" }
+      - OAuth / JWT
+      - { en: "queues", es: "colas" }
+      - { en: "payment webhooks", es: "webhooks de pago" }
+      - { en: "multi-tenant SaaS", es: "SaaS multi-tenant" }
+      - web scraping
+  - id: frontend
+    label: { en: "Frontend", es: "Frontend" }
+    items:
+      - React
+      - TypeScript
+      - JavaScript
+      - Tailwind CSS
+      - Vite
+      - Figma
+  - id: data
+    label: { en: "Data", es: "Datos" }
+    items:
+      - PostgreSQL
+      - MySQL
+      - Microsoft SQL Server
+      - Supabase (Edge Functions)
+      - Redis
+      - { en: "data modeling and normalization", es: "modelado y normalización de datos" }
+  - id: devops
+    label: { en: "DevOps & quality", es: "DevOps y calidad" }
+    items:
+      - Docker
+      - Git
+      - CI/CD
+      - Nginx
+      - { en: "automated testing", es: "testing automatizado" }
+      - Sentry
+      - Bash
+      - { en: "web security (OWASP)", es: "seguridad web (OWASP)" }
+  - id: automation
+    label: { en: "Automation", es: "Automatización" }
+    items:
+      - n8n
+      - Google Apps Script
+      - { en: "WhatsApp and Telegram bots", es: "bots de WhatsApp y Telegram" }
+  - id: ways-of-working
+    label: { en: "Ways of working", es: "Forma de trabajo" }
+    items:
+      - Scrum
+      - Kanban
+      - Jira
+      - { en: "estimation", es: "estimación" }
+      - { en: "technical documentation", es: "documentación técnica" }
+      - { en: "client demos and pre-sales", es: "demos y preventa" }
+      - { en: "business process analysis", es: "relevamiento de procesos de negocio" }
+      - { en: "user training", es: "capacitación de usuarios" }
+
+# Ordered as in the CV, by relevance; the timeline card sorts by date on its own.
+# A company with several positions lists them under `roles`, most recent first.
+experience:
+  - id: simbel
+    company: Simbel IA Studio
+    formerly: Simbel
+    roles:
+      - title: { en: "Full Stack Developer (AI)", es: "Desarrollador Full Stack (IA)" }
+        start: "2023-10"
+        end: null
+        work_mode: remote
+        highlights:
+          - en: "Build AI-powered products and web applications as the company evolved from e-commerce development into an AI studio."
+            es: "Desarrolla productos y aplicaciones web con IA, acompañando la evolución de la empresa del desarrollo de e-commerce a estudio de inteligencia artificial."
+          - en: "Develop web applications, management systems and e-commerce platforms, plus REST APIs and integrations with payment and logistics providers."
+            es: "Aplicaciones web, sistemas de gestión y e-commerce, además de APIs REST e integraciones con proveedores de pago y logística."
+          - en: "Cover the full cycle from system design to development and testing, proposing new features and solutions to product and client needs."
+            es: "Ciclo completo, del diseño del sistema al desarrollo y las pruebas, proponiendo nuevas funcionalidades y soluciones."
+
+  - id: utn
+    company: Universidad Tecnológica Nacional, Facultad Regional Morón
+    roles:
+      - title: { en: "AI R&D Developer", es: "Desarrollador de I+D en IA" }
+        start: "2026-01"
+        end: null
+        work_mode: remote
+        stack: [Python, FastAPI, LangGraph, OpenAI, PostgreSQL, n8n]
+        highlights:
+          - en: "Research and development of AI-based solutions within the university's R&D team."
+            es: "Investigación y desarrollo de soluciones basadas en inteligencia artificial en el equipo de I+D."
+          - en: "Built a RAG document assistant and an AI agent with tool use (Python, FastAPI, LangGraph, OpenAI, PostgreSQL), WhatsApp and Telegram chatbots, and n8n pipelines where LLMs extract, classify and route data from documents."
+            es: "Desarrolló un asistente de documentos con RAG y un agente de IA con herramientas (Python, FastAPI, LangGraph, OpenAI, PostgreSQL), chatbots de WhatsApp y Telegram, y pipelines en n8n donde los LLMs extraen, clasifican y derivan datos de documentos."
+
+  - id: servime
+    company: ServiME
+    description: { en: "AI digital menu and chat SaaS for restaurants", es: "SaaS de menú digital y chat con IA para gastronomía" }
+    roles:
+      - title: { en: "Lead Developer", es: "Desarrollador principal" }
+        start: "2026-08"
+        end: null
+        work_mode: remote
+        stack: [Laravel, FilamentPHP, React, TypeScript, PostgreSQL, Redis, OpenAI, Gemini]
+        highlights:
+          - en: "Designed and built the full platform: Laravel + FilamentPHP backend, React / TypeScript frontend, PostgreSQL and Redis."
+            es: "Diseñó y desarrolló la plataforma completa: backend en Laravel + FilamentPHP, frontend en React / TypeScript, PostgreSQL y Redis."
+          - en: "AI chat assistant (OpenAI, Gemini) that answers menu questions and recommends products; embeddable widget SDK secured with CORS and ephemeral session tokens; real-time streaming (SSE); CI/CD."
+            es: "Asistente de chat con IA (OpenAI, Gemini) que responde consultas y recomienda productos; SDK de widget embebible con seguridad CORS y tokens de sesión efímeros; streaming en tiempo real (SSE); CI/CD."
+          - en: "In production at Azopardo Café Bar, where it improved service speed by 20%."
+            es: "En producción en Azopardo Café Bar, donde mejoró un 20 % la velocidad de atención."
+
+  - id: atlantida
+    company: Universidad Atlántida Argentina
+    roles:
+      - title: { en: "Project Leader", es: "Líder de Proyecto" }
+        start: "2022-01"
+        end: "2023-12"
+        highlights:
+          - en: "Led a team of 8 developers serving 7+ university areas; delivered systems across the academic cycle, including dynamic displays, digitized academic records and automated degree certificates; Scrum and Kanban with Jira."
+            es: "Lideró un equipo de 8 desarrolladores que atendía a más de 7 áreas; sistemas para todo el circuito académico, con pantallas dinámicas, gestión académica digitalizada y generación automatizada de títulos; Scrum y Kanban con Jira."
+      - title: { en: "Full Stack Developer", es: "Desarrollador Full Stack" }
+        start: "2017"
+        end: "2022"
+        stack: [PHP, JavaScript, MySQL]
+        highlights:
+          - en: "Academic systems with PHP, JavaScript and MySQL; evolution of existing platforms and optimization of internal processes."
+            es: "Sistemas académicos con PHP, JavaScript y MySQL; evolución de plataformas y optimización de procesos internos."
+
+  - id: eest1
+    company: 'EEST Nº 1 "Raúl Scalabrini Ortiz"'
+    description: { en: "Technical secondary school", es: "Escuela técnica" }
+    location: { en: "Santa Teresita, Argentina", es: "Santa Teresita, Argentina" }
+    roles:
+      - title: { en: "IT Teacher", es: "Docente de Informática" }
+        start: "2019-03"
+        end: null
+        highlights:
+          - en: "Prepare technical-track students to start as junior developers, from programming fundamentals to complete applications."
+            es: "Forma a estudiantes de orientación técnica para empezar como desarrolladores junior, desde los fundamentos hasta aplicaciones completas."
+
+  - id: tres-barbas
+    company: Tres Barbas Games
+    roles:
+      - title: { en: "Game Designer", es: "Game Designer" }
+        start: "2016"
+        end: "2017"
+        highlights:
+          - en: "Designed game mechanics, levels and assets; built web and mobile prototypes."
+            es: "Diseño de mecánicas, niveles y assets; prototipos web y mobile."
+
+projects:
+  note:
+    en: "Private work, code under NDA. Architecture walkthrough and live demo available on request."
+    es: "Trabajo privado para clientes, código bajo confidencialidad. Recorrido de arquitectura y demo disponibles a pedido."
+  items:
+    - id: ai-avatars
+      name: { en: "Real-time conversational AI avatars", es: "Avatares conversacionales con IA en tiempo real" }
+      summary:
+        en: "Integrated and built the full solution: speech-to-text with Whisper, voice synthesis with ElevenLabs, video avatar with LiveAvatar, PostgreSQL backend and back office on Supabase with Edge Functions."
+        es: "Integró y desarrolló la solución completa: transcripción de voz con Whisper, síntesis de voz con ElevenLabs, video con LiveAvatar, backend en PostgreSQL y backoffice sobre Supabase con Edge Functions."
+      stack: [Whisper, ElevenLabs, LiveAvatar, PostgreSQL, Supabase]
+
+    - id: rag-assistant
+      name: { en: "RAG document assistant", es: "Asistente de documentos con RAG" }
+      summary:
+        en: "Q&A over internal documents with retrieval and source citations."
+        es: "Preguntas y respuestas sobre documentos internos con recuperación y cita de fuentes."
+      stack: [Python, FastAPI, LangGraph, OpenAI Responses API, Langfuse]
+
+    - id: ai-agent
+      name: { en: "AI agent with tool use", es: "Agente de IA con herramientas" }
+      summary:
+        en: "Calls APIs, queries a database and sends email to complete multi-step tasks."
+        es: "Llama APIs, consulta una base de datos y envía emails para completar tareas de varios pasos."
+      stack: [Python, LangGraph, function calling, PostgreSQL]
+
+    - id: vinoteca-bicchieri
+      name: { en: "Vinoteca Bicchieri online store", es: "Tienda online Vinoteca Bicchieri" }
+      freelance: true
+      summary:
+        en: "WordPress e-commerce store that drove a 20% increase in fine-wine sales."
+        es: "Tienda online en WordPress que aumentó un 20 % las ventas de vinos finos."
+      stack: [WordPress]
+
+education:
+  - degree:
+      en: "Licenciatura en Sistemas Informáticos (Bachelor's in Information Systems)"
+      es: "Licenciatura en Sistemas Informáticos"
+    institution: Universidad Atlántida Argentina
+    year: "2014"
+    note:
+      en: "Intermediate degree: Analista de Sistemas (2013)"
+      es: "Título intermedio: Analista de Sistemas (2013)"
+  - degree:
+      en: "Profesorado en Educación (Teaching degree)"
+      es: "Profesorado en Educación"
+    institution: Universidad Tecnológica Nacional
+    year: "2017"
+
+languages:
+  - name: { en: "Spanish", es: "Español" }
+    level: { en: "Native", es: "Nativo" }
+  - name: { en: "English", es: "Inglés" }
+    level: { en: "B1, currently in daily conversation training", es: "B1, con práctica diaria de conversación" }
