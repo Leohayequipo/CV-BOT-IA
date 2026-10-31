@@ -19,7 +19,7 @@ The mockups show the Spanish copy, with voseo. English is the default language o
 
 ## Colour
 
-Components use these tokens, never raw hex values. Each one has a light and a dark value, and the theme follows `prefers-color-scheme` until the visitor picks one.
+Components use these tokens, never raw hex values. Each one has a light and a dark value, and the theme follows `prefers-color-scheme` until the visitor picks one. In the code, each token is `--color-<name>` in [`frontend/src/styles/tokens.css`](../frontend/src/styles/tokens.css), which gives Tailwind utilities such as `bg-card`, `text-muted` and `border-border-strong`. A test checks that the file matches this table and these contrast ratios.
 
 | Token | Role | Light | Dark |
 |---|---|---|---|
