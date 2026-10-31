@@ -39,7 +39,7 @@ Organise by feature. Tests sit next to the code: `ChatInput.tsx` + `ChatInput.te
 - **Tokens first.** Colours, radii, shadows and font sizes are CSS variables in `tokens.css`, mapped into Tailwind's theme. Components use semantic names (`bg-surface`, `text-muted`, `ring-accent`), never raw hex values.
 - **LinkedIn-inspired, not a copy:** light grey canvas, white cards, clear hierarchy, our own accent colour, no LinkedIn logo or name.
 - Light and dark themes from day one, following `prefers-color-scheme`.
-- An 8px spacing scale, at most 2 font families, and consistent radii.
+- The spacing, radii and type scale in `DESIGN.md`, with system fonts only (ADR-018).
 
 ## Polish checklist (what makes it stand out)
 

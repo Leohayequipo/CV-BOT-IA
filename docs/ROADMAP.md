@@ -80,7 +80,7 @@ Goal: decide how the product looks and feels before writing interface code. Recr
   - [x] Errors: network failure, rate limit, off-topic redirect
   - [x] Mobile and dark mode versions of all of the above
 - [x] 2.5 Motion spec: what animates, how long and with which easing; reduced-motion fallback (ADR-020)
-- [ ] 2.6 `docs/DESIGN.md`: tokens, components, states and screenshots of the approved mockups. Phase 4 builds from this file
+- [x] 2.6 `docs/DESIGN.md`: tokens, components, states and screenshots of the approved mockups. Phase 4 builds from this file
 
 **Done when:** Leonardo has approved the final mockups and every state the interface can be in has a design.
 
