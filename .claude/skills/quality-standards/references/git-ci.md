@@ -53,4 +53,4 @@ Don't put path filters on the whole workflow: once branch protection requires a 
 
 - Never in the repo, not even in examples. `.env.example` has keys with fake values only.
 - Where secrets live: GitHub Actions secrets (deploy), Railway variables (runtime), and Leonardo's password manager (source of truth).
-- pre-commit runs gitleaks locally. If a secret ever lands in a commit, rotate it immediately; rewriting history is not enough.
+- pre-commit (`.pre-commit-config.yaml`) runs gitleaks locally, along with each app's formatter and linter, and the content privacy tests when `content/` or `evals/` change. If a secret ever lands in a commit, rotate it immediately; rewriting history is not enough.

@@ -1,0 +1,52 @@
+# Checks that run on every commit, so problems never reach the public history.
+# Set up once per clone: `uv tool install pre-commit`, then `pre-commit install`.
+# The local hooks run each app's own pinned tools, so they match CI exactly.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.0
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      - id: backend-format
+        name: ruff format (backend)
+        entry: uv --directory backend run ruff format
+        language: system
+        files: ^backend/.*\.py$
+        pass_filenames: false
+      - id: backend-lint
+        name: ruff check (backend)
+        entry: uv --directory backend run ruff check --fix
+        language: system
+        files: ^backend/.*\.py$
+        pass_filenames: false
+      # Schema and privacy tests: a phone number or email in content/ stops the commit
+      - id: content
+        name: content schema and privacy
+        entry: uv --directory backend run pytest tests/content -q
+        language: system
+        files: ^(content|evals)/
+        pass_filenames: false
+      - id: frontend-format
+        name: prettier (frontend)
+        entry: npm --prefix frontend run format
+        language: system
+        files: ^frontend/
+        pass_filenames: false
+      - id: frontend-lint
+        name: oxlint (frontend)
+        entry: npm --prefix frontend run lint
+        language: system
+        files: ^frontend/
+        pass_filenames: false
