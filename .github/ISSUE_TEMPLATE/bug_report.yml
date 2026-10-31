@@ -1,0 +1,32 @@
+name: Bug report
+description: Something on the site or in the API doesn't work as it should
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did and what you saw. Screenshots help.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where
+      options:
+        - Site, on a phone
+        - Site, on a computer
+        - API
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: e.g. Safari on an iPhone, Chrome on Windows

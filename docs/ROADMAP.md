@@ -95,7 +95,7 @@ Goal: an empty "hello world" travels from a push on `main` to production automat
 - [x] 3.5 GitHub Actions CI: add the frontend job (lint, type-check, test, build) next to the backend job from 1.6
 - [ ] 3.6 Deploy: frontend to Hostinger by FTP, backend to Railway, both on merge to `main`; the phone number reaches both from deployment secrets (ADR-016)
 - [ ] 3.7 DNS: domain → Hostinger, `api.` subdomain → Railway, HTTPS on both
-- [ ] 3.8 PR template + issue templates
+- [x] 3.8 PR template + issue templates
 
 **Done when:** the production domain shows the frontend, `api.<domain>/health` answers, and CI is green.
 
