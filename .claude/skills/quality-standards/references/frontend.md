@@ -29,7 +29,7 @@ Organise by feature. Tests sit next to the code: `ChatInput.tsx` + `ChatInput.te
 
 - Function components with typed props; one component per file; named exports.
 - Keep components presentational and move logic into hooks (`useChat`, `useSuggestedQuestions`).
-- Chat state lives in a `useReducer` with explicit actions (`send`, `token`, `citation`, `card`, `done`, `error`). Don't add a state library unless a real need appears.
+- Chat state lives in a `useReducer` with explicit actions (`send`, `token`, `citation`, `card`, `node`, `done`, `error`). Don't add a state library unless a real need appears.
 - Streaming: `fetch` + `ReadableStream` with a small tested SSE parser in `lib/`. `EventSource` can't POST. Support cancel via `AbortController`.
 - Never render model output as raw HTML. Use a Markdown renderer with HTML disabled, and only `http(s)` links.
 
@@ -46,7 +46,7 @@ Organise by feature. Tests sit next to the code: `ChatInput.tsx` + `ChatInput.te
 - Every async view has designed **empty, loading, streaming, error and retry** states. A spinner alone is not a design.
 - Streaming text appears smoothly, the view auto-scrolls only if the user is already at the bottom, and a "jump to latest" button appears otherwise.
 - Suggested questions on first load, so nobody faces an empty box.
-- Subtle motion (150–250 ms, ease-out) for appearing messages and cards; disabled under `prefers-reduced-motion`.
+- Motion follows the spec in `DESIGN.md` (ADR-020): the 120, 200 and 320 ms duration tokens, CSS only. Under `prefers-reduced-motion`, keep only opacity and colour changes of up to 120 ms, with no loops.
 - Visible focus rings, generous hit targets (≥ 44px), and no layout shift while streaming.
 - Copy is short, warm and professional, in both languages.
 
