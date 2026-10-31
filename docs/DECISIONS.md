@@ -28,6 +28,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 015 | Content as the single source of truth, English first |
 | 016 | Phone number visible on the site, kept out of the repo |
 | 017 | Visual direction: LinkedIn's three-column layout |
+| 018 | Visual identity: teal accent, system fonts and Lucide icons |
 
 ---
 
@@ -235,6 +236,18 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 
 **Trade-offs:** the look is familiar rather than distinctive, so the accent colour, the cover image and the motion (steps 2.3 to 2.5) have to carry the personality. Being this close to LinkedIn also means the site must never use its logo, its name or its exact brand colours.
 
+## ADR-018 · Visual identity: teal accent, system fonts and Lucide icons
+
+*Accepted · 2026-10-31*
+
+**Decision:** the accent colour is teal (`#0F6E78` in light mode, `#62C6CD` in dark mode), on a neutral grey tinted with the same hue instead of ADR-017's warm grey. Teal marks what can be clicked and the facts a recruiter should see first, such as EU citizenship. A project's own brand colours appear only inside its project card: ServiME's card has a band and a logo tile in its green, orange and cream, while its text and links stay teal. Text uses the system fonts in three weights, and icons come from Lucide. Leonardo's photo on its own stands for him; with a teal badge it stands for the assistant. The cover of the profile card draws the assistant's real graph (guardrail, supervisor and three agents) over a dot pattern, as inline SVG that follows the theme. The Spanish copy uses voseo, in the interface and in the assistant's answers. All text meets WCAG AA contrast in both themes, and control borders reach 3:1. The identity sheet lives in the design canvas next to the mockups; its tokens go into `docs/DESIGN.md` in step 2.6.
+
+**Why:** teal is the accent of Leonardo's CV PDFs, so the site and the PDF read as one brand, and it keeps a page shaped like LinkedIn from looking like a blue copy of it. ServiME's palette across the whole site would make it read as a company page and push his other roles into the background. System fonts need no download, which helps the Lighthouse target (step 4.12). Lucide is open source (ISC licence), ships one icon per import and matches the line style of the mockups. The badge keeps visitors from thinking Leonardo himself is typing (ADR-011). Leonardo chose voseo, his own variety of Spanish, over neutral *tú*.
+
+**Alternatives considered:** a blue accent close to LinkedIn's, or ServiME's green, both compared in the mockup; a web font such as Inter; hand-drawn SVG icons; a photo as the cover; neutral *tú* in Spanish.
+
+**Trade-offs:** system fonts look slightly different on each operating system, and Lucide adds a frontend dependency. Voseo may sound informal to recruiters in Spain; since English is the default, it only reaches visitors whose browser is set to Spanish.
+
 ---
 
 ## Open decisions
@@ -245,5 +258,4 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | Embeddings provider | Step 0.5 |
 | Email provider for the contact agent | Step 0.5 |
 | CV PDFs: generated from `profile.yaml` at build time, or uploaded by hand | Step 1.7 |
-| Accent colour: blue, teal (as in the CV PDFs) or ServiME's green | Step 2.3 |
 | Speech-to-text and text-to-speech providers | Phase 8 |
