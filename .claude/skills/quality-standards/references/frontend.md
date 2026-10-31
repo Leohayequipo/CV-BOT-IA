@@ -4,9 +4,9 @@ The interface is the first thing a recruiter judges, in under 30 seconds and oft
 
 ## Toolchain
 
-- Latest stable React, Vite and Tailwind. `npm` with a committed `package-lock.json`.
-- TypeScript `strict: true` plus `noUncheckedIndexedAccess`. No `any`; use `unknown` and narrow it.
-- ESLint (typescript-eslint, react-hooks, jsx-a11y) + Prettier.
+- Latest stable React, Vite and Tailwind, on Node 26 LTS (pinned in `frontend/.nvmrc`). `npm` with a committed `package-lock.json`.
+- TypeScript 7 with `strict: true` plus `noUncheckedIndexedAccess`. No `any`; use `unknown` and narrow it.
+- oxlint with its React, hooks, jsx-a11y and Vitest rules, failing on warnings, plus Prettier. Vite's template ships oxlint, and typescript-eslint doesn't support TypeScript 7 yet.
 - Vitest + Testing Library + `@testing-library/user-event` + MSW + `vitest-axe`. Playwright for end-to-end tests.
 
 ## Layout

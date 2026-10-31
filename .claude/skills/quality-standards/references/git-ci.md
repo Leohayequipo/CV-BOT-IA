@@ -36,7 +36,7 @@ Merge with a merge commit (GitHub's default button) and merge stacked PRs in ord
 `ci.yml` runs on every PR and push to `main`:
 
 1. `backend` (since step 1.6): uv sync → ruff format check → ruff → mypy → pytest. The content tests run here, so a broken fact in `content/` fails CI.
-2. `frontend` (step 3.5): npm ci → prettier check → eslint → tsc → vitest → build
+2. `frontend` (step 3.5): npm ci → prettier check → oxlint → tsc → vitest → build
 3. `security` (step 7.4): secret scanning (gitleaks) and dependency audit
 4. `evals` (step 7.1, only when `backend/app/prompts`, `backend/app/agents`, `backend/app/rag` or `content/` change): run the eval suite and compare it with the thresholds
 
