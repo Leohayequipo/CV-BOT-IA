@@ -31,6 +31,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 018 | Visual identity: teal accent, system fonts and Lucide icons |
 | 019 | OpenAI for the language models and the embeddings |
 | 020 | Motion: short CSS animations with a reduced-motion version |
+| 021 | A stateless chat API, and contact sent only on confirmation |
 
 ---
 
@@ -273,6 +274,18 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Alternatives considered:** an animation library such as Motion (formerly Framer Motion), which helps with exit and layout animations but adds JavaScript for effects CSS already covers; no motion at all; the typing dots alone, without the live graph.
 
 **Trade-offs:** a CSS exit animation needs the element to stay mounted until its fade ends. The live graph adds an event to the API contract, and it only shows on desktop, where the cover is visible.
+
+## ADR-021 · A stateless chat API, and contact sent only on confirmation
+
+*Accepted · 2026-10-31*
+
+**Decision:** `POST /chat` streams the answer as Server-Sent Events, and the site sends the recent history with every question, so the server keeps no conversation state. A random `session_id` exists only for rate limiting. The email to Leonardo goes out through a separate `POST /contact`, which the site calls only when the visitor confirms the summary. The contract lives in [`API.md`](API.md).
+
+**Why:** without server-side state there is no session store to run, expire or protect, any backend instance can answer any request, and no conversation is kept on the server (ADR-012). The history limit keeps the cost of a request bounded. Sending email is the only action with a side effect, so it waits for a person's explicit click instead of a model's decision; a prompt injection can't trigger it, which is the confirmation ADR-009 asked for. SSE fits a one-way stream of events and works over plain HTTP.
+
+**Alternatives considered:** keeping conversations on the server with a LangGraph checkpointer in Postgres, which allows resuming but stores every conversation and adds a table to manage; WebSockets, two-way but heavier than this needs; letting the contact agent send the email when the visitor writes "yes".
+
+**Trade-offs:** requests grow with the history, up to its limit. Reloading the page starts a new conversation. A visitor could alter the history the site sends, but that only affects their own conversation, and the guardrail treats history as untrusted input.
 
 ---
 
