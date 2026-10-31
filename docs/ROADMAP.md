@@ -72,13 +72,13 @@ Goal: decide how the product looks and feels before writing interface code. Recr
 - [x] 2.1 Reference: LinkedIn's home feed and messaging, chosen by Leonardo as the single reference (what we take from it: ADR-017)
 - [x] 2.2 Visual direction: an interactive mockup of the main screen (desktop + mobile) built with real content, approved by Leonardo (ADR-017)
 - [x] 2.3 Visual identity: accent colour, light and dark palettes, typography, icon set, photo treatment, cover image, tone of the interface copy (ADR-018)
-- [ ] 2.4 High-fidelity mockups of every screen and state:
-  - [ ] First load with suggested questions
-  - [ ] Streaming answer with citations
-  - [ ] Cards: project, experience timeline, skills, job-fit report
-  - [ ] Contact flow and confirmation
-  - [ ] Errors: network failure, rate limit, off-topic redirect
-  - [ ] Mobile and dark mode versions of all of the above
+- [x] 2.4 High-fidelity mockups of every screen and state (13 state boards in the design canvas; their screenshots go into `DESIGN.md` in step 2.6):
+  - [x] First load with suggested questions
+  - [x] Streaming answer with citations
+  - [x] Cards: project, experience timeline, skills, job-fit report
+  - [x] Contact flow and confirmation
+  - [x] Errors: network failure, rate limit, off-topic redirect
+  - [x] Mobile and dark mode versions of all of the above
 - [ ] 2.5 Motion spec: what animates, how long and with which easing; reduced-motion fallback
 - [ ] 2.6 `docs/DESIGN.md`: tokens, components, states and screenshots of the approved mockups. Phase 4 builds from this file
 
