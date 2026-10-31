@@ -15,3 +15,22 @@ A chat-first CV: recruiters ask an AI assistant about Leonardo Mannanice's exper
 | `docs/` | The [roadmap](docs/ROADMAP.md), the [decisions](docs/DECISIONS.md) and the [design](docs/DESIGN.md) |
 
 Both apps live in one repository so that the API contract, the content and the code that uses them change together, in one reviewed pull request. Each app still deploys to its own host (ADR-002 and ADR-005 in [the decisions](docs/DECISIONS.md)).
+
+## Run locally
+
+The backend needs [uv](https://docs.astral.sh/uv/), which installs the right Python by itself.
+
+```bash
+cd backend
+uv sync
+uv run uvicorn app.main:app --reload
+```
+
+Then open <http://localhost:8000/health>, or <http://localhost:8000/docs> for the interactive API docs.
+
+To run the same checks as CI:
+
+```bash
+cd backend
+uv run ruff format --check . && uv run ruff check . && uv run mypy . && uv run pytest
+```
