@@ -4,8 +4,11 @@ version = "0.1.0"
 description = "API and AI agents for CV-BOT-IA"
 requires-python = ">=3.13"
 dependencies = [
+    "fastapi>=0.162.0",
     "pydantic>=2.14.2",
+    "pydantic-settings>=2.16.2",
     "pyyaml>=6.0.3",
+    "uvicorn>=0.54.0",
 ]
 
 [tool.ruff]
@@ -29,11 +32,16 @@ explicit_package_bases = true
 testpaths = ["tests"]
 pythonpath = ["."]
 addopts = ["--import-mode=importlib", "--strict-markers", "-ra"]
+# Async tests and fixtures run without a marker on each one
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 
 [dependency-groups]
 dev = [
+    "httpx>=0.28.1",
     "mypy>=2.4.1",
     "pytest>=9.2.0",
+    "pytest-asyncio>=1.4.1",
     "ruff>=0.17.3",
     "types-pyyaml>=6.0.12.20261030",
 ]

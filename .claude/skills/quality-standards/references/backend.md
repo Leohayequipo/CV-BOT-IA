@@ -4,6 +4,7 @@
 
 - Latest stable Python, pinned in `backend/.python-version`.
 - `uv` for dependencies and running commands. Commit `uv.lock`.
+- `uvicorn` serves the app, locally and on Railway.
 - `ruff` for formatting and linting (rules: `E, F, I, B, UP, SIM, N, S, ASYNC, RUF`).
 - `mypy --strict`. A new `# type: ignore` needs an inline reason.
 - `pytest`, `pytest-asyncio`, `httpx` for API tests, `respx` to mock outgoing HTTP.
