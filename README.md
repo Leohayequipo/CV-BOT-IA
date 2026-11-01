@@ -18,7 +18,11 @@ Both apps live in one repository so that the API contract, the content and the c
 
 ## Run locally
 
-The backend needs [uv](https://docs.astral.sh/uv/), which installs the right Python by itself.
+Both apps use fixed ports away from the usual defaults (8001 instead of 8000, 5180 instead of 5173), so they can run next to other local projects.
+
+### Backend
+
+It needs [uv](https://docs.astral.sh/uv/), which installs the right Python by itself.
 
 ```bash
 cd backend
@@ -26,11 +30,28 @@ uv sync
 uv run uvicorn app.main:app --reload --port 8001
 ```
 
-Then open <http://localhost:8001/health>, or <http://localhost:8001/docs> for the interactive API docs. The API uses port 8001 because 8000 is the default of other local servers, such as Laravel's.
+Then open <http://localhost:8001/health>, or <http://localhost:8001/docs> for the interactive API docs.
 
-To run the same checks as CI:
+### Frontend
+
+It needs Node 26, the version in `frontend/.nvmrc`.
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Then open <http://localhost:5180>.
+
+### Checks
+
+The same commands CI runs:
 
 ```bash
 cd backend
 uv run ruff format --check . && uv run ruff check . && uv run mypy . && uv run pytest
+
+cd ../frontend
+npm run format:check && npm run lint && npm run typecheck && npm run test -- --run && npm run build
 ```
