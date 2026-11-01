@@ -1,0 +1,24 @@
+name: Wrong or outdated fact
+description: The site or the assistant says something about Leonardo that isn't right
+body:
+  - type: markdown
+    attributes:
+      value: Everything the site and the assistant say comes from `content/`, so a wrong fact gets fixed there, and Leonardo confirms every change.
+  - type: textarea
+    id: claim
+    attributes:
+      label: What it said
+      description: Quote the sentence. If it came from the assistant, include the question you asked.
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong with it
+    validations:
+      required: true
+  - type: input
+    id: citation
+    attributes:
+      label: Source it cited, if any
+      placeholder: e.g. ServiME · Lead developer
