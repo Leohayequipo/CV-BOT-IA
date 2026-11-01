@@ -12,7 +12,7 @@ A chat-first CV: recruiters ask an AI assistant about Leonardo Mannanice's exper
 | `backend/` | The API and the AI agents: Python, FastAPI and LangGraph, deployed to Railway |
 | `content/` | Facts about Leonardo: profile, policies and case studies. Both the site and the assistant read them |
 | `evals/` | Recruiter questions with the facts a good answer must contain, used to measure the assistant |
-| `docs/` | The [roadmap](docs/ROADMAP.md), the [decisions](docs/DECISIONS.md) and the [design](docs/DESIGN.md) |
+| `docs/` | The [roadmap](docs/ROADMAP.md), the [decisions](docs/DECISIONS.md), the [design](docs/DESIGN.md) and the [API contract](docs/API.md) |
 
 Both apps live in one repository so that the API contract, the content and the code that uses them change together, in one reviewed pull request. Each app still deploys to its own host (ADR-002 and ADR-005 in [the decisions](docs/DECISIONS.md)).
 

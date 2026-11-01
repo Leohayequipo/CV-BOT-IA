@@ -106,7 +106,7 @@ Goal: an empty "hello world" travels from a push on `main` to production automat
 Goal: build the approved design with a fake server that streams pre-written answers, so the interface can be finished and tested before any AI exists.
 
 - [x] 4.1 Design tokens from `DESIGN.md` into CSS variables and the Tailwind theme; light and dark themes
-- [ ] 4.2 API contract in `docs/API.md`: `POST /chat` and its SSE events (`token`, `citation`, `card`, `node`, `done`, `error`); `node` names the graph step that is working, for the live graph on the cover (ADR-020)
+- [x] 4.2 API contract in `docs/API.md`: `POST /chat` and its SSE events (`token`, `citation`, `card`, `node`, `done`, `error`); `node` names the graph step that is working, for the live graph on the cover (ADR-020)
 - [ ] 4.3 Mock server that streams fake answers following the contract, including slow, failing and very long responses
 - [ ] 4.4 Layout: profile card + conversation; on mobile the card collapses into a header
 - [ ] 4.5 Chat: streamed messages, Markdown, suggested questions, typing indicator, citations, retry on error, empty, loading and error states
