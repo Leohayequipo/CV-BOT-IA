@@ -48,7 +48,7 @@ Goal: the idea, the decisions and the quality bar are written down before any co
 Goal: one reviewed source of truth that both the page and the assistant read. The assistant can never be better than this content.
 
 - [x] 1.1 `content/profile.yaml`: unified CV in EN/ES (fixes the inconsistencies between the two PDFs, no phone number)
-- [ ] 1.2 `content/policies.md`: how the assistant handles sensitive topics (salary, start date, citizenship, concurrent roles, English level, NDA work, unknown answers)
+- [x] 1.2 `content/policies.md`: how the assistant handles sensitive topics (salary, start date, citizenship, concurrent roles, English level, NDA work, unknown answers)
 - [ ] 1.3 `content/case-studies/_TEMPLATE.md`
 - [ ] 1.4 Case studies, one per PR. Leonardo drafts in Spanish, then we edit them into English together:
   - [ ] ServiME
@@ -59,7 +59,7 @@ Goal: one reviewed source of truth that both the page and the assistant read. Th
   - [ ] Leading an 8-developer team at Universidad Atlántida
 - [ ] 1.5 `evals/questions.yaml`: 30+ real recruiter questions with the facts a good answer must contain. These become the eval dataset in Phase 5
 - [ ] 1.6 Content schema + validation test (fails CI if `profile.yaml` breaks the schema or a case study misses a required section)
-- [ ] 1.7 Visual assets: a professional profile photo and a cover image, in high resolution
+- [ ] 1.7 Assets: a professional profile photo and a cover image in high resolution, and the CV PDFs (EN/ES) for download without the phone number
 
 **Done when:** Leonardo has reviewed every fact and the validation test passes.
 
