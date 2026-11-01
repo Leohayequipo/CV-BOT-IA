@@ -1,0 +1,7 @@
+# Store text with LF line endings on every OS, so diffs, hooks and CI see the same bytes
+* text=auto eol=lf
+
+*.jpg binary
+*.png binary
+*.webp binary
+*.ico binary

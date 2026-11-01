@@ -88,7 +88,7 @@ Goal: decide how the product looks and feels before writing interface code. Recr
 
 Goal: an empty "hello world" travels from a push on `main` to production automatically.
 
-- [ ] 3.1 Monorepo layout: `frontend/`, `backend/`, `content/`, `evals/`, `docs/`
+- [x] 3.1 Monorepo layout: `frontend/`, `backend/`, `content/`, `evals/`, `docs/`
 - [ ] 3.2 Backend: FastAPI with `/health` and typed settings, on the Python project from 1.6 (`uv`, ruff, mypy strict, pytest)
 - [ ] 3.3 Frontend: Vite + React + TypeScript (strict), Tailwind, ESLint, Prettier, Vitest + Testing Library
 - [ ] 3.4 pre-commit hooks (format, lint, secret scanning)
