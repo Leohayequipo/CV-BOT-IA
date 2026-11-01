@@ -93,6 +93,8 @@ Goal: an empty "hello world" travels from a push on `main` to production automat
 - [x] 3.3 Frontend: Vite + React + TypeScript (strict), Tailwind, oxlint, Prettier, Vitest + Testing Library
 - [x] 3.4 pre-commit hooks (format, lint, secret scanning)
 - [x] 3.5 GitHub Actions CI: add the frontend job (lint, type-check, test, build) next to the backend job from 1.6
+> 3.6 and 3.7 need the domain and the hosting accounts (steps 0.4 and 0.5). Meanwhile, Leonardo decided on 2026-10-31 to build Phase 4 locally, the only step taken out of order.
+
 - [ ] 3.6 Deploy: frontend to Hostinger by FTP, backend to Railway, both on merge to `main`; the phone number reaches both from deployment secrets (ADR-016)
 - [ ] 3.7 DNS: domain → Hostinger, `api.` subdomain → Railway, HTTPS on both
 - [x] 3.8 PR template + issue templates
@@ -103,7 +105,7 @@ Goal: an empty "hello world" travels from a push on `main` to production automat
 
 Goal: build the approved design with a fake server that streams pre-written answers, so the interface can be finished and tested before any AI exists.
 
-- [ ] 4.1 Design tokens from `DESIGN.md` into CSS variables and the Tailwind theme; light and dark themes
+- [x] 4.1 Design tokens from `DESIGN.md` into CSS variables and the Tailwind theme; light and dark themes
 - [ ] 4.2 API contract in `docs/API.md`: `POST /chat` and its SSE events (`token`, `citation`, `card`, `node`, `done`, `error`); `node` names the graph step that is working, for the live graph on the cover (ADR-020)
 - [ ] 4.3 Mock server that streams fake answers following the contract, including slow, failing and very long responses
 - [ ] 4.4 Layout: profile card + conversation; on mobile the card collapses into a header
