@@ -57,7 +57,7 @@ Goal: one reviewed source of truth that both the page and the assistant read. Th
   - [ ] Real-time conversational AI avatars
   - [ ] LLM pipelines with n8n
   - [ ] Leading an 8-developer team at Universidad Atlántida
-- [ ] 1.5 `evals/questions.yaml`: 30+ real recruiter questions with the facts a good answer must contain. These become the eval dataset in Phase 5
+- [x] 1.5 `evals/questions.yaml`: 30+ real recruiter questions with the facts a good answer must contain. These become the eval dataset in Phase 5
 - [ ] 1.6 Content schema + validation test (fails CI if `profile.yaml` breaks the schema or a case study misses a required section)
 - [ ] 1.7 Assets: a professional profile photo and a cover image in high resolution, and the CV PDFs (EN/ES) for download without the phone number
 
