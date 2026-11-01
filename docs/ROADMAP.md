@@ -71,7 +71,7 @@ Goal: decide how the product looks and feels before writing interface code. Recr
 
 - [x] 2.1 Reference: LinkedIn's home feed and messaging, chosen by Leonardo as the single reference (what we take from it: ADR-017)
 - [x] 2.2 Visual direction: an interactive mockup of the main screen (desktop + mobile) built with real content, approved by Leonardo (ADR-017)
-- [ ] 2.3 Visual identity: accent colour, light and dark palettes, typography, icon set, photo treatment, cover image, tone of the interface copy
+- [x] 2.3 Visual identity: accent colour, light and dark palettes, typography, icon set, photo treatment, cover image, tone of the interface copy (ADR-018)
 - [ ] 2.4 High-fidelity mockups of every screen and state:
   - [ ] First load with suggested questions
   - [ ] Streaming answer with citations
