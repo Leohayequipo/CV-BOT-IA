@@ -1,0 +1,39 @@
+[project]
+name = "cv-bot-backend"
+version = "0.1.0"
+description = "API and AI agents for CV-BOT-IA"
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic>=2.14.2",
+    "pyyaml>=6.0.3",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "N", "S", "ASYNC", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# pytest is built on plain asserts
+"tests/**" = ["S101"]
+
+[tool.mypy]
+strict = true
+plugins = ["pydantic.mypy"]
+# Name modules after their folders, so tests/conftest.py and tests/content/conftest.py differ
+explicit_package_bases = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = ["--import-mode=importlib", "--strict-markers", "-ra"]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.1",
+    "pytest>=9.2.0",
+    "ruff>=0.17.3",
+    "types-pyyaml>=6.0.12.20261030",
+]

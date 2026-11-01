@@ -40,7 +40,7 @@ A step is done only when all of these hold:
 
 ## Quality gate
 
-Run from the repo root once the apps exist (Phase 3 sets these scripts up, so keep them working):
+Run it for every app you touched. The backend exists since step 1.6 and the frontend arrives in Phase 3; keep these commands working:
 
 ```bash
 # backend
