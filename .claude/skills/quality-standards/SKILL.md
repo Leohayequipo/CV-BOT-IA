@@ -23,7 +23,7 @@ That makes the bar different from a normal side project:
 6. Update docs in the same change: tick the roadmap checkbox, add a decision entry if you chose between alternatives, update `docs/API.md` if the contract changed, update the README if setup changed.
 7. Commit with Conventional Commits and open a PR using the template.
 
-Ask Leonardo before: adding a dependency not already named in `DECISIONS.md`, changing the API contract, changing anything in `content/` (those are facts about a real person), or anything that costs money.
+Ask Leonardo before: adding a framework, service or provider that has no entry in `docs/DECISIONS.md` (the tooling named in `references/` is already accepted), changing the API contract, changing anything in `content/` (those are facts about a real person), or anything that costs money.
 
 ## Definition of Done
 
