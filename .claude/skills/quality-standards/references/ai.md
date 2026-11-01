@@ -19,7 +19,7 @@ The assistant speaks about a real person to people deciding whether to hire him.
 ## Models and cost
 
 - Model IDs come from `Settings`, never hard-coded. Use a fast, cheap model for the guardrail and router, and a stronger model for answers and job-fit analysis.
-- Enable prompt caching on the system prompt and profile.
+- Keep the system prompt and profile byte-identical across requests, so OpenAI's automatic prompt caching applies to them.
 - Cap `max_tokens` per node, the history sent per request, and tool-call iterations.
 - Track tokens and cost per request in Langfuse, and enforce a daily spend cap in the backend.
 

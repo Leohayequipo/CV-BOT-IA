@@ -10,4 +10,4 @@ Chat-first CV for Leonardo Mannanice: recruiters ask an AI assistant about his e
 
 ## Stack
 
-React + Vite + TypeScript + Tailwind (static, Hostinger) → FastAPI + LangGraph + Claude (Railway) → Supabase pgvector, Langfuse.
+React + Vite + TypeScript + Tailwind (static, Hostinger) → FastAPI + LangGraph + OpenAI (Railway) → Supabase pgvector, Langfuse.

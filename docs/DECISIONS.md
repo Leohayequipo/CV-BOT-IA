@@ -16,7 +16,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 003 | React + Vite static site, not Next.js |
 | 004 | Python and FastAPI for the backend |
 | 005 | Frontend on Hostinger, backend on Railway |
-| 006 | Claude as the LLM, with a model per kind of task |
+| 006 | Claude as the LLM, with a model per kind of task (superseded by 019) |
 | 007 | Two-tier context: profile in the prompt, case studies through RAG |
 | 008 | Postgres with pgvector on Supabase, with hybrid search |
 | 009 | Multi-agent graph with LangGraph |
@@ -29,6 +29,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 016 | Phone number visible on the site, kept out of the repo |
 | 017 | Visual direction: LinkedIn's three-column layout |
 | 018 | Visual identity: teal accent, system fonts and Lucide icons |
+| 019 | OpenAI for the language models and the embeddings |
 
 ---
 
@@ -94,7 +95,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 
 ## ADR-006 · Claude as the LLM, with a model per kind of task
 
-*Accepted · 2026-10-30*
+*Accepted · 2026-10-30 · Superseded by ADR-019*
 
 **Decision:** Anthropic's Claude models, chosen per task: a fast, low-cost model for the guardrail and the router, and a stronger one for answers and job-fit analysis. The static part of the prompt uses prompt caching. Model IDs live in configuration, not in code.
 
@@ -248,6 +249,18 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 
 **Trade-offs:** system fonts look slightly different on each operating system, and Lucide adds a frontend dependency. Voseo may sound informal to recruiters in Spain; since English is the default, it only reaches visitors whose browser is set to Spanish.
 
+## ADR-019 · OpenAI for the language models and the embeddings
+
+*Accepted · 2026-10-31 · Supersedes ADR-006*
+
+**Decision:** OpenAI provides both the language models and the embeddings. ADR-006's split by task stays: a fast, low-cost model for the guardrail and the router, and a stronger one for answers and job-fit analysis. Model IDs live in configuration and are chosen with the evals in Phase 5. Every provider call goes through a single client module.
+
+**Why:** Leonardo chose OpenAI for the project's account. One account and one key cover both the chat and the embeddings, which settles the open embeddings decision and leaves one provider fewer to set up in step 0.5. OpenAI caches repeated prompt prefixes automatically, so keeping the profile and the policies at the start of the prompt still cuts cost and latency, as ADR-006 planned. It is also the provider Leonardo already uses in his production work.
+
+**Alternatives considered:** keeping Claude (ADR-006), whose argument was showing a provider beyond the ones in his production work; Gemini; a separate provider for the embeddings.
+
+**Trade-offs:** the repo no longer shows that range across providers; since calls go through one client module, switching provider stays a contained change. The stored vectors belong to one embedding model, so changing it means running the ingestion again, which is idempotent (ADR-007).
+
 ---
 
 ## Open decisions
@@ -255,7 +268,6 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | Decision | When |
 |---|---|
 | Personal domain name | Step 0.4 |
-| Embeddings provider | Step 0.5 |
 | Email provider for the contact agent | Step 0.5 |
 | CV PDFs: generated from `profile.yaml` at build time, or uploaded by hand | Step 1.7 |
 | Speech-to-text and text-to-speech providers | Phase 8 |

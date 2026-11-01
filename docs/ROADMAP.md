@@ -23,7 +23,7 @@ FastAPI + LangGraph (Railway)
         ├── Guardrail ──► Supervisor ──► Profile agent (RAG + citations)
         │                           ├──► Job-fit analyst
         │                           └──► Contact agent
-        ├── Claude (fast model for routing, strong model for answers)
+        ├── OpenAI (fast model for routing, strong model for answers, embeddings)
         ├── Supabase Postgres + pgvector (hybrid search over case studies)
         └── Langfuse (traces) · evals in CI
 ```
@@ -38,7 +38,7 @@ Goal: the idea, the decisions and the quality bar are written down before any co
 - [x] 0.2 Quality standards skill + `CLAUDE.md`
 - [x] 0.3 `docs/DECISIONS.md`: one short entry per decision taken so far (chat-first, two services instead of microservices, two-tier context + RAG, multi-agent with LangGraph, hosting split, third-person assistant, live avatar out of scope, privacy rules)
 - [ ] 0.4 Buy the personal domain
-- [ ] 0.5 Create accounts and API keys: Anthropic, Railway, Supabase, Langfuse, embeddings provider, email provider. Keys go to a password manager and to platform secrets, never to the repo
+- [ ] 0.5 Create accounts and API keys: OpenAI (models and embeddings, ADR-019), Railway, Supabase, Langfuse, email provider. Keys go to a password manager and to platform secrets, never to the repo
 - [ ] 0.6 GitHub repo settings: public, branch protection on `main` (PR + green CI required)
 
 **Done when:** anyone reading `docs/` understands what we build and why, and every account exists.
