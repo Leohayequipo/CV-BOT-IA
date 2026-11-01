@@ -59,7 +59,9 @@ Goal: one reviewed source of truth that both the page and the assistant read. Th
   - [ ] Leading an 8-developer team at Universidad Atlántida
 - [x] 1.5 `evals/questions.yaml`: 30+ real recruiter questions with the facts a good answer must contain. These become the eval dataset in Phase 5
 - [x] 1.6 Content schema + validation test (fails CI if `profile.yaml` breaks the schema or a case study misses a required section)
-- [ ] 1.7 Assets: a professional profile photo and a cover image in high resolution, and the CV PDFs (EN/ES) for download without the phone number
+- [ ] 1.7 Assets:
+  - [x] Professional profile photo (`content/assets/profile-photo.jpg`, without metadata)
+  - [ ] CV PDFs (EN/ES) for download, without the phone number
 
 **Done when:** Leonardo has reviewed every fact and the validation test passes.
 
@@ -69,7 +71,7 @@ Goal: decide how the product looks and feels before writing interface code. Recr
 
 - [ ] 2.1 Moodboard: 5–10 references (chat products, profile pages, LinkedIn messaging), each with a note on what we take from it
 - [ ] 2.2 Visual directions: 2–3 interactive mockups of the main screen (desktop + mobile) built with real content. Leonardo picks one or a mix
-- [ ] 2.3 Visual identity: accent colour, light and dark palettes, typography, icon set, photo treatment, tone of the interface copy
+- [ ] 2.3 Visual identity: accent colour, light and dark palettes, typography, icon set, photo treatment, cover image, tone of the interface copy
 - [ ] 2.4 High-fidelity mockups of every screen and state:
   - [ ] First load with suggested questions
   - [ ] Streaming answer with citations

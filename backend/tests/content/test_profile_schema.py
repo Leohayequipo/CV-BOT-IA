@@ -67,6 +67,13 @@ def test_project_reusing_an_experience_id_is_rejected(profile_data: dict[str, An
         Profile.model_validate(profile_data)
 
 
+def test_photo_outside_the_assets_folder_is_rejected(profile_data: dict[str, Any]) -> None:
+    profile_data["basics"]["photo"]["path"] = "assets/../../secrets.png"
+
+    with pytest.raises(ValidationError, match=r"basics\.photo\.path"):
+        Profile.model_validate(profile_data)
+
+
 def test_id_with_spaces_is_rejected(profile_data: dict[str, Any]) -> None:
     profile_data["experience"][0]["id"] = "Acme Corp"
 
