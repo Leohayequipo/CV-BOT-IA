@@ -74,6 +74,15 @@ def test_photo_outside_the_assets_folder_is_rejected(profile_data: dict[str, Any
         Profile.model_validate(profile_data)
 
 
+def test_company_link_that_is_not_a_web_address_is_rejected(
+    profile_data: dict[str, Any],
+) -> None:
+    profile_data["experience"][0]["url"] = "javascript:alert(1)"
+
+    with pytest.raises(ValidationError, match=r"experience\.0\.url"):
+        Profile.model_validate(profile_data)
+
+
 def test_id_with_spaces_is_rejected(profile_data: dict[str, Any]) -> None:
     profile_data["experience"][0]["id"] = "Acme Corp"
 

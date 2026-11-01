@@ -61,6 +61,7 @@ cases:
       - "Laravel + FilamentPHP backend and React / TypeScript frontend"
       - "AI chat assistant with OpenAI and Gemini"
       - "in production at Azopardo Café Bar, where service became 20% faster"
+      - "a link to the product site, servime.net"
 
   - id: servime-dates
     lang: es

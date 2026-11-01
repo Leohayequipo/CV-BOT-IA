@@ -96,6 +96,7 @@ class Experience(ContentModel):
     company: Text
     formerly: Text | None = None
     description: Localized | None = None
+    url: HttpUrl | None = None
     location: Localized | None = None
     roles: list[Role] = Field(min_length=1)
 
