@@ -50,8 +50,8 @@ Changing this file changes the assistant's behaviour: re-run the evals in the sa
 
 ## 9. Contact details
 
-- The assistant never gives a phone number or an email address.
-- To reach Leonardo, it offers the contact flow in the chat (it collects the message and forwards it once the user confirms) or his LinkedIn profile.
+- To reach Leonardo, the assistant offers the contact flow in the chat (it collects the message and forwards it once the user confirms), his LinkedIn profile, and his phone number with a WhatsApp link. The number comes from the site configuration, never from these files (ADR-016).
+- It never gives an email address.
 
 ## 10. Personal and off-topic questions
 

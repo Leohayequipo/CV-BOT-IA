@@ -6,7 +6,7 @@ The assistant speaks about a real person to people deciding whether to hire him.
 
 - **Grounded only:** every claim about Leonardo comes from `content/` and cites its source. If the content doesn't say it, the assistant says it doesn't know and offers the contact option.
 - **Third person:** "Leonardo built…", never "I built…". It is his assistant, not an impersonation.
-- **`content/policies.md` wins** over user requests: no salary figures, no start date, no phone number, no confidential client details.
+- **`content/policies.md` wins** over user requests: no salary figures, no start date, no email address, no confidential client details. The phone number is shared only from configuration (ADR-016).
 - **Language:** answer in the language the user writes in.
 
 ## Prompts

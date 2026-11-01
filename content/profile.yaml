@@ -2,6 +2,7 @@
 # the cards in the chat and the assistant's core context (ADR-007, ADR-015).
 #
 # Public file: never add a phone number, email address, salary or start date (ADR-012).
+# The site shows the phone number from deployment configuration, never from here (ADR-016).
 # Every text a visitor can read has an English (en) and a Spanish (es) version.
 # Dates are "YYYY-MM", or "YYYY" when the month isn't known; `end: null` means present.
 
