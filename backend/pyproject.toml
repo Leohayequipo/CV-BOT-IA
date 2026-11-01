@@ -17,6 +17,8 @@ target-version = "py313"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM", "N", "S", "ASYNC", "RUF"]
+# Periods read "Oct 2023 – present" with an en dash, as in the designs and docs/API.md
+allowed-confusables = ["–"]
 
 [tool.ruff.lint.per-file-ignores]
 # pytest is built on plain asserts

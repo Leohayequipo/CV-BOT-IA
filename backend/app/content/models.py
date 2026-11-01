@@ -22,6 +22,8 @@ Period = Annotated[str, StringConstraints(pattern=rf"^{_PARTIAL_DATE}(?:/{_PARTI
 # An image in content/assets/; the pattern also keeps paths from leaving that folder.
 AssetPath = Annotated[str, StringConstraints(pattern=r"^assets/[a-z0-9-]+\.(?:jpg|png|webp|avif)$")]
 WorkMode = Literal["remote", "hybrid", "onsite"]
+# The languages of the site; every Localized text has both.
+Locale = Literal["en", "es"]
 
 REQUIRED_SECTIONS = (
     "Summary",

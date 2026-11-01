@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from httpx import AsyncClient
 
-from app.api.errors import UNEXPECTED_ERROR_MESSAGE
+from app.api.errors import error_message
 
 
 async def test_unknown_route_answers_with_the_error_shape(client: AsyncClient) -> None:
@@ -28,5 +28,5 @@ async def test_unexpected_error_hides_its_details(app: FastAPI, client: AsyncCli
 
     assert response.status_code == 500
     assert response.json() == {
-        "error": {"code": "internal_error", "message": UNEXPECTED_ERROR_MESSAGE}
+        "error": {"code": "internal_error", "message": error_message("internal_error", "en")}
     }

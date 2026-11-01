@@ -32,6 +32,15 @@ uv run uvicorn app.main:app --reload --port 8001
 
 Then open <http://localhost:8001/health>, or <http://localhost:8001/docs> for the interactive API docs.
 
+Until the agents exist (Phase 5), `POST /chat` answers from scripts built from `content/` (ADR-022). Questions about salary, start dates or unrelated topics get their redirect, and these messages force the cases a real model can't produce on demand:
+
+| Message | Answer |
+|---|---|
+| `mock: slow` | The usual answer, five times slower, to try the stop button |
+| `mock: long` | Every role and project, with a citation each |
+| `mock: fail` | A few words, then an `upstream_unavailable` error event |
+| `mock: limit` | `429` with `Retry-After`, before any event |
+
 ### Frontend
 
 It needs Node 26, the version in `frontend/.nvmrc`.
