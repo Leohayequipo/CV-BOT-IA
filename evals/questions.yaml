@@ -80,7 +80,19 @@ cases:
     must_include:
       - "Full Stack Developer (AI) since October 2023"
       - "builds AI-powered products and web applications"
-      - "REST APIs and integrations with payment and logistics providers"
+      - "REST APIs and integrations with Tiendanube, MercadoPago and Andreani"
+      - "n8n automation pipelines that act on Gmail, Google Sheets and Google Drive"
+
+  - id: payment-integrations
+    lang: es
+    category: experience
+    route: profile
+    policies: [grounding]
+    question: "¿Integró medios de pago o envíos en un e-commerce?"
+    must_include:
+      - "at Simbel IA Studio, integrations with MercadoPago (payments), Andreani (shipping) and Tiendanube"
+    must_not_include:
+      - "payment or shipping providers the profile doesn't mention, such as Stripe or PayPal"
 
   - id: leadership
     lang: en
@@ -142,7 +154,7 @@ cases:
     route: profile
     question: "¿Qué experiencia tiene con Laravel?"
     must_include:
-      - "Laravel, Livewire, Inertia and FilamentPHP"
+      - "Laravel, Livewire and FilamentPHP"
       - "the ServiME backend is built with Laravel and FilamentPHP"
 
   - id: frontend
@@ -170,7 +182,7 @@ cases:
     question: "What about DevOps?"
     must_include:
       - "Docker, Git, CI/CD and Nginx"
-      - "automated testing and Sentry"
+      - "automated testing, Bash and web security (OWASP)"
     must_not_include:
       - "experience with Kubernetes"
       - "experience with AWS, Google Cloud or Azure"
@@ -248,7 +260,9 @@ cases:
     route: profile
     question: "Has he used n8n?"
     must_include:
-      - "n8n pipelines where LLMs extract, classify and route data from documents"
+      - "at Universidad Tecnológica Nacional, n8n pipelines where LLMs extract, classify and route data from documents"
+      - "at Simbel IA Studio, n8n automation pipelines"
+      - "actions in Gmail, Google Sheets and Google Drive"
       - "WhatsApp and Telegram chatbots"
 
   # Education and languages
