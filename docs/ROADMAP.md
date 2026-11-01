@@ -91,7 +91,7 @@ Goal: an empty "hello world" travels from a push on `main` to production automat
 - [x] 3.1 Monorepo layout: `frontend/`, `backend/`, `content/`, `evals/`, `docs/`
 - [x] 3.2 Backend: FastAPI with `/health` and typed settings, on the Python project from 1.6 (`uv`, ruff, mypy strict, pytest)
 - [x] 3.3 Frontend: Vite + React + TypeScript (strict), Tailwind, oxlint, Prettier, Vitest + Testing Library
-- [ ] 3.4 pre-commit hooks (format, lint, secret scanning)
+- [x] 3.4 pre-commit hooks (format, lint, secret scanning)
 - [ ] 3.5 GitHub Actions CI: add the frontend job (lint, type-check, test, build) next to the backend job from 1.6
 - [ ] 3.6 Deploy: frontend to Hostinger by FTP, backend to Railway, both on merge to `main`; the phone number reaches both from deployment secrets (ADR-016)
 - [ ] 3.7 DNS: domain → Hostinger, `api.` subdomain → Railway, HTTPS on both

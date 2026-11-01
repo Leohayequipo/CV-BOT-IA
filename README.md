@@ -44,6 +44,15 @@ npm run dev
 
 Then open <http://localhost:5180>.
 
+### Commit hooks
+
+[pre-commit](https://pre-commit.com) checks every commit before it enters the history. It formats and lints the files that changed, and blocks leaked secrets with gitleaks. When `content/` or `evals/` change, it also blocks phone numbers and email addresses that must not be published. Set it up once per clone, after installing both apps:
+
+```bash
+uv tool install pre-commit
+pre-commit install
+```
+
 ### Checks
 
 The same commands CI runs:
