@@ -79,7 +79,7 @@ Goal: decide how the product looks and feels before writing interface code. Recr
   - [x] Contact flow and confirmation
   - [x] Errors: network failure, rate limit, off-topic redirect
   - [x] Mobile and dark mode versions of all of the above
-- [ ] 2.5 Motion spec: what animates, how long and with which easing; reduced-motion fallback
+- [x] 2.5 Motion spec: what animates, how long and with which easing; reduced-motion fallback (ADR-020)
 - [ ] 2.6 `docs/DESIGN.md`: tokens, components, states and screenshots of the approved mockups. Phase 4 builds from this file
 
 **Done when:** Leonardo has approved the final mockups and every state the interface can be in has a design.
@@ -104,7 +104,7 @@ Goal: an empty "hello world" travels from a push on `main` to production automat
 Goal: build the approved design with a fake server that streams pre-written answers, so the interface can be finished and tested before any AI exists.
 
 - [ ] 4.1 Design tokens from `DESIGN.md` into CSS variables and the Tailwind theme; light and dark themes
-- [ ] 4.2 API contract in `docs/API.md`: `POST /chat` and its SSE events (`token`, `citation`, `card`, `done`, `error`)
+- [ ] 4.2 API contract in `docs/API.md`: `POST /chat` and its SSE events (`token`, `citation`, `card`, `node`, `done`, `error`); `node` names the graph step that is working, for the live graph on the cover (ADR-020)
 - [ ] 4.3 Mock server that streams fake answers following the contract, including slow, failing and very long responses
 - [ ] 4.4 Layout: profile card + conversation; on mobile the card collapses into a header
 - [ ] 4.5 Chat: streamed messages, Markdown, suggested questions, typing indicator, citations, retry on error, empty, loading and error states
@@ -140,7 +140,7 @@ Goal: the assistant does more than answer; each agent exists because its task re
 - [ ] 6.1 LangGraph supervisor: typed state, fast-model router, guardrail as the entry node
 - [ ] 6.2 Job-fit analyst (subgraph): pasted job offer → requirements → evidence from the profile → honest fit report
 - [ ] 6.3 Contact agent: collects name, email, company and message, confirms, and emails a summary to Leonardo (anti-spam included)
-- [ ] 6.4 Connect the agents to the cards built in 4.6
+- [ ] 6.4 Connect the agents to the cards built in 4.6 and to the live graph on the cover
 - [ ] 6.5 Graph tests with fake models: routing, every node, error paths
 - [ ] 6.6 Evals for routing accuracy and job-fit quality
 

@@ -30,6 +30,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 017 | Visual direction: LinkedIn's three-column layout |
 | 018 | Visual identity: teal accent, system fonts and Lucide icons |
 | 019 | OpenAI for the language models and the embeddings |
+| 020 | Motion: short CSS animations with a reduced-motion version |
 
 ---
 
@@ -260,6 +261,18 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Alternatives considered:** keeping Claude (ADR-006), whose argument was showing a provider beyond the ones in his production work; Gemini; a separate provider for the embeddings.
 
 **Trade-offs:** the repo no longer shows that range across providers; since calls go through one client module, switching provider stays a contained change. The stored vectors belong to one embedding model, so changing it means running the ingestion again, which is idempotent (ADR-007).
+
+## ADR-020 · Motion: short CSS animations with a reduced-motion version
+
+*Accepted · 2026-10-31*
+
+**Decision:** motion uses three durations (120, 200 and 320 ms) and three easing curves: one for what enters, one for what leaves, and one for what moves or loops. What enters fades in while rising 8 px (12 px for cards), and what leaves fades out in 120 ms. Nothing lasts longer than 320 ms except the waiting indicators: the typing dots, the streaming caret and the retry spinner. The page load, each streamed word and the theme switch don't animate. Under `prefers-reduced-motion` nothing moves, scales or rotates: only opacity and colour change, in 120 ms at most, and nothing loops. While the assistant thinks, the cover of the profile card lights up the path the question takes through the graph (guardrail, supervisor, agent), so the API streams which node is working (step 4.2). Animations are plain CSS transitions and keyframes, with no animation library. The motion sheet lives in the design canvas; its tokens go into `docs/DESIGN.md` in step 2.6.
+
+**Why:** the visitor is reading, so motion should show what changed and never make them wait; short durations keep the chat feeling fast. CSS covers every animation in the sheet with no extra JavaScript, animates opacity and transforms without blocking the main thread, and handles reduced motion with a single media query. The live graph turns the architecture of ADR-009 into something a visitor can watch, which is what this project has to prove. Leonardo approved the sheet, including the live graph.
+
+**Alternatives considered:** an animation library such as Motion (formerly Framer Motion), which helps with exit and layout animations but adds JavaScript for effects CSS already covers; no motion at all; the typing dots alone, without the live graph.
+
+**Trade-offs:** a CSS exit animation needs the element to stay mounted until its fade ends. The live graph adds an event to the API contract, and it only shows on desktop, where the cover is visible.
 
 ---
 
