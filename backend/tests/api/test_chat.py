@@ -219,3 +219,52 @@ async def test_invalid_question_is_refused_in_its_language(client: AsyncClient) 
     response = await client.post("/chat", json=question("   ", locale="es"))
 
     assert response.json()["error"]["message"] == error_message("invalid_request", "es")
+
+
+@pytest.mark.parametrize(
+    ("message", "card_type"),
+    [
+        ("What is ServiME?", "project"),
+        ("Show me his experience", "timeline"),
+        ("What's his stack?", "skills"),
+        ("We are looking for an AI Engineer. " * 12, "job_fit"),
+        ("Leave him a message", "contact_summary"),
+    ],
+    ids=["project", "timeline", "skills", "pasted-offer", "contact"],
+)
+async def test_card_follows_the_text_of_its_answer(
+    client: AsyncClient, message: str, card_type: str
+) -> None:
+    events = await ask(client, message)
+
+    order = names(events)
+    assert [payload["type"] for name, payload in events if name == "card"] == [card_type]
+    assert order.index("card") > max(i for i, name in enumerate(order) if name == "token")
+    assert order[-1] == "done"
+
+
+async def test_job_fit_summary_agrees_with_its_rows(client: AsyncClient) -> None:
+    events = await ask(client, "mock: job-fit")
+
+    card = next(payload["data"] for name, payload in events if name == "card")
+    statuses = [row["status"] for row in card["requirements"]]
+    summary = f"meets {statuses.count('met')} of the {len(statuses)} requirements"
+    assert summary in text_of(events)
+
+
+async def test_card_markers_refer_to_citations_already_sent(client: AsyncClient) -> None:
+    events = await ask(client, "mock: job-fit")
+
+    cited = {payload["id"] for name, payload in events if name == "citation"}
+    card = next(payload["data"] for name, payload in events if name == "card")
+    markers = {
+        int(n) for row in card["requirements"] for n in re.findall(r"\[(\d+)\]", row["evidence"])
+    }
+    assert markers <= cited
+
+
+async def test_asking_to_analyse_an_offer_asks_for_the_offer(client: AsyncClient) -> None:
+    events = await ask(client, "Analyse a job offer")
+
+    assert text_of(events).startswith("Paste the job description")
+    assert "card" not in names(events)

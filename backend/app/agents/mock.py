@@ -1,9 +1,12 @@
 """Scripted answers that follow docs/API.md, standing in for the agents until Phase 5 (ADR-022).
 
-The site is built and tested against them. Every fact comes from content/, so even placeholder
-answers are true. A question picks its script by keywords, and "mock: <name>" picks one by name,
-including the cases a real model can't produce on demand: a slow answer, a very long one, a
-failure partway through and the question limit.
+The site is built and tested against them. A question picks its script by keywords, and
+"mock: <name>" picks one by name, including the cases a real model can't produce on demand: a slow
+answer, a very long one, a failure partway through and the question limit.
+
+Every fact comes from content/, so even placeholder answers are true. The two exceptions are
+samples from the approved designs: the job-fit report for a fictional offer, since matching an
+offer needs a model, and the contact summary of a fictional recruiter.
 """
 
 import asyncio
@@ -12,10 +15,13 @@ import re
 from collections.abc import AsyncIterator, Callable
 from dataclasses import dataclass
 
-from app.content.format import format_period, localize
+from app.content.cards import project_card, skills_card, timeline_card
+from app.content.format import format_date, format_period, localize
 from app.content.models import Content, Experience, Locale, Role
 from app.core.errors import RateLimitedError, UpstreamUnavailableError
+from app.schemas.cards import ContactSummaryCard, JobFitCard, Requirement
 from app.schemas.chat import (
+    CardEvent,
     ChatRequest,
     CitationEvent,
     DoneEvent,
@@ -24,16 +30,20 @@ from app.schemas.chat import (
     StreamEvent,
     TokenEvent,
 )
+from app.schemas.contact import ContactRequest
 
 LIMIT_RETRY_AFTER = 60
 # Tokens the failing answer sends before it breaks
 FAIL_AFTER_TOKENS = 12
+# A message this long is a pasted job offer, whatever words it uses
+JOB_OFFER_MIN_CHARS = 400
 
 _COMMAND = re.compile(r"^mock:\s*([a-z-]+)")
 # A word and the spaces after it: close enough to how models stream
 _TOKEN = re.compile(r"\S+\s*")
 _MARKER = re.compile(r"\[(\d+)\]")
 _ANSWER_PATH: tuple[NodeName, ...] = ("guardrail", "supervisor", "profile")
+_JOB_FIT_PATH: tuple[NodeName, ...] = ("guardrail", "supervisor", "job_fit")
 
 
 @dataclass(frozen=True)
@@ -53,6 +63,7 @@ class Script:
     # Markdown, with a [n] marker after each claim
     text: str
     citations: tuple[CitationEvent, ...] = ()
+    cards: tuple[CardEvent, ...] = ()
     suggestions: tuple[str, ...] = ()
     slow: bool = False
     fails_after: int | None = None
@@ -88,6 +99,9 @@ class MockChat:
                     yield citation
             await asyncio.sleep(pace.token)
             yield TokenEvent(text=token)
+        for card in script.cards:
+            await asyncio.sleep(pace.step)
+            yield card
         yield DoneEvent(suggestions=list(script.suggestions))
 
     def _script_for(self, question: ChatRequest) -> Script:
@@ -96,15 +110,33 @@ class MockChat:
         return build(self._content, question.locale)
 
 
+class MockMailer:
+    """Accepts confirmed messages without sending them, until step 6.3 adds the email provider."""
+
+    async def send(self, contact: ContactRequest) -> None:
+        command = _command(contact.message)
+        if command == "fail":
+            raise UpstreamUnavailableError
+        if command == "limit":
+            raise RateLimitedError(retry_after=LIMIT_RETRY_AFTER)
+
+
 def _command(message: str) -> str | None:
     match = _COMMAND.match(message.casefold())
     return match.group(1) if match else None
 
 
 def _topic(message: str) -> str | None:
+    if len(message) >= JOB_OFFER_MIN_CHARS:
+        return "job-fit"
     text = message.casefold()
     return next(
-        (name for name, keywords in _KEYWORDS.items() if any(word in text for word in keywords)),
+        (
+            name
+            for name, keywords in _KEYWORDS.items()
+            # Keywords match at the start of a word: "project" finds "projects", not "subproject"
+            if any(re.search(rf"(?<!\w){re.escape(word)}", text) for word in keywords)
+        ),
         None,
     )
 
@@ -234,6 +266,148 @@ def _fail(content: Content, locale: Locale) -> Script:
     return dataclasses.replace(_summary(content, locale), fails_after=FAIL_AFTER_TOKENS)
 
 
+def _project(content: Content, locale: Locale) -> Script:
+    """ServiME, the project the approved design shows."""
+    entry = _experience(content, "servime")
+    role = entry.roles[0]
+    # ServiME's last highlight is its result in production
+    result = role.highlights[-1]
+    description = localize(entry.description, locale) if entry.description else ""
+    title = localize(role.title, locale).lower()
+    since = format_date(role.start, locale)
+    outcome = localize(result, locale).rstrip(".")
+    text = {
+        "en": f"{entry.company}: {description}. Leonardo has been its {title} since {since} [1]. "
+        f"{outcome} [1].",
+        "es": f"{entry.company}: {description}. Leonardo es su {title} desde {since} [1]. "
+        f"{outcome} [1].",
+    }[locale]
+    suggestions = {
+        "en": ("What AI experience does he have?", "Has he led teams?", "Analyse a job offer"),
+        "es": ("¿Qué experiencia tiene con IA?", "¿Lideró equipos?", "Analizar una oferta"),
+    }[locale]
+    return Script(
+        nodes=_ANSWER_PATH,
+        text=text,
+        citations=(_role_citation(1, entry, role, locale),),
+        cards=(CardEvent.of(project_card(entry, result, locale)),),
+        suggestions=suggestions,
+    )
+
+
+def _timeline(content: Content, locale: Locale) -> Script:
+    """Every role; policy 6 answers the concurrent ones briefly."""
+    text = {
+        "en": "Here is his career, from the most recent role to the oldest. Today he holds "
+        "several ongoing roles, which he meets on different schedules [1].",
+        "es": "Este es su recorrido, del puesto más reciente al más antiguo. Hoy combina varios "
+        "roles en curso, que cumple en distintos horarios [1].",
+    }[locale]
+    citation = CitationEvent(
+        id=1,
+        label={"en": "Profile · Experience", "es": "Perfil · Experiencia"}[locale],
+        source="profile.yaml",
+        section="experience",
+    )
+    suggestions = {
+        "en": ("See his projects", "What's his stack?"),
+        "es": ("Ver sus proyectos", "¿Cuál es su stack?"),
+    }[locale]
+    return Script(
+        nodes=_ANSWER_PATH,
+        text=text,
+        citations=(citation,),
+        cards=(CardEvent.of(timeline_card(content.profile, locale)),),
+        suggestions=suggestions,
+    )
+
+
+def _skills(content: Content, locale: Locale) -> Script:
+    text = {
+        "en": "His main stack, as his CV lists it [1]:",
+        "es": "Su stack principal, tal como figura en su CV [1]:",
+    }[locale]
+    citation = CitationEvent(
+        id=1,
+        label={"en": "Profile · Skills", "es": "Perfil · Skills"}[locale],
+        source="profile.yaml",
+        section="skills",
+    )
+    suggestions = {
+        "en": ("What AI experience does he have?", "See his projects"),
+        "es": ("¿Qué experiencia tiene con IA?", "Ver sus proyectos"),
+    }[locale]
+    return Script(
+        nodes=_ANSWER_PATH,
+        text=text,
+        citations=(citation,),
+        cards=(CardEvent.of(skills_card(content.profile, _MAIN_STACK, locale)),),
+        suggestions=suggestions,
+    )
+
+
+def _job_offer(content: Content, locale: Locale) -> Script:
+    """Asks for the offer, as the approved design does before the report."""
+    text = {
+        "en": "Paste the job description in the box below. I'll put together a report with the "
+        "requirements he meets, the evidence from his CV for each one and what he's missing, "
+        "without exaggerating.",
+        "es": "Pegá la descripción del puesto en el cuadro de abajo. Te armo un informe con los "
+        "requisitos que cumple, la evidencia de su CV para cada uno y lo que le falta, sin "
+        "exagerar.",
+    }[locale]
+    return Script(nodes=_JOB_FIT_PATH, text=text)
+
+
+def _job_fit(content: Content, locale: Locale) -> Script:
+    """The approved design's report on a fictional offer, whatever offer was pasted."""
+    utn = _experience(content, "utn")
+    servime = _experience(content, "servime")
+    profile = CitationEvent(
+        id=3,
+        label={
+            "en": "Profile · Summary, languages and citizenship",
+            "es": "Perfil · Resumen, idiomas y ciudadanía",
+        }[locale],
+        source="profile.yaml",
+        section="summary",
+    )
+    text = {
+        "en": "I compared the offer with his CV. He meets 5 of the 7 requirements, and one more "
+        "in part; there is no evidence of AWS [1] [2] [3]. Here are the details:",
+        "es": "Comparé la oferta con su CV. Cumple 5 de los 7 requisitos y uno en parte; de AWS "
+        "no hay evidencia [1] [2] [3]. Este es el detalle:",
+    }[locale]
+    return Script(
+        nodes=_JOB_FIT_PATH,
+        text=text,
+        citations=(
+            _role_citation(1, utn, utn.roles[0], locale),
+            _role_citation(2, servime, servime.roles[0], locale),
+            profile,
+        ),
+        cards=(CardEvent.of(_SAMPLE_FIT[locale]),),
+        suggestions=_REDIRECT_ACTIONS[locale][:1],
+    )
+
+
+def _contact(content: Content, locale: Locale) -> Script:
+    """The summary to confirm; the real contact agent (step 6.3) collects it step by step."""
+    text = {
+        "en": "Here is the summary. Check it and, if everything is right, I'll send it.",
+        "es": "Este es el resumen. Revisalo y, si está todo bien, se lo envío.",
+    }[locale]
+    return Script(
+        nodes=("guardrail", "supervisor", "contact"),
+        text=text,
+        cards=(CardEvent.of(_SAMPLE_CONTACT[locale]),),
+    )
+
+
+def _experience(content: Content, entry_id: str) -> Experience:
+    return next(entry for entry in content.profile.experience if entry.id == entry_id)
+
+
 def _role_citation(number: int, entry: Experience, role: Role, locale: Locale) -> CitationEvent:
     return CitationEvent(
         id=number,
@@ -252,6 +426,100 @@ _REDIRECT_ACTIONS: dict[Locale, tuple[str, ...]] = {
     "es": ("Dejarle un mensaje", "Analizar una oferta"),
 }
 
+# The skill groups DESIGN.md puts on the skills card
+_MAIN_STACK = ("ai", "backend", "frontend", "data")
+
+_SAMPLE_FIT: dict[Locale, JobFitCard] = {
+    "en": JobFitCard(
+        title="AI Engineer · remote in the EU",
+        requirements=[
+            Requirement(
+                requirement="Python and FastAPI",
+                status="met",
+                evidence="Python backend with FastAPI at UTN [1]",
+            ),
+            Requirement(
+                requirement="RAG and agents with LangGraph",
+                status="met",
+                evidence="RAG document assistant and an AI agent with tool use [1]",
+            ),
+            Requirement(
+                requirement="LLMs in production",
+                status="met",
+                evidence="Chat with OpenAI and Gemini at ServiME, in production [2]",
+            ),
+            Requirement(
+                requirement="5+ years of experience",
+                status="met",
+                evidence="10+ years as a developer [3]",
+            ),
+            Requirement(
+                requirement="EU work permit",
+                status="met",
+                evidence="Italian citizen, no visa needed [3]",
+            ),
+            Requirement(
+                requirement="English C1",
+                status="partial",
+                evidence="B1, with daily conversation practice [3]",
+            ),
+            Requirement(requirement="AWS", status="missing", evidence="Not in his CV"),
+        ],
+    ),
+    "es": JobFitCard(
+        title="AI Engineer · remoto en la UE",
+        requirements=[
+            Requirement(
+                requirement="Python y FastAPI",
+                status="met",
+                evidence="Backend en Python con FastAPI en la UTN [1]",
+            ),
+            Requirement(
+                requirement="RAG y agentes con LangGraph",
+                status="met",
+                evidence="Asistente de documentos con RAG y agente con herramientas [1]",
+            ),
+            Requirement(
+                requirement="LLMs en producción",
+                status="met",
+                evidence="Chat con OpenAI y Gemini en ServiME, ya en producción [2]",
+            ),
+            Requirement(
+                requirement="5 años o más de experiencia",
+                status="met",
+                evidence="Más de 10 años como desarrollador [3]",
+            ),
+            Requirement(
+                requirement="Permiso de trabajo en la UE",
+                status="met",
+                evidence="Ciudadanía italiana, sin necesidad de visado [3]",
+            ),
+            Requirement(
+                requirement="Inglés C1",
+                status="partial",
+                evidence="Tiene B1, con práctica diaria de conversación [3]",
+            ),
+            Requirement(requirement="AWS", status="missing", evidence="No figura en su CV"),
+        ],
+    ),
+}
+# A fictional recruiter, as in the approved design
+_SAMPLE_CONTACT: dict[Locale, ContactSummaryCard] = {
+    "en": ContactSummaryCard(
+        name="Laura Gómez",
+        company="Example Ltd",
+        email="laura.gomez@example.com",
+        message="I'd like to arrange an interview for an AI Engineer role next week.",
+    ),
+    "es": ContactSummaryCard(
+        name="Laura Gómez",
+        company="Empresa de Ejemplo",
+        email="laura.gomez@example.com",
+        message="Me gustaría coordinar una entrevista para un puesto de AI Engineer la semana "
+        "que viene.",
+    ),
+}
+
 _SCRIPTS: dict[str, Callable[[Content, Locale], Script]] = {
     "summary": _summary,
     "long": _long,
@@ -260,6 +528,12 @@ _SCRIPTS: dict[str, Callable[[Content, Locale], Script]] = {
     "salary": _salary,
     "availability": _availability,
     "off-topic": _off_topic,
+    "job-offer": _job_offer,
+    "job-fit": _job_fit,
+    "contact": _contact,
+    "project": _project,
+    "timeline": _timeline,
+    "skills": _skills,
 }
 # Checked in this order; the first topic with a keyword in the question wins
 _KEYWORDS: dict[str, tuple[str, ...]] = {
@@ -273,4 +547,18 @@ _KEYWORDS: dict[str, tuple[str, ...]] = {
         "empezar",
     ),
     "off-topic": ("my code", "recipe", "weather", "mi código", "receta", "clima"),
+    "job-offer": ("job offer", "oferta"),
+    "contact": ("contact", "message", "interview", "contactar", "mensaje", "entrevista"),
+    "project": ("servime", "project", "proyecto"),
+    "timeline": (
+        "his experience",
+        "career",
+        "led",
+        "teams",
+        "su experiencia",
+        "trayectoria",
+        "lideró",
+        "equipos",
+    ),
+    "skills": ("stack", "skills", "technolog", "tecnolog", "habilidades"),
 }

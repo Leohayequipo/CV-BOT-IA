@@ -1,11 +1,12 @@
 """The request and the stream events of POST /chat, as docs/API.md defines them."""
 
-from typing import Annotated, ClassVar, Literal
+from typing import Annotated, ClassVar, Literal, Self
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, StringConstraints
 
 from app.content.models import Locale
+from app.schemas.cards import Card, CardType
 
 NodeName = Literal["guardrail", "supervisor", "profile", "job_fit", "contact"]
 
@@ -52,6 +53,17 @@ class CitationEvent(StreamEvent):
     label: str
     source: str
     section: str
+
+
+class CardEvent(StreamEvent):
+    name: ClassVar[str] = "card"
+
+    type: CardType
+    data: Card
+
+    @classmethod
+    def of(cls, card: Card) -> Self:
+        return cls(type=card.type, data=card)
 
 
 class DoneEvent(StreamEvent):
