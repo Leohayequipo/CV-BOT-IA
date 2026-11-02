@@ -33,6 +33,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 020 | Motion: short CSS animations with a reduced-motion version |
 | 021 | A stateless chat API, and contact sent only on confirmation |
 | 022 | Mock answers from the real backend, built from the content |
+| 023 | The site reads the profile from a JSON copy the backend exports |
 
 ---
 
@@ -301,6 +302,20 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Alternatives considered:** Mock Service Worker in the browser, which needs no backend but skips the real network path and repeats the contract's rules in TypeScript (it remains the tool for the site's own integration tests); a separate mock server generated from the contract, one more thing to run that would drift from the real one.
 
 **Trade-offs:** working on the site needs the backend running, one `uv run` command. The scripts pick answers by keywords, so a question in other words gets the general answer.
+
+---
+
+## ADR-023 · The site reads the profile from a JSON copy the backend exports
+
+*Accepted · 2026-11-02*
+
+**Decision:** `uv run python -m app.content.export` (in `backend/`) writes `content/profile.yaml` to `frontend/src/content/profile.json`, which the site imports when it's built. The copy is committed, and a test in `backend/tests/content` fails while it differs from the profile, so CI and the pre-commit hook catch a forgotten export. The export adds what both apps need computed the same way: each company's initials and each role's period in English and Spanish. The site's photo, `frontend/src/assets/profile-photo.webp`, is a 160 px square derived from `content/assets/profile-photo.jpg` with the framing of the approved mockups.
+
+**Why:** ADR-015 asks the page and the assistant to read the same content. The backend already loads and validates it, so the site reuses that work instead of adding a YAML parser. TypeScript infers the exact shape of the imported JSON, so a renamed key fails the type check. Dates and initials come from the same Python functions as the cards, so the profile column and the chat can't format them differently. The photo shrinks from 255 kB to about 4 kB, which the Lighthouse target needs (step 4.12).
+
+**Alternatives considered:** parsing the YAML in the site with a library and a Vite plugin, which adds a dependency and hand-written types; serving the profile from the API, which would leave the page empty until the backend answers and hide it from search engines; generating the JSON during each build, which would make the frontend build need Python.
+
+**Trade-offs:** a generated file lives in the repo, guarded by the test. Changing the photo means deriving the WebP again by hand; it changes rarely.
 
 ---
 

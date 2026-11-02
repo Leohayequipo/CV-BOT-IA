@@ -1,3 +1,5 @@
 package-lock.json
 dist/
 coverage/
+# Generated from content/profile.yaml by the backend (ADR-023)
+src/content/profile.json
