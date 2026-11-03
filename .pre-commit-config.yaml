@@ -31,12 +31,13 @@ repos:
         language: system
         files: ^backend/.*\.py$
         pass_filenames: false
-      # Schema and privacy tests: a phone number or email in content/ stops the commit
+      # Schema and privacy tests: a phone number or email in content/ stops the commit, and so
+      # does a site copy of the profile that no longer matches it (ADR-023)
       - id: content
-        name: content schema and privacy
+        name: content schema, privacy and site copy
         entry: uv --directory backend run pytest tests/content -q
         language: system
-        files: ^(content|evals)/
+        files: ^(content|evals|frontend/src/content)/
         pass_filenames: false
       - id: frontend-format
         name: prettier (frontend)
