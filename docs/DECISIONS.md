@@ -32,6 +32,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 019 | OpenAI for the language models and the embeddings |
 | 020 | Motion: short CSS animations with a reduced-motion version |
 | 021 | A stateless chat API, and contact sent only on confirmation |
+| 022 | Mock answers from the real backend, built from the content |
 
 ---
 
@@ -286,6 +287,20 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Alternatives considered:** keeping conversations on the server with a LangGraph checkpointer in Postgres, which allows resuming but stores every conversation and adds a table to manage; WebSockets, two-way but heavier than this needs; letting the contact agent send the email when the visitor writes "yes".
 
 **Trade-offs:** requests grow with the history, up to its limit. Reloading the page starts a new conversation. A visitor could alter the history the site sends, but that only affects their own conversation, and the guardrail treats history as untrusted input.
+
+---
+
+## ADR-022 · Mock answers from the real backend, built from the content
+
+*Accepted · 2026-10-31*
+
+**Decision:** until the agents exist (Phase 5), the backend's real `POST /chat` answers from scripts in `backend/app/agents/mock.py`. The request checks, the error responses, CORS and the event stream are the production code; only the part that writes the answer is a stand-in. The scripts build every answer from `content/`, and a message such as `mock: slow` picks the cases a real model can't produce on demand: a slow answer, a very long one, a failure partway through and the question limit. The stream uses FastAPI's built-in Server-Sent Events, with no extra dependency.
+
+**Why:** the site talks to the backend over the same HTTP, streaming and CORS it will use in production, so Phase 4 finds integration problems early, and Phase 5 replaces one module instead of a fake server. The scripts can show the designed states on purpose, which a real model can't do reliably. Building the answers from `content/` means even the placeholders say only true things about Leonardo.
+
+**Alternatives considered:** Mock Service Worker in the browser, which needs no backend but skips the real network path and repeats the contract's rules in TypeScript (it remains the tool for the site's own integration tests); a separate mock server generated from the contract, one more thing to run that would drift from the real one.
+
+**Trade-offs:** working on the site needs the backend running, one `uv run` command. The scripts pick answers by keywords, so a question in other words gets the general answer.
 
 ---
 
