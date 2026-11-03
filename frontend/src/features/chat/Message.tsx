@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { AssistantAvatar, VisitorAvatar } from '../../components/ui/Avatar';
 import { locale, messages } from '../../i18n';
+import { AnswerText, SourcesRow } from './AnswerText';
 import type { AssistantMessage, ChatMessage } from './chatState';
 import { ErrorNotice } from './Notices';
 
@@ -53,10 +54,13 @@ function AnswerBody({ message, onRetry }: { message: AssistantMessage; onRetry?:
     default:
       return (
         <>
-          <p className="mt-0.5 text-answer whitespace-pre-line">
-            {message.text}
-            {message.status === 'streaming' && <Caret />}
-          </p>
+          <AnswerText
+            text={message.text}
+            citations={message.citations}
+            trailing={message.status === 'streaming' && <Caret />}
+          />
+          {/* The sources wait until the answer ends (DESIGN.md) */}
+          {message.status === 'done' && <SourcesRow citations={message.citations} />}
           {message.status === 'stopped' && (
             <p className="mt-1 text-label text-muted">{messages.chat.stopped}</p>
           )}

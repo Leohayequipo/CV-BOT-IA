@@ -109,7 +109,7 @@ Goal: build the approved design with a fake server that streams pre-written answ
 - [x] 4.2 API contract in `docs/API.md`: `POST /chat` and its SSE events (`token`, `citation`, `card`, `node`, `done`, `error`); `node` names the graph step that is working, for the live graph on the cover (ADR-020)
 - [x] 4.3 Mock server that streams fake answers following the contract, including slow, failing and very long responses (ADR-022: scripted answers behind the real `/chat` and `/contact`, built from `content/`)
 - [x] 4.4 Layout: profile card + conversation; on mobile the card collapses into a header
-- [ ] 4.5 Chat: streamed messages, Markdown, suggested questions, typing indicator, citations, retry on error, empty, loading and error states
+- [x] 4.5 Chat: streamed messages, Markdown, suggested questions, typing indicator, citations, retry on error, empty, loading and error states (Markdown subset: ADR-024)
 - [ ] 4.6 Cards: project, timeline, skills, job-fit report
 - [ ] 4.7 Motion and micro-interactions as specified in `DESIGN.md`
 - [ ] 4.8 i18n EN/ES (English by default, follows the browser)
