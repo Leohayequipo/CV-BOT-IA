@@ -73,6 +73,17 @@ export const en = {
       "You've reached the question limit for now. Try again in a few minutes; meanwhile, you " +
       'can write to him on WhatsApp or LinkedIn.',
   },
+  cards: {
+    experience: 'Experience',
+    mainStack: 'Main stack',
+    jobFit: 'Fit with the offer',
+    met: 'Meets',
+    partial: 'In part',
+    missing: 'No evidence',
+    jobFitSummary: (met: number, total: number, partial: number) =>
+      `Meets ${met} of ${total} requirements` + (partial > 0 ? `, ${partial} in part` : ''),
+    jobFitNote: "Based only on his CV. If something isn't there, you can ask Leonardo.",
+  },
   shortcuts: {
     label: 'Shortcuts',
     start: 'To get started',

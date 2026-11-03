@@ -1,9 +1,12 @@
-import type { ReactNode } from 'react';
+import { lazy, type ReactNode, Suspense } from 'react';
 import { AssistantAvatar, VisitorAvatar } from '../../components/ui/Avatar';
 import { locale, messages } from '../../i18n';
 import { AnswerText, SourcesRow } from './AnswerText';
 import type { AssistantMessage, ChatMessage } from './chatState';
 import { ErrorNotice } from './Notices';
+
+// Loaded only when an answer has cards (frontend standards: keep the first load small)
+const CardList = lazy(() => import('./cards/CardList'));
 
 const time = new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' });
 
@@ -61,6 +64,11 @@ function AnswerBody({ message, onRetry }: { message: AssistantMessage; onRetry?:
           />
           {/* The sources wait until the answer ends (DESIGN.md) */}
           {message.status === 'done' && <SourcesRow citations={message.citations} />}
+          {message.cards.length > 0 && (
+            <Suspense fallback={null}>
+              <CardList cards={message.cards} citations={message.citations} />
+            </Suspense>
+          )}
           {message.status === 'stopped' && (
             <p className="mt-1 text-label text-muted">{messages.chat.stopped}</p>
           )}

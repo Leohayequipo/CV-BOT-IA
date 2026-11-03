@@ -180,3 +180,57 @@ describe('Chat answers', () => {
     ).toHaveAttribute('aria-live', 'polite');
   });
 });
+
+describe('Chat cards', () => {
+  it('shows a card under the text of its answer', async () => {
+    server.use(
+      http.post(CHAT_URL, () =>
+        sse([
+          ['token', { text: 'Here is his career.' }],
+          [
+            'card',
+            {
+              type: 'timeline',
+              data: {
+                items: [
+                  {
+                    role: 'Lead Developer',
+                    company: 'ServiME',
+                    period: 'Aug 2026 – present',
+                    initials: 'SM',
+                  },
+                ],
+              },
+            },
+          ],
+          ['done', { suggestions: [] }],
+        ]),
+      ),
+    );
+    render(<App />);
+
+    await ask('Show me his experience');
+
+    const card = await within(chat()).findByRole('article');
+    expect(within(card).getByRole('heading', { name: 'Experience' })).toBeInTheDocument();
+    expect(within(card).getByText('Lead Developer')).toBeInTheDocument();
+  });
+
+  it('skips a card that breaks the contract and keeps the answer', async () => {
+    server.use(
+      http.post(CHAT_URL, () =>
+        sse([
+          ['token', { text: 'Here is his career.' }],
+          ['card', { type: 'timeline', data: { items: 'not a list' } }],
+          ['done', { suggestions: [] }],
+        ]),
+      ),
+    );
+    render(<App />);
+
+    await ask('Show me his experience');
+
+    expect(await within(chat()).findByText('Here is his career.')).toBeInTheDocument();
+    expect(within(chat()).queryByRole('article')).not.toBeInTheDocument();
+  });
+});

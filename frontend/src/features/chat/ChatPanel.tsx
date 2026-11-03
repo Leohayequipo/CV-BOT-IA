@@ -1,5 +1,5 @@
 import { ArrowDown, RotateCcw } from 'lucide-react';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AssistantAvatar } from '../../components/ui/Avatar';
 import { messages } from '../../i18n';
 import type { ChatMessage } from './chatState';
@@ -29,23 +29,32 @@ export function ChatPanel(props: ChatPanelProps) {
   const suggestions =
     latest?.role === 'assistant' && latest.status === 'done' && !limited ? latest.suggestions : [];
 
+  const scroller = useRef<HTMLDivElement>(null);
   const list = useRef<HTMLOListElement>(null);
   // The conversation follows new text only while the visitor is at its end, so someone
   // reading an earlier answer isn't pulled down
   const following = useRef(true);
   const [awayFromEnd, setAwayFromEnd] = useState(false);
 
-  // After every render, which is every streamed word
+  // A new question always brings the conversation to its end
   useLayoutEffect(() => {
-    const element = list.current;
-    if (!element) return;
-    // A new question always brings the conversation to its end
     if (latest?.role === 'assistant' && latest.status === 'thinking') following.current = true;
-    if (following.current) element.scrollTop = element.scrollHeight;
   });
 
+  // Follow the conversation as it grows: each streamed word, and cards that load a moment later
+  useEffect(() => {
+    const element = scroller.current;
+    const content = list.current;
+    if (!element || !content || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(() => {
+      if (following.current) element.scrollTop = element.scrollHeight;
+    });
+    observer.observe(content);
+    return () => observer.disconnect();
+  }, []);
+
   function onScroll() {
-    const element = list.current;
+    const element = scroller.current;
     if (!element) return;
     following.current =
       element.scrollHeight - element.scrollTop - element.clientHeight <= END_SLACK;
@@ -55,7 +64,7 @@ export function ChatPanel(props: ChatPanelProps) {
   function jumpToEnd() {
     following.current = true;
     setAwayFromEnd(false);
-    if (list.current) list.current.scrollTop = list.current.scrollHeight;
+    if (scroller.current) scroller.current.scrollTop = scroller.current.scrollHeight;
   }
 
   return (
@@ -81,22 +90,26 @@ export function ChatPanel(props: ChatPanelProps) {
         </button>
       </div>
       <div className="relative min-h-0 flex-1">
-        <ol
-          ref={list}
+        <div
+          ref={scroller}
           onScroll={onScroll}
           className="h-full overflow-y-auto px-3.5 pb-2 md:px-4 md:pb-[18px]"
         >
-          {conversation.map((message) => (
-            <Message
-              key={message.id}
-              message={message}
-              {...(message === latest && {
-                onRetry,
-                footer: <SuggestedQuestions questions={suggestions} onAsk={onAsk} layout="wrap" />,
-              })}
-            />
-          ))}
-        </ol>
+          <ol ref={list}>
+            {conversation.map((message) => (
+              <Message
+                key={message.id}
+                message={message}
+                {...(message === latest && {
+                  onRetry,
+                  footer: (
+                    <SuggestedQuestions questions={suggestions} onAsk={onAsk} layout="wrap" />
+                  ),
+                })}
+              />
+            ))}
+          </ol>
+        </div>
         {awayFromEnd && busy && (
           <button
             type="button"

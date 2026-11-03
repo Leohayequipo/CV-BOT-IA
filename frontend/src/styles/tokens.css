@@ -74,6 +74,24 @@
   color-scheme: dark;
 }
 
+/*
+ * A project card's own colours (DESIGN.md): the teal set by default, and a project's brand
+ * when it has one, on its card only. ServiME's are the same in both themes.
+ */
+.project-brand {
+  --brand-band: var(--color-cover);
+  --brand-dot: var(--color-cover-dot);
+  --brand-tile: var(--color-accent-soft);
+  --brand-ink: var(--color-accent);
+}
+
+.project-brand.brand-servime {
+  --brand-band: #1f5a43;
+  --brand-dot: #d9692a;
+  --brand-tile: #f5efe3;
+  --brand-ink: #1f5a43;
+}
+
 @layer base {
   body {
     background-color: var(--color-bg);

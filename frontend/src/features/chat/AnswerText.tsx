@@ -1,6 +1,6 @@
 import { type ReactNode, useMemo } from 'react';
 import { messages } from '../../i18n';
-import { type Block, type Inline, parseMarkdown } from '../../lib/markdown';
+import { type Block, type Inline, parseInline, parseMarkdown } from '../../lib/markdown';
 import type { Citation } from './api';
 
 type AnswerTextProps = {
@@ -26,6 +26,12 @@ export function AnswerText({ text, citations, trailing }: AnswerTextProps) {
       {blocks.length === 0 && trailing}
     </div>
   );
+}
+
+/** One line of Markdown inside a card, such as a job-fit row's evidence, with its badges. */
+export function InlineText({ text, citations }: { text: string; citations: Citation[] }) {
+  const sources = new Map(citations.map((citation) => [citation.id, citation]));
+  return parseInline(text).map((node, index) => renderNode(node, index, sources));
 }
 
 type BlockViewProps = {
