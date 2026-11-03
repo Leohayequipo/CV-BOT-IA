@@ -22,6 +22,14 @@ export type ChatRequest = {
   session_id: string;
 };
 
+export type ContactRequest = {
+  name: string;
+  company: string;
+  email: string;
+  message: string;
+  session_id: string;
+};
+
 /** The API refused the question before streaming: an invalid body, the limit or a failure. */
 export class ChatRequestError extends Error {
   readonly error: ChatError;
@@ -51,6 +59,18 @@ export async function* streamChat(
     const parsed = toStreamEvent(event, parseJson(data));
     if (parsed) yield parsed;
   }
+}
+
+/** Send the message the visitor confirmed to Leonardo, and return when it was sent. */
+export async function sendContact(request: ContactRequest): Promise<Date> {
+  const response = await fetch(`${apiUrl()}/contact`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request),
+  });
+  if (!response.ok) throw new ChatRequestError(await readError(response));
+  const body: unknown = await response.json().catch(() => null);
+  return isRecord(body) && typeof body.sent_at === 'string' ? new Date(body.sent_at) : new Date();
 }
 
 // Unknown or malformed events are skipped, so the API can add events without breaking the site

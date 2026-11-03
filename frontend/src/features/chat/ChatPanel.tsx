@@ -4,7 +4,7 @@ import { AssistantAvatar } from '../../components/ui/Avatar';
 import { messages } from '../../i18n';
 import type { ChatMessage } from './chatState';
 import { Composer } from './Composer';
-import { Message } from './Message';
+import { type ContactHandlers, Message } from './Message';
 import { LimitNotice } from './Notices';
 import { SuggestedQuestions } from './SuggestedQuestions';
 
@@ -19,11 +19,17 @@ type ChatPanelProps = {
   onRetry: () => void;
   onStop: () => void;
   onReset: () => void;
+  onSendContact: ContactHandlers['onConfirm'];
 };
 
 /** The centre column on desktop and the whole screen on a phone. */
 export function ChatPanel(props: ChatPanelProps) {
-  const { conversation, busy, limited, onAsk, onRetry, onStop, onReset } = props;
+  const { conversation, busy, limited, onAsk, onRetry, onStop, onReset, onSendContact } = props;
+  const contact: ContactHandlers = {
+    onConfirm: onSendContact,
+    // The assistant asks again what to change, as the contact agent will (step 6.3)
+    onCorrect: () => onAsk(messages.questions.correct),
+  };
   const { chat } = messages;
   const latest = conversation.at(-1);
   const suggestions =
@@ -100,6 +106,7 @@ export function ChatPanel(props: ChatPanelProps) {
               <Message
                 key={message.id}
                 message={message}
+                contact={contact}
                 {...(message === latest && {
                   onRetry,
                   footer: (

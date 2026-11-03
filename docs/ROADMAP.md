@@ -110,7 +110,7 @@ Goal: build the approved design with a fake server that streams pre-written answ
 - [x] 4.3 Mock server that streams fake answers following the contract, including slow, failing and very long responses (ADR-022: scripted answers behind the real `/chat` and `/contact`, built from `content/`)
 - [x] 4.4 Layout: profile card + conversation; on mobile the card collapses into a header
 - [x] 4.5 Chat: streamed messages, Markdown, suggested questions, typing indicator, citations, retry on error, empty, loading and error states (Markdown subset: ADR-024)
-- [ ] 4.6 Cards: project, timeline, skills, job-fit report; the contact summary to confirm and the message-sent card (states 8 and 9 in `DESIGN.md`)
+- [x] 4.6 Cards: project, timeline, skills, job-fit report; the contact summary to confirm and the message-sent card (states 8 and 9 in `DESIGN.md`)
 - [ ] 4.7 Motion and micro-interactions as specified in `DESIGN.md`
 - [ ] 4.8 i18n EN/ES (English by default, follows the browser)
 - [ ] 4.9 Accessibility: keyboard only, screen reader (`aria-live`), contrast, `prefers-reduced-motion`; axe checks in tests

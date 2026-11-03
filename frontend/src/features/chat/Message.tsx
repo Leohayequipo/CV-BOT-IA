@@ -1,24 +1,31 @@
 import { lazy, type ReactNode, Suspense } from 'react';
 import { AssistantAvatar, VisitorAvatar } from '../../components/ui/Avatar';
-import { locale, messages } from '../../i18n';
+import { messages } from '../../i18n';
 import { AnswerText, SourcesRow } from './AnswerText';
+import type { ContactSummaryData } from './cards/cardData';
+import { MessageSentCard } from './cards/MessageSentCard';
 import type { AssistantMessage, ChatMessage } from './chatState';
 import { ErrorNotice } from './Notices';
+import { formatTime } from './time';
 
 // Loaded only when an answer has cards (frontend standards: keep the first load small)
 const CardList = lazy(() => import('./cards/CardList'));
-
-const time = new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' });
 
 type MessageProps = {
   message: ChatMessage;
   // Only the latest answer offers suggestions and a retry
   footer?: ReactNode;
   onRetry?: () => void;
+  contact: ContactHandlers;
+};
+
+export type ContactHandlers = {
+  onConfirm: (messageId: number, contact: ContactSummaryData) => Promise<void>;
+  onCorrect: () => void;
 };
 
 /** No bubbles, as in LinkedIn messaging: avatar, name and time, then the text. */
-export function Message({ message, footer, onRetry }: MessageProps) {
+export function Message({ message, footer, onRetry, contact }: MessageProps) {
   const fromAssistant = message.role === 'assistant';
   return (
     <li className="flex gap-2.5 pt-3.5 md:gap-3 md:pt-4">
@@ -32,11 +39,11 @@ export function Message({ message, footer, onRetry }: MessageProps) {
             ·
           </span>
           <time dateTime={message.sentAt.toISOString()} className="text-label text-muted">
-            {time.format(message.sentAt)}
+            {formatTime(message.sentAt)}
           </time>
         </p>
         {fromAssistant ? (
-          <AnswerBody message={message} onRetry={onRetry} />
+          <AnswerBody message={message} onRetry={onRetry} contact={contact} />
         ) : (
           <p className="mt-0.5 text-answer whitespace-pre-line">{message.text}</p>
         )}
@@ -46,7 +53,13 @@ export function Message({ message, footer, onRetry }: MessageProps) {
   );
 }
 
-function AnswerBody({ message, onRetry }: { message: AssistantMessage; onRetry?: () => void }) {
+type AnswerBodyProps = {
+  message: AssistantMessage;
+  onRetry?: () => void;
+  contact: ContactHandlers;
+};
+
+function AnswerBody({ message, onRetry, contact }: AnswerBodyProps) {
   switch (message.status) {
     case 'thinking':
       return <TypingDots />;
@@ -66,9 +79,18 @@ function AnswerBody({ message, onRetry }: { message: AssistantMessage; onRetry?:
           {message.status === 'done' && <SourcesRow citations={message.citations} />}
           {message.cards.length > 0 && (
             <Suspense fallback={null}>
-              <CardList cards={message.cards} citations={message.citations} />
+              <CardList
+                cards={message.cards}
+                citations={message.citations}
+                contact={{
+                  confirmedAt: message.confirmedAt,
+                  onConfirm: (data) => contact.onConfirm(message.id, data),
+                  onCorrect: contact.onCorrect,
+                }}
+              />
             </Suspense>
           )}
+          {message.contactSentAt && <MessageSentCard at={message.contactSentAt} />}
           {message.status === 'stopped' && (
             <p className="mt-1 text-label text-muted">{messages.chat.stopped}</p>
           )}

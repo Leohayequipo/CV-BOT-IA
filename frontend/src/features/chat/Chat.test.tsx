@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
 import { App } from '../../app/App';
-import { answer, CHAT_URL, server, sse } from '../../test/server';
+import { answer, CHAT_URL, CONTACT_URL, server, sse } from '../../test/server';
 
 /** The whole chat against the fake API: real fetch, real stream parsing, real reducer. */
 
@@ -232,5 +232,82 @@ describe('Chat cards', () => {
 
     expect(await within(chat()).findByText('Here is his career.')).toBeInTheDocument();
     expect(within(chat()).queryByRole('article')).not.toBeInTheDocument();
+  });
+});
+
+describe('Chat contact flow', () => {
+  const summary = {
+    name: 'Laura Gómez',
+    company: 'Example Ltd',
+    email: 'laura.gomez@example.com',
+    message: "I'd like to arrange an interview.",
+  };
+
+  function answerWithSummary() {
+    server.use(
+      http.post(CHAT_URL, () =>
+        sse([
+          ['token', { text: 'Here is the summary.' }],
+          ['card', { type: 'contact_summary', data: summary }],
+          ['done', { suggestions: [] }],
+        ]),
+      ),
+    );
+  }
+
+  it('sends the message only when the visitor confirms, then says it was sent', async () => {
+    answerWithSummary();
+    const bodies: unknown[] = [];
+    server.use(
+      http.post(CONTACT_URL, async ({ request }) => {
+        bodies.push(await request.json());
+        return HttpResponse.json({ sent_at: '2026-11-03T10:32:00Z' }, { status: 202 });
+      }),
+    );
+    render(<App />);
+    const user = await ask('Leave him a message');
+    const card = await within(chat()).findByRole('article');
+    expect(bodies).toHaveLength(0);
+
+    await user.click(within(card).getByRole('button', { name: 'Send message' }));
+
+    expect(await within(card).findByText(/^Confirmed at/)).toBeInTheDocument();
+    expect(within(chat()).getByRole('heading', { name: 'Message sent' })).toBeInTheDocument();
+    expect(bodies).toEqual([{ ...summary, session_id: expect.any(String) }]);
+  });
+
+  it('keeps the buttons and shows why when sending fails', async () => {
+    answerWithSummary();
+    server.use(
+      http.post(CONTACT_URL, () =>
+        HttpResponse.json(
+          { error: { code: 'upstream_unavailable', message: "The message couldn't be sent." } },
+          { status: 503 },
+        ),
+      ),
+    );
+    render(<App />);
+    const user = await ask('Leave him a message');
+    const card = await within(chat()).findByRole('article');
+
+    await user.click(within(card).getByRole('button', { name: 'Send message' }));
+
+    expect(await within(card).findByRole('alert')).toHaveTextContent(
+      "The message couldn't be sent.",
+    );
+    expect(within(card).getByRole('button', { name: 'Send message' })).toBeEnabled();
+  });
+
+  it('asks the assistant again when the visitor wants to correct something', async () => {
+    answerWithSummary();
+    render(<App />);
+    const user = await ask('Leave him a message');
+    const card = await within(chat()).findByRole('article');
+
+    await user.click(within(card).getByRole('button', { name: 'Correct' }));
+
+    expect(
+      within(chat()).getByText("I'd like to change something in the message"),
+    ).toBeInTheDocument();
   });
 });

@@ -67,6 +67,9 @@ export const en = {
     source: 'Source',
     sources: 'Sources',
     newMessage: 'New message',
+    contactSent:
+      "Done, I've sent your message to Leonardo. Would you like to keep asking something meanwhile?",
+    afterContact: ['What AI experience does he have?', 'Analyse a job offer'],
     // Two sentences, as every error: what happened, then what to do
     networkError: "Couldn't connect. Check your connection and try again.",
     limit:
@@ -83,6 +86,18 @@ export const en = {
     jobFitSummary: (met: number, total: number, partial: number) =>
       `Meets ${met} of ${total} requirements` + (partial > 0 ? `, ${partial} in part` : ''),
     jobFitNote: "Based only on his CV. If something isn't there, you can ask Leonardo.",
+    contactTitle: 'Message for Leonardo',
+    contactFrom: 'From',
+    contactEmail: 'Email',
+    contactMessage: 'Message',
+    contactSend: 'Send message',
+    contactSending: 'Sending…',
+    contactCorrect: 'Correct',
+    contactPrivacy: 'Your email is only used so Leonardo can reply to you.',
+    contactConfirmed: (time: string) => `Confirmed at ${time}`,
+    sentTitle: 'Message sent',
+    sentLine: 'Leonardo got it by email, with your address so he can reply.',
+    sentToday: (time: string) => `Today, ${time}`,
   },
   shortcuts: {
     label: 'Shortcuts',
@@ -107,5 +122,6 @@ export const en = {
     skills: "What's his stack?",
     contact: "I'd like to leave him a message",
     offer: 'Analyse a job offer',
+    correct: "I'd like to change something in the message",
   },
 } as const;
