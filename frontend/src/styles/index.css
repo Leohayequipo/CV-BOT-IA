@@ -1,2 +1,15 @@
 @import 'tailwindcss';
 @import './tokens.css';
+
+@layer base {
+  /* A visible focus ring on everything that can take keyboard focus */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Lucide draws at 2 px; the identity uses 1.8 px lines (DESIGN.md) */
+  svg.lucide {
+    stroke-width: 1.8;
+  }
+}

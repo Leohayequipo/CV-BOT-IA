@@ -55,10 +55,11 @@ It needs Node 26, the version in `frontend/.nvmrc`.
 ```bash
 cd frontend
 npm install
+cp .env.example .env   # optional: a placeholder phone number shows the WhatsApp link
 npm run dev
 ```
 
-Then open <http://localhost:5180>.
+Then open <http://localhost:5180>. The real phone number and the CV address reach the site only from the deploy's configuration (ADR-016).
 
 ### Content
 

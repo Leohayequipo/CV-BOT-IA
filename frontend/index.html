@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Leonardo Mannanice · CV</title>
+    <script>
+      // Apply the theme the visitor chose on an earlier visit before the first paint, so the
+      // page doesn't flash in the other one. useTheme reads and writes the same key.
+      try {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
