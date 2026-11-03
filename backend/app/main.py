@@ -3,7 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import chat, health
+from app.api import chat, contact, health
 from app.api.errors import register_error_handlers
 from app.config import Settings, get_settings
 
@@ -21,6 +21,7 @@ def create_app(settings: Settings) -> FastAPI:
     register_error_handlers(app)
     app.include_router(health.router)
     app.include_router(chat.router)
+    app.include_router(contact.router)
     return app
 
 

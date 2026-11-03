@@ -107,7 +107,7 @@ Goal: build the approved design with a fake server that streams pre-written answ
 
 - [x] 4.1 Design tokens from `DESIGN.md` into CSS variables and the Tailwind theme; light and dark themes
 - [x] 4.2 API contract in `docs/API.md`: `POST /chat` and its SSE events (`token`, `citation`, `card`, `node`, `done`, `error`); `node` names the graph step that is working, for the live graph on the cover (ADR-020)
-- [ ] 4.3 Mock server that streams fake answers following the contract, including slow, failing and very long responses
+- [x] 4.3 Mock server that streams fake answers following the contract, including slow, failing and very long responses (ADR-022: scripted answers behind the real `/chat` and `/contact`, built from `content/`)
 - [ ] 4.4 Layout: profile card + conversation; on mobile the card collapses into a header
 - [ ] 4.5 Chat: streamed messages, Markdown, suggested questions, typing indicator, citations, retry on error, empty, loading and error states
 - [ ] 4.6 Cards: project, timeline, skills, job-fit report
