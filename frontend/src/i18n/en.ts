@@ -45,6 +45,30 @@ export const en = {
       "Hi, I'm Leonardo's assistant. I can tell you about his experience, his projects and his " +
       'stack, check how he fits a job offer, or help you contact him. Everything comes from his ' +
       'CV, and I cite the source of every fact.',
+    firstSuggestions: [
+      'What AI experience does he have?',
+      'What is ServiME?',
+      'Can he work in the EU?',
+      'Has he led teams?',
+      'Analyse a job offer',
+    ],
+    suggestionsLabel: 'Suggested questions',
+    questionLabel: 'Your question',
+    placeholder: 'Ask anything or paste a job offer…',
+    limitedPlaceholder: 'You can ask again in a few minutes',
+    send: 'Send question',
+    stop: 'Stop answer',
+    typing: 'Typing',
+    stopped: 'You stopped this answer.',
+    analyseOffer: 'Analyse a job offer',
+    contactHim: 'Contact him',
+    onlyCv: 'Only uses data from his CV',
+    retry: 'Retry',
+    // Two sentences, as every error: what happened, then what to do
+    networkError: "Couldn't connect. Check your connection and try again.",
+    limit:
+      "You've reached the question limit for now. Try again in a few minutes; meanwhile, you " +
+      'can write to him on WhatsApp or LinkedIn.',
   },
   shortcuts: {
     label: 'Shortcuts',
@@ -68,5 +92,6 @@ export const en = {
     projects: 'See his projects',
     skills: "What's his stack?",
     contact: "I'd like to leave him a message",
+    offer: 'Analyse a job offer',
   },
 } as const;

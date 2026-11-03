@@ -1,17 +1,29 @@
 import { RotateCcw } from 'lucide-react';
 import { AssistantAvatar } from '../../components/ui/Avatar';
 import { messages } from '../../i18n';
+import type { ChatMessage } from './chatState';
+import { Composer } from './Composer';
 import { Message } from './Message';
-import type { ChatMessage } from './useConversation';
+import { LimitNotice } from './Notices';
+import { SuggestedQuestions } from './SuggestedQuestions';
 
 type ChatPanelProps = {
   conversation: ChatMessage[];
+  busy: boolean;
+  limited: boolean;
+  onAsk: (question: string) => void;
+  onRetry: () => void;
+  onStop: () => void;
   onReset: () => void;
 };
 
 /** The centre column on desktop and the whole screen on a phone. */
-export function ChatPanel({ conversation, onReset }: ChatPanelProps) {
+export function ChatPanel(props: ChatPanelProps) {
+  const { conversation, busy, limited, onAsk, onRetry, onStop, onReset } = props;
   const { chat } = messages;
+  const latest = conversation.at(-1);
+  const suggestions =
+    latest?.role === 'assistant' && latest.status === 'done' && !limited ? latest.suggestions : [];
   return (
     <section
       id="chat"
@@ -36,9 +48,19 @@ export function ChatPanel({ conversation, onReset }: ChatPanelProps) {
       </div>
       <ol aria-live="polite" className="flex-1 overflow-y-auto px-3.5 pb-2 md:px-4 md:pb-[18px]">
         {conversation.map((message) => (
-          <Message key={message.id} message={message} />
+          <Message
+            key={message.id}
+            message={message}
+            {...(message === latest && {
+              onRetry,
+              footer: <SuggestedQuestions questions={suggestions} onAsk={onAsk} layout="wrap" />,
+            })}
+          />
         ))}
       </ol>
+      <SuggestedQuestions questions={suggestions} onAsk={onAsk} layout="row" />
+      {limited && <LimitNotice />}
+      <Composer busy={busy} limited={limited} onSend={onAsk} onStop={onStop} />
     </section>
   );
 }

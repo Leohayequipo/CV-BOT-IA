@@ -1,9 +1,15 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
-import { afterEach } from 'vitest';
+import { afterAll, afterEach, beforeAll } from 'vitest';
+import { server } from './server';
 
 // Vitest runs without globals, so Testing Library can't register its own cleanup
 afterEach(cleanup);
+
+// Every request goes to the fake API; one it doesn't know fails the test
+beforeAll(() => server.listen({ onUnhandledFrame: 'error' }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 // jsdom has no matchMedia; this one answers the colour-scheme query the theme reads
 let systemTheme: 'light' | 'dark' = 'light';
