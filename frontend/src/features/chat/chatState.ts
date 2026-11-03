@@ -20,6 +20,10 @@ export type AssistantMessage = {
   cards: Card[];
   suggestions: string[];
   error: ChatError | null;
+  // When the visitor confirmed this answer's contact summary
+  confirmedAt: Date | null;
+  // Set on the reply that says the message was sent, which shows the message-sent card
+  contactSentAt: Date | null;
 };
 
 export type ChatMessage = VisitorMessage | AssistantMessage;
@@ -39,6 +43,7 @@ export type ChatAction =
   | { type: 'stop' }
   | { type: 'limited'; until: Date }
   | { type: 'unlimited' }
+  | { type: 'contact_sent'; id: number; at: Date }
   | { type: 'reset'; at: Date };
 
 export function initialChat(at = new Date()): ChatState {
@@ -113,6 +118,21 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
       };
     case 'unlimited':
       return { ...state, limitedUntil: null };
+    case 'contact_sent': {
+      const conversation = state.messages.map((message) =>
+        message.id === action.id && message.role === 'assistant'
+          ? { ...message, confirmedAt: action.at }
+          : message,
+      );
+      const reply: AssistantMessage = {
+        ...answer(conversation.length, action.at),
+        text: messages.chat.contactSent,
+        status: 'done',
+        contactSentAt: action.at,
+        suggestions: [...messages.chat.afterContact],
+      };
+      return { ...state, messages: [...conversation, reply] };
+    }
     case 'reset':
       return { ...initialChat(action.at), limitedUntil: state.limitedUntil };
   }
@@ -137,6 +157,8 @@ function answer(id: number, at: Date): AssistantMessage {
     cards: [],
     suggestions: [],
     error: null,
+    confirmedAt: null,
+    contactSentAt: null,
   };
 }
 

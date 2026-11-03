@@ -9,6 +9,7 @@ import { apiUrl } from '../config';
 export type ApiEvent = [name: string, payload: unknown];
 
 export const CHAT_URL = `${apiUrl()}/chat`;
+export const CONTACT_URL = `${apiUrl()}/contact`;
 
 /** A response that sends each event, in order, as one SSE block. */
 export function sse(events: ApiEvent[]): HttpResponse<ReadableStream<Uint8Array>> {
@@ -32,4 +33,9 @@ export const answer: ApiEvent[] = [
   ['done', { suggestions: ['What is ServiME?'] }],
 ];
 
-export const server = setupServer(http.post(CHAT_URL, () => sse(answer)));
+export const server = setupServer(
+  http.post(CHAT_URL, () => sse(answer)),
+  http.post(CONTACT_URL, () =>
+    HttpResponse.json({ sent_at: '2026-11-03T10:32:00Z' }, { status: 202 }),
+  ),
+);

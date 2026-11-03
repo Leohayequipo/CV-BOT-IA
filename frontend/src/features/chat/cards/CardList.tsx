@@ -1,5 +1,6 @@
 import type { Citation } from '../api';
 import type { Card } from './cardData';
+import { type ContactActions, ContactSummaryCard } from './ContactSummaryCard';
 import { JobFitCard } from './JobFitCard';
 import { ProjectCard } from './ProjectCard';
 import { SkillsCard } from './SkillsCard';
@@ -9,7 +10,13 @@ import { TimelineCard } from './TimelineCard';
  * The cards of one answer. Message loads this module only when an answer has cards, so the
  * first page load doesn't carry them (frontend standards).
  */
-export default function CardList({ cards, citations }: { cards: Card[]; citations: Citation[] }) {
+type CardListProps = {
+  cards: Card[];
+  citations: Citation[];
+  contact: ContactActions;
+};
+
+export default function CardList({ cards, citations, contact }: CardListProps) {
   return cards.map((card, index) => {
     switch (card.type) {
       case 'project':
@@ -21,8 +28,7 @@ export default function CardList({ cards, citations }: { cards: Card[]; citation
       case 'job_fit':
         return <JobFitCard key={index} data={card.data} citations={citations} />;
       case 'contact_summary':
-        // Not drawn yet: the contact flow and its confirmation complete step 4.6
-        return null;
+        return <ContactSummaryCard key={index} data={card.data} actions={contact} />;
     }
   });
 }

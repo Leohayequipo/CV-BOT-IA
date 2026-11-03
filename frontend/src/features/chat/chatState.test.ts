@@ -95,3 +95,18 @@ describe('chatReducer', () => {
     expect(state.limitedUntil).toEqual(until);
   });
 });
+
+describe('contact', () => {
+  it('marks the summary as confirmed and adds the reply with the message-sent card', () => {
+    const sent = new Date('2026-11-03T10:32:00Z');
+    const asked = run(send, { type: 'done', suggestions: [] });
+    const summaryId = latest(asked).id;
+
+    const state = chatReducer(asked, { type: 'contact_sent', id: summaryId, at: sent });
+
+    expect(state.messages.find((message) => message.id === summaryId)).toMatchObject({
+      confirmedAt: sent,
+    });
+    expect(latest(state)).toMatchObject({ status: 'done', contactSentAt: sent });
+  });
+});

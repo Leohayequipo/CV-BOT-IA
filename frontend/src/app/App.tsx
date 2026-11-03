@@ -27,6 +27,7 @@ export function App() {
           onRetry={chat.retry}
           onStop={chat.stop}
           onReset={chat.reset}
+          onSendContact={chat.confirmContact}
         />
         <ShortcutsColumn onAsk={chat.ask} />
       </main>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react';
 import { locale, messages } from '../../i18n';
-import { ChatRequestError, type ChatRequest, streamChat } from './api';
+import { ChatRequestError, type ChatRequest, sendContact, streamChat } from './api';
+import type { ContactSummaryData } from './cards/cardData';
 import { type ChatMessage, chatReducer, initialChat, isPending } from './chatState';
 
 // The API's default limit (docs/API.md); older messages are left out
@@ -79,6 +80,12 @@ export function useChat() {
     dispatch({ type: 'reset', at: new Date() });
   }, []);
 
+  // Errors reach the card that asked, which shows them next to its buttons
+  const confirmContact = useCallback(async (id: number, contact: ContactSummaryData) => {
+    const at = await sendContact({ ...contact, session_id: sessionId });
+    dispatch({ type: 'contact_sent', id, at });
+  }, []);
+
   // Asking works again once the limit's time is up
   useEffect(() => {
     if (state.limitedUntil === null) return;
@@ -92,7 +99,7 @@ export function useChat() {
   // Leaving the page mid-answer closes the connection
   useEffect(() => () => request.current?.abort(), []);
 
-  return { ...state, busy, limited, ask, retry, stop, reset };
+  return { ...state, busy, limited, ask, retry, stop, reset, confirmContact };
 }
 
 /** The finished messages before the question, oldest first, as the API expects them. */
