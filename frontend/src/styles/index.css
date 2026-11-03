@@ -13,3 +13,27 @@
     stroke-width: 1.8;
   }
 }
+
+/* The waiting indicators, the only loops (ADR-020); components turn them off under
+   prefers-reduced-motion with motion-reduce:animate-none */
+@theme {
+  --animate-typing: typing 1.2s var(--ease-move) infinite;
+  --animate-caret: caret 1s steps(1) infinite;
+
+  @keyframes typing {
+    0%,
+    80%,
+    100% {
+      opacity: 0.25;
+    }
+    40% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes caret {
+    50% {
+      opacity: 0;
+    }
+  }
+}

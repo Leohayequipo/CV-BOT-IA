@@ -59,7 +59,7 @@ cp .env.example .env   # optional: a placeholder phone number shows the WhatsApp
 npm run dev
 ```
 
-Then open <http://localhost:5180>. The real phone number and the CV address reach the site only from the deploy's configuration (ADR-016).
+Then open <http://localhost:5180>. The chat talks to the backend, so keep it running too. The real phone number and the CV address reach the site only from the deploy's configuration (ADR-016).
 
 ### Content
 

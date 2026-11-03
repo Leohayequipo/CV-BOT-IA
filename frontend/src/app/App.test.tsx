@@ -14,11 +14,12 @@ describe('App', () => {
     expect(within(chat()).getByText(/^Hi, I'm Leonardo's assistant/)).toBeInTheDocument();
   });
 
-  it('posts the question of a shortcut in the conversation', async () => {
+  it('asks the question of a shortcut', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('button', { name: /AI experience/ }));
+    const shortcuts = screen.getByRole('complementary', { name: 'Shortcuts' });
+    await user.click(within(shortcuts).getByRole('button', { name: /AI experience/ }));
 
     expect(within(chat()).getByText('What AI experience does he have?')).toBeInTheDocument();
   });
@@ -36,10 +37,12 @@ describe('App', () => {
   it('starts a new conversation with only the greeting', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /AI experience/ }));
+    const sections = screen.getByRole('navigation', { name: 'Sections' });
+    await user.click(within(sections).getByRole('button', { name: 'Experience' }));
 
     await user.click(screen.getByRole('button', { name: 'New conversation' }));
 
-    expect(within(chat()).getAllByRole('listitem')).toHaveLength(1);
+    expect(within(chat()).queryByText('Show me his experience')).not.toBeInTheDocument();
+    expect(within(chat()).getByText(/^Hi, I'm Leonardo's assistant/)).toBeInTheDocument();
   });
 });
