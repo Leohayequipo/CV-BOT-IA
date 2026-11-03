@@ -64,6 +64,9 @@ export const en = {
     contactHim: 'Contact him',
     onlyCv: 'Only uses data from his CV',
     retry: 'Retry',
+    source: 'Source',
+    sources: 'Sources',
+    newMessage: 'New message',
     // Two sentences, as every error: what happened, then what to do
     networkError: "Couldn't connect. Check your connection and try again.",
     limit:

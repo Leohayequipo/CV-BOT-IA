@@ -34,6 +34,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 021 | A stateless chat API, and contact sent only on confirmation |
 | 022 | Mock answers from the real backend, built from the content |
 | 023 | The site reads the profile from a JSON copy the backend exports |
+| 024 | A small Markdown reader for the answers, instead of a library |
 
 ---
 
@@ -316,6 +317,20 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Alternatives considered:** parsing the YAML in the site with a library and a Vite plugin, which adds a dependency and hand-written types; serving the profile from the API, which would leave the page empty until the backend answers and hide it from search engines; generating the JSON during each build, which would make the frontend build need Python.
 
 **Trade-offs:** a generated file lives in the repo, guarded by the test. Changing the photo means deriving the WebP again by hand; it changes rarely.
+
+---
+
+## ADR-024 · A small Markdown reader for the answers, instead of a library
+
+*Accepted · 2026-11-03*
+
+**Decision:** the site reads the answers' Markdown with its own parser, `frontend/src/lib/markdown.ts`, which covers what the assistant writes: paragraphs, bullet and numbered lists, bold, italics, inline code, `http(s)` links and `[n]` citation markers. It returns a tree that React renders, never HTML. Headings read as bold lines, since the design has no headings inside answers. The Phase 5 prompt asks the model for this subset.
+
+**Why:** an answer is model output, so it must never become markup (the frontend standards). A parser that only produces a tree can't inject HTML at all, rather than relying on a library's setting to turn HTML off. The citation markers are part of the same grammar, so each `[n]` becomes a badge in one pass. Text that is still streaming parses as it comes: an unclosed `**` shows as written until it closes. About 100 lines with their tests, and nothing added to the bundle.
+
+**Alternatives considered:** `react-markdown` (safe by default, but about 40 kB gzipped to lazy-load, and a remark plugin for the citation badges); `markdown-to-jsx` (smaller, with an option to ignore HTML); `marked` with DOMPurify, which renders an HTML string the site would have to trust.
+
+**Trade-offs:** tables, images, block quotes and code blocks don't render. If answers ever need them, a library becomes the better choice.
 
 ---
 

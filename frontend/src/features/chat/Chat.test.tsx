@@ -139,3 +139,44 @@ describe('Chat', () => {
     expect(within(chat()).getByRole('textbox', { name: 'Your question' })).toBeDisabled();
   });
 });
+
+describe('Chat answers', () => {
+  const citation = {
+    id: 1,
+    label: 'ServiME · Lead Developer',
+    source: 'profile.yaml',
+    section: 'experience.servime',
+  };
+
+  it('shows each citation as a badge, and lists the sources once the answer ends', async () => {
+    server.use(
+      http.post(CHAT_URL, () =>
+        sse([
+          ['citation', citation],
+          ['token', { text: 'He leads **ServiME** [1]. Not cited [2].' }],
+          ['done', { suggestions: [] }],
+        ]),
+      ),
+    );
+    render(<App />);
+
+    await ask('What is ServiME?');
+
+    const sources = await within(chat()).findByRole('list', { name: 'Sources' });
+    expect(within(sources).getByText('ServiME · Lead Developer')).toBeInTheDocument();
+    expect(within(chat()).getByText('Source 1: ServiME · Lead Developer')).toBeInTheDocument();
+    expect(within(chat()).getByText('ServiME', { selector: 'strong' })).toBeInTheDocument();
+    // A marker with no citation stays as written (docs/API.md)
+    expect(within(chat()).getByText(/Not cited \[2\]/)).toBeInTheDocument();
+  });
+
+  it('tells screen readers the whole answer once it ends, without the markers', async () => {
+    render(<App />);
+
+    await ask('What does he build?');
+
+    expect(
+      await within(chat()).findByText("Leonardo's assistant: Leonardo builds AI products."),
+    ).toHaveAttribute('aria-live', 'polite');
+  });
+});
