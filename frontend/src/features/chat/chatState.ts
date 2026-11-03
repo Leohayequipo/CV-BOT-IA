@@ -3,7 +3,8 @@
  * state change in one place. Only the latest answer ever changes.
  */
 import { messages } from '../../i18n';
-import type { Card, ChatError, Citation, StreamEvent } from './api';
+import type { ChatError, Citation, StreamEvent } from './api';
+import type { Card } from './cards/cardData';
 
 export type AnswerStatus = 'thinking' | 'streaming' | 'done' | 'stopped' | 'failed';
 

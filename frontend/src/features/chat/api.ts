@@ -2,10 +2,9 @@
 import { apiUrl } from '../../config';
 import type { Locale } from '../../i18n';
 import { readEvents } from '../../lib/sse';
+import { type Card, toCard } from './cards/cardData';
 
 export type Citation = { id: number; label: string; source: string; section: string };
-// Step 4.6 gives each card type its own shape
-export type Card = { type: string; data: unknown };
 export type ChatError = { code: string; message: string; retryAfter: number | null };
 
 export type StreamEvent =
@@ -64,10 +63,10 @@ function toStreamEvent(name: string, payload: unknown): StreamEvent | null {
       return typeof payload.text === 'string' ? { type: 'token', text: payload.text } : null;
     case 'citation':
       return isCitation(payload) ? { type: 'citation', citation: payload } : null;
-    case 'card':
-      return typeof payload.type === 'string'
-        ? { type: 'card', card: { type: payload.type, data: payload.data } }
-        : null;
+    case 'card': {
+      const card = typeof payload.type === 'string' ? toCard(payload.type, payload.data) : null;
+      return card ? { type: 'card', card } : null;
+    }
     case 'done':
       return { type: 'done', suggestions: strings(payload.suggestions) };
     case 'error':
