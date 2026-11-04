@@ -1,0 +1,3 @@
+# The whole site is public
+User-agent: *
+Allow: /

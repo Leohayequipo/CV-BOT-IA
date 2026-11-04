@@ -1,0 +1,145 @@
+<!doctype html>
+<!--
+  The image shown when the site is shared (Open Graph, 1200 × 630), built from the identity in
+  DESIGN.md: the profile card's cover and graph, the photo, and the teal accent.
+  To update it, open this file in Chrome at exactly 1200 × 630 and save a screenshot as
+  frontend/public/og-image.png. The texts come from content/profile.yaml.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Open Graph image</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: #f2f4f3;
+        font-family: -apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        color: #172022;
+      }
+      .card {
+        position: absolute;
+        inset: 48px;
+        background: #ffffff;
+        border: 2px solid #dde2e1;
+        border-radius: 24px;
+        overflow: hidden;
+      }
+      .cover {
+        position: relative;
+        height: 168px;
+        background-color: #d0e8e9;
+        background-image: radial-gradient(#9ccbcf 3px, transparent 3.4px);
+        background-size: 32px 32px;
+      }
+      .cover svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .edge {
+        fill: none;
+        stroke: #7db6bb;
+        stroke-width: 1.5;
+      }
+      .node {
+        fill: #ffffff;
+        stroke: #0f6e78;
+        stroke-width: 2;
+      }
+      .hub {
+        fill: #0f6e78;
+      }
+      .body {
+        position: relative;
+        padding: 0 64px;
+      }
+      .photo {
+        display: block;
+        width: 176px;
+        height: 176px;
+        margin-top: -96px;
+        border-radius: 50%;
+        border: 7px solid #ffffff;
+        object-fit: cover;
+      }
+      h1 {
+        margin: 20px 0 0;
+        font-size: 64px;
+        font-weight: 600;
+        line-height: 1.1;
+      }
+      .headline {
+        margin: 12px 0 0;
+        font-size: 34px;
+      }
+      .row {
+        display: flex;
+        gap: 16px;
+        margin-top: 30px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 24px;
+        border-radius: 999px;
+        font-size: 26px;
+        font-weight: 600;
+      }
+      .ask {
+        background: #0f6e78;
+        color: #ffffff;
+      }
+      .eu {
+        background: #e0f0f1;
+        color: #0f6e78;
+      }
+      .pill svg {
+        width: 26px;
+        height: 26px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="cover">
+        <!-- The assistant's graph, as on the profile card: guardrail, supervisor, three agents -->
+        <svg viewBox="0 0 280 64" preserveAspectRatio="xMaxYMid meet" aria-hidden="true">
+          <path class="edge" d="M124 42 168 30M168 30 214 14M168 30 222 48M168 30 258 28" />
+          <circle class="node" cx="124" cy="42" r="4" />
+          <circle class="hub" cx="168" cy="30" r="6" />
+          <circle class="node" cx="214" cy="14" r="4" />
+          <circle class="node" cx="222" cy="48" r="4" />
+          <circle class="node" cx="258" cy="28" r="4" />
+        </svg>
+      </div>
+      <div class="body">
+        <img class="photo" src="../../content/assets/profile-photo.jpg" alt="" />
+        <h1>Leonardo Mannanice</h1>
+        <p class="headline">AI Engineer · Full Stack Developer</p>
+        <div class="row">
+          <span class="pill ask">
+            <!-- Lucide message-square -->
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+            Ask his AI assistant: every answer cites his CV
+          </span>
+          <span class="pill eu">
+            <!-- Lucide shield-check -->
+            <svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg>
+            EU citizen
+          </span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

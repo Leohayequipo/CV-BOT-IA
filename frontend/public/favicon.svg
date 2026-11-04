@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- The "LM" monogram of the top bar (DESIGN.md): teal tile, bold white initials -->
+  <rect width="64" height="64" rx="14" fill="#0F6E78" />
+  <text x="32" y="42" text-anchor="middle" fill="#FFFFFF" font-size="27" font-weight="700" letter-spacing="1" font-family="-apple-system, system-ui, 'Segoe UI', Roboto, Arial, sans-serif">LM</text>
+</svg>
