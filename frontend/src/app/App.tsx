@@ -4,6 +4,7 @@ import { PhoneHeader } from '../features/profile/PhoneHeader';
 import { ProfileColumn } from '../features/profile/ProfileColumn';
 import { ShortcutsColumn } from '../features/shortcuts/ShortcutsColumn';
 import { useTheme } from '../features/theme/useTheme';
+import { I18nProvider } from '../i18n/I18nProvider';
 import { TopBar } from './TopBar';
 
 /**
@@ -11,6 +12,14 @@ import { TopBar } from './TopBar';
  * Phone, below 768 px: a header with the profile, and the chat filling the rest of the screen.
  */
 export function App() {
+  return (
+    <I18nProvider>
+      <Page />
+    </I18nProvider>
+  );
+}
+
+function Page() {
   const { theme, toggleTheme } = useTheme();
   const chat = useChat();
   return (

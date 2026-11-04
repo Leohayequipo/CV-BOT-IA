@@ -3,13 +3,14 @@ import { Photo } from '../../components/ui/Avatar';
 import { Card } from '../../components/ui/Card';
 import { ExternalLink } from '../../components/ui/ExternalLink';
 import { InitialsTile } from '../../components/ui/InitialsTile';
-import { locale, messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 import { CoverGraph } from './CoverGraph';
 import { EuBadge } from './EuBadge';
 import { currentRoles, localize, profile } from './profile';
 
 // activeNode: the graph step working on an answer, which the cover lights up
 export function ProfileCard({ activeNode = null }: { activeNode?: string | null }) {
+  const { messages, locale } = useI18n();
   const { basics } = profile;
   return (
     <Card className="overflow-hidden">

@@ -2,7 +2,7 @@ import { Download, MessageCircle } from 'lucide-react';
 import { Photo } from '../../components/ui/Avatar';
 import { ExternalLink } from '../../components/ui/ExternalLink';
 import { cvUrl, whatsappUrl } from '../../config';
-import { locale, messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 import { ThemeToggle } from '../theme/ThemeToggle';
 import type { Theme } from '../theme/useTheme';
 import { EuBadge } from './EuBadge';
@@ -18,6 +18,7 @@ type PhoneHeaderProps = {
 
 /** On a phone the profile collapses into this header, so the chat gets the whole screen. */
 export function PhoneHeader({ theme, onToggleTheme }: PhoneHeaderProps) {
+  const { messages, locale } = useI18n();
   const { basics } = profile;
   const whatsapp = whatsappUrl();
   const cv = cvUrl();

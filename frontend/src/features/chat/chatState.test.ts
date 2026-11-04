@@ -22,11 +22,8 @@ function latest(state: ChatState): AssistantMessage {
 const send: ChatAction = { type: 'send', question: 'Has he led teams?', at };
 
 describe('chatReducer', () => {
-  it('opens with the greeting and its suggested questions', () => {
-    const greeting = latest(initialChat(at));
-
-    expect(greeting.status).toBe('done');
-    expect(greeting.suggestions.length).toBeGreaterThan(0);
+  it('opens with the greeting, whose text the site writes in the interface language', () => {
+    expect(latest(initialChat(at))).toMatchObject({ kind: 'greeting', status: 'done', text: '' });
   });
 
   it('adds the question and an answer that is thinking', () => {

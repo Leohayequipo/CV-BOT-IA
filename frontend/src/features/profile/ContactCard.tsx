@@ -3,13 +3,14 @@ import { useId } from 'react';
 import { Card } from '../../components/ui/Card';
 import { ExternalLink } from '../../components/ui/ExternalLink';
 import { whatsappUrl } from '../../config';
-import { messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 import { profile } from './profile';
 
 const outlined =
   'flex h-10 items-center justify-center gap-2 rounded-full border font-semibold transition-colors duration-(--duration-fast)';
 
 export function ContactCard({ onAsk }: { onAsk: (question: string) => void }) {
+  const { messages } = useI18n();
   const titleId = useId();
   const whatsapp = whatsappUrl();
   const { links } = profile.basics;

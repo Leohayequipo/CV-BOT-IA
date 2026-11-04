@@ -1,5 +1,5 @@
 import { CircleCheck, CircleMinus, Contrast, FileText } from 'lucide-react';
-import { messages } from '../../../i18n';
+import { useI18n } from '../../../i18n/useI18n';
 import type { Citation } from '../api';
 import { InlineText } from '../AnswerText';
 import { CardFrame } from './CardFrame';
@@ -15,6 +15,7 @@ const STATUS = {
 /** The fit with a job offer. The totals are counted here from the rows, so they can't
  * disagree with them (docs/API.md); gaps show as plainly as strengths. */
 export function JobFitCard({ data, citations }: { data: JobFitCardData; citations: Citation[] }) {
+  const { messages } = useI18n();
   const { cards } = messages;
   const count = (status: RequirementStatus) =>
     data.requirements.filter((row) => row.status === status).length;

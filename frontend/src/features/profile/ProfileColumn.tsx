@@ -1,4 +1,4 @@
-import { messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 import { ContactCard } from './ContactCard';
 import { ProfileCard } from './ProfileCard';
 import { WorkModeCard } from './WorkModeCard';
@@ -10,6 +10,7 @@ type ProfileColumnProps = {
 };
 
 export function ProfileColumn({ onAsk, activeNode }: ProfileColumnProps) {
+  const { messages } = useI18n();
   return (
     <aside
       aria-label={messages.profile.label}

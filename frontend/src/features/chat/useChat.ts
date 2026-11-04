@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react';
-import { locale, messages } from '../../i18n';
+import { catalogs, type Messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 import { ChatRequestError, type ChatRequest, sendContact, streamChat } from './api';
 import type { ContactSummaryData } from './cards/cardData';
 import { type ChatMessage, chatReducer, initialChat, isPending } from './chatState';
+import { textOf } from './displayText';
 
 // The API's default limit (docs/API.md); older messages are left out
 const MAX_HISTORY = 20;
@@ -14,41 +16,47 @@ const sessionId = crypto.randomUUID();
 
 /** The conversation, and the actions that stream answers into it. */
 export function useChat() {
+  const { locale } = useI18n();
   const [state, dispatch] = useReducer(chatReducer, undefined, () => initialChat());
   const request = useRef<AbortController | null>(null);
 
-  const stream = useCallback(async (question: string, earlier: ChatMessage[]) => {
-    request.current?.abort();
-    const controller = new AbortController();
-    request.current = controller;
-    const body: ChatRequest = {
-      message: question,
-      history: toHistory(earlier),
-      locale,
-      session_id: sessionId,
-    };
-    try {
-      let finished = false;
-      for await (const event of streamChat(body, controller.signal)) {
-        dispatch(event);
-        finished ||= event.type === 'done' || event.type === 'error';
+  const stream = useCallback(
+    async (question: string, earlier: ChatMessage[]) => {
+      request.current?.abort();
+      const controller = new AbortController();
+      request.current = controller;
+      // The copy of the language the question was asked in
+      const copy = catalogs[locale];
+      const body: ChatRequest = {
+        message: question,
+        history: toHistory(earlier, copy),
+        locale,
+        session_id: sessionId,
+      };
+      try {
+        let finished = false;
+        for await (const event of streamChat(body, controller.signal)) {
+          dispatch(event);
+          finished ||= event.type === 'done' || event.type === 'error';
+        }
+        // The connection closed before the answer's last event
+        if (!finished) dispatch({ type: 'error', error: networkError(copy) });
+      } catch (error) {
+        // Stopping or starting over already updated the conversation
+        if (controller.signal.aborted) return;
+        if (error instanceof ChatRequestError && error.error.code === 'rate_limited') {
+          const seconds = error.error.retryAfter ?? DEFAULT_RETRY_AFTER;
+          dispatch({ type: 'limited', until: new Date(Date.now() + seconds * 1000) });
+        } else {
+          dispatch({
+            type: 'error',
+            error: error instanceof ChatRequestError ? error.error : networkError(copy),
+          });
+        }
       }
-      // The connection closed before the answer's last event
-      if (!finished) dispatch({ type: 'error', error: networkError() });
-    } catch (error) {
-      // Stopping or starting over already updated the conversation
-      if (controller.signal.aborted) return;
-      if (error instanceof ChatRequestError && error.error.code === 'rate_limited') {
-        const seconds = error.error.retryAfter ?? DEFAULT_RETRY_AFTER;
-        dispatch({ type: 'limited', until: new Date(Date.now() + seconds * 1000) });
-      } else {
-        dispatch({
-          type: 'error',
-          error: error instanceof ChatRequestError ? error.error : networkError(),
-        });
-      }
-    }
-  }, []);
+    },
+    [locale],
+  );
 
   const latest = state.messages.at(-1);
   const busy = isPending(latest);
@@ -107,16 +115,16 @@ export function useChat() {
 }
 
 /** The finished messages before the question, oldest first, as the API expects them. */
-function toHistory(earlier: ChatMessage[]): ChatRequest['history'] {
+function toHistory(earlier: ChatMessage[], messages: Messages): ChatRequest['history'] {
   return earlier
     .filter((message) => message.role === 'visitor' || message.status === 'done')
     .slice(-MAX_HISTORY)
     .map((message) => ({
       role: message.role === 'visitor' ? 'user' : 'assistant',
-      content: message.text,
+      content: textOf(message, messages),
     }));
 }
 
-function networkError() {
+function networkError(messages: Messages) {
   return { code: 'network', message: messages.chat.networkError, retryAfter: null };
 }

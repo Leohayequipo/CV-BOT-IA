@@ -1,4 +1,4 @@
-import { messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 
 type SuggestedQuestionsProps = {
   questions: string[];
@@ -8,6 +8,7 @@ type SuggestedQuestionsProps = {
 };
 
 export function SuggestedQuestions({ questions, onAsk, layout }: SuggestedQuestionsProps) {
+  const { messages } = useI18n();
   if (questions.length === 0) return null;
   const list =
     layout === 'wrap'

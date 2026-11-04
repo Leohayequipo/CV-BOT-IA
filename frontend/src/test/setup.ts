@@ -5,6 +5,8 @@ import { server } from './server';
 
 // Vitest runs without globals, so Testing Library can't register its own cleanup
 afterEach(cleanup);
+// The theme and the language a test picks don't carry over to the next one
+afterEach(() => localStorage.clear());
 
 // Every request goes to the fake API; one it doesn't know fails the test
 beforeAll(() => server.listen({ onUnhandledFrame: 'error' }));

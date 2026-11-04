@@ -1,12 +1,13 @@
 import { ArrowDown, RotateCcw } from 'lucide-react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AssistantAvatar } from '../../components/ui/Avatar';
-import { messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 import type { ChatMessage } from './chatState';
 import { Composer } from './Composer';
 import { type ContactHandlers, Message } from './Message';
 import { LimitNotice } from './Notices';
 import { SuggestedQuestions } from './SuggestedQuestions';
+import { suggestionsOf, textOf } from './displayText';
 
 // How close to the end still counts as "at the end", in pixels
 const END_SLACK = 32;
@@ -30,6 +31,7 @@ function scrollToEnd(element: HTMLElement) {
 
 /** The centre column on desktop and the whole screen on a phone. */
 export function ChatPanel(props: ChatPanelProps) {
+  const { messages } = useI18n();
   const { conversation, busy, limited, onAsk, onRetry, onStop, onReset, onSendContact } = props;
   const contact: ContactHandlers = {
     onConfirm: onSendContact,
@@ -39,7 +41,9 @@ export function ChatPanel(props: ChatPanelProps) {
   const { chat } = messages;
   const latest = conversation.at(-1);
   const suggestions =
-    latest?.role === 'assistant' && latest.status === 'done' && !limited ? latest.suggestions : [];
+    latest?.role === 'assistant' && latest.status === 'done' && !limited
+      ? suggestionsOf(latest, messages)
+      : [];
 
   // What's there on the first render appears at once: the page load never animates
   const [initialIds] = useState(() => new Set(conversation.map((message) => message.id)));
@@ -155,9 +159,10 @@ export function ChatPanel(props: ChatPanelProps) {
  * read every streamed word.
  */
 function Announcement({ latest }: { latest: ChatMessage | undefined }) {
+  const { messages } = useI18n();
   const text =
     latest?.role === 'assistant' && latest.status === 'done'
-      ? `${messages.chat.assistant}: ${latest.text.replace(/\[\d+\]|[*_`#]/g, '')}`
+      ? `${messages.chat.assistant}: ${textOf(latest, messages).replace(/\[\d+\]|[*_`#]/g, '')}`
       : '';
   return (
     <p aria-live="polite" className="sr-only">

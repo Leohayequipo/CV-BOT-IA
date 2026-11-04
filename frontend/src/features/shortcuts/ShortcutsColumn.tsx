@@ -4,22 +4,21 @@ import { Card } from '../../components/ui/Card';
 import { ExternalLink } from '../../components/ui/ExternalLink';
 import { InitialsTile } from '../../components/ui/InitialsTile';
 import { REPO_URL } from '../../config';
-import { locale, messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 import { localize, recentRoles } from '../profile/profile';
-
-const { shortcuts, questions } = messages;
-// Keyed by the profile's work_mode values: remote, hybrid, onsite
-const workModes: Partial<Record<string, string>> = messages.workModes;
-
-const STARTERS: { icon: LucideIcon; title: string; subtitle: string; question: string }[] = [
-  { icon: Sparkles, ...shortcuts.ai, question: questions.ai },
-  { icon: Utensils, ...shortcuts.servime, question: questions.servime },
-  { icon: Globe, ...shortcuts.eu, question: questions.eu },
-  { icon: Users, ...shortcuts.leadership, question: questions.leadership },
-];
 
 /** The right column on desktop: questions to start with and his latest roles. */
 export function ShortcutsColumn({ onAsk }: { onAsk: (question: string) => void }) {
+  const { locale, messages } = useI18n();
+  const { shortcuts, questions } = messages;
+  // Keyed by the profile's work_mode values: remote, hybrid, onsite
+  const workModes: Partial<Record<string, string>> = messages.workModes;
+  const starters: { icon: LucideIcon; title: string; subtitle: string; question: string }[] = [
+    { icon: Sparkles, ...shortcuts.ai, question: questions.ai },
+    { icon: Utensils, ...shortcuts.servime, question: questions.servime },
+    { icon: Globe, ...shortcuts.eu, question: questions.eu },
+    { icon: Users, ...shortcuts.leadership, question: questions.leadership },
+  ];
   const startId = useId();
   const experienceId = useId();
   return (
@@ -31,7 +30,7 @@ export function ShortcutsColumn({ onAsk }: { onAsk: (question: string) => void }
         <h2 id={startId} className="mx-1.5 mb-1.5 text-title font-semibold">
           {shortcuts.start}
         </h2>
-        {STARTERS.map(({ icon: Icon, title, subtitle, question }) => (
+        {starters.map(({ icon: Icon, title, subtitle, question }) => (
           <button
             key={question}
             type="button"

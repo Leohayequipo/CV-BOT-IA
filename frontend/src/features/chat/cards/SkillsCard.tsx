@@ -1,10 +1,11 @@
 import { Pill } from '../../../components/ui/Pill';
-import { messages } from '../../../i18n';
+import { useI18n } from '../../../i18n/useI18n';
 import { CardFrame } from './CardFrame';
 import { rowEntrance } from './rowEntrance';
 import type { SkillsCardData } from './cardData';
 
 export function SkillsCard({ data }: { data: SkillsCardData }) {
+  const { messages } = useI18n();
   return (
     <CardFrame className="flex flex-col gap-3 px-4 py-3.5">
       <h3 className="text-card-title font-semibold">{messages.cards.mainStack}</h3>
