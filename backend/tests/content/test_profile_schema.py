@@ -88,3 +88,10 @@ def test_id_with_spaces_is_rejected(profile_data: dict[str, Any]) -> None:
 
     with pytest.raises(ValidationError, match="should match pattern"):
         Profile.model_validate(profile_data)
+
+
+def test_main_skills_cannot_outnumber_the_group(profile_data: dict[str, Any]) -> None:
+    profile_data["skills"][0]["main"] = 5
+
+    with pytest.raises(ValidationError, match="main is 5"):
+        Profile.model_validate(profile_data)

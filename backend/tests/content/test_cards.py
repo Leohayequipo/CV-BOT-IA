@@ -77,3 +77,12 @@ def test_timeline_uses_the_short_name_and_keeps_the_initials(
     card = timeline_card(Profile.model_validate(profile_data), "en")
 
     assert {(item.company, item.initials) for item in card.items} == {("UTN", "UT")}
+
+
+def test_skills_card_shows_only_the_main_items_of_a_group(profile_data: dict[str, Any]) -> None:
+    profile_data["skills"][0]["items"] = ["Python", "FastAPI", "Django"]
+    profile_data["skills"][0]["main"] = 2
+
+    card = skills_card(Profile.model_validate(profile_data), ("backend",), "en")
+
+    assert card.groups[0].items == ["Python", "FastAPI"]

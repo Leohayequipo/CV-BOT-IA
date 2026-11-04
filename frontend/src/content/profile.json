@@ -48,27 +48,28 @@
         "en": "LLMs & AI",
         "es": "LLMs e IA"
       },
+      "main": 8,
       "items": [
         "OpenAI",
         "Anthropic Claude",
         "Gemini",
+        "RAG",
+        "LangGraph",
+        "LangChain",
+        "MCP",
+        "evals",
         {
           "en": "local models (Ollama)",
           "es": "modelos locales (Ollama)"
         },
         "Hugging Face",
-        "RAG",
         "embeddings",
         {
           "en": "vector databases",
           "es": "bases vectoriales"
         },
-        "LangChain",
         "LlamaIndex",
-        "LangGraph",
-        "MCP",
         "fine-tuning",
-        "evals",
         "prompt engineering",
         {
           "en": "cost optimization (prompt caching)",
@@ -91,6 +92,7 @@
         "en": "Voice & vision",
         "es": "Voz y visión"
       },
+      "main": null,
       "items": [
         {
           "en": "Whisper (speech-to-text)",
@@ -110,6 +112,7 @@
         "en": "Backend",
         "es": "Backend"
       },
+      "main": 4,
       "items": [
         "Python (FastAPI)",
         "PHP (Laravel, Livewire, FilamentPHP, Symfony, CodeIgniter)",
@@ -140,12 +143,13 @@
         "en": "Frontend",
         "es": "Frontend"
       },
+      "main": 4,
       "items": [
         "React",
         "TypeScript",
-        "JavaScript",
         "Tailwind CSS",
         "Vite",
+        "JavaScript",
         "Figma"
       ]
     },
@@ -155,12 +159,13 @@
         "en": "Data",
         "es": "Datos"
       },
+      "main": 4,
       "items": [
         "PostgreSQL",
         "MySQL",
-        "Microsoft SQL Server",
-        "Supabase (Edge Functions)",
         "Redis",
+        "Supabase (Edge Functions)",
+        "Microsoft SQL Server",
         {
           "en": "data modeling and normalization",
           "es": "modelado y normalización de datos"
@@ -173,6 +178,7 @@
         "en": "DevOps & quality",
         "es": "DevOps y calidad"
       },
+      "main": null,
       "items": [
         "Docker",
         "Git",
@@ -195,6 +201,7 @@
         "en": "Automation",
         "es": "Automatización"
       },
+      "main": null,
       "items": [
         "n8n",
         "Google Apps Script",
@@ -210,6 +217,7 @@
         "en": "Ways of working",
         "es": "Forma de trabajo"
       },
+      "main": null,
       "items": [
         "Scrum",
         "Kanban",

@@ -64,13 +64,16 @@ def timeline_card(profile: Profile, locale: Locale) -> TimelineCard:
 
 
 def skills_card(profile: Profile, group_ids: tuple[str, ...], locale: Locale) -> SkillsCard:
-    """The chosen skill groups, in the order given."""
+    """The chosen skill groups, in the order given, each with its main items."""
     groups = {group.id: group for group in profile.skills}
     return SkillsCard(
         groups=[
             SkillsGroup(
                 label=localize(groups[group_id].label, locale),
-                items=[localize(item, locale) for item in groups[group_id].items],
+                items=[
+                    localize(item, locale)
+                    for item in groups[group_id].items[: groups[group_id].main]
+                ],
             )
             for group_id in group_ids
         ]
