@@ -20,8 +20,15 @@ export function useTheme() {
 
   useEffect(() => {
     if (chosen === null) return;
-    document.documentElement.dataset.theme = chosen;
+    const root = document.documentElement;
+    // The colours change at once: no button fades between themes (DESIGN.md)
+    root.classList.add('theme-switching');
+    root.dataset.theme = chosen;
     saveChoice(chosen);
+    const frame = requestAnimationFrame(() =>
+      requestAnimationFrame(() => root.classList.remove('theme-switching')),
+    );
+    return () => cancelAnimationFrame(frame);
   }, [chosen]);
 
   const toggleTheme = useCallback(() => setChosen(theme === 'dark' ? 'light' : 'dark'), [theme]);

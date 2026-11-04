@@ -60,16 +60,16 @@ describe('chatReducer', () => {
     expect(latest(state)).toMatchObject({ status: 'done', suggestions: ['Next?'] });
   });
 
-  it('marks a failed answer, and a retry starts it again from scratch', () => {
+  it('marks a failed answer, and a retry keeps the notice until the new answer starts', () => {
     const error = { code: 'upstream_unavailable', message: 'Failed. Retry.', retryAfter: null };
     const failed = run(send, { type: 'token', text: 'He' }, { type: 'error', error });
-
     expect(latest(failed)).toMatchObject({ status: 'failed', error });
-    expect(latest(chatReducer(failed, { type: 'retry', at }))).toMatchObject({
-      status: 'thinking',
-      text: '',
-      error: null,
-    });
+
+    const retrying = chatReducer(failed, { type: 'retry', at });
+    expect(latest(retrying)).toMatchObject({ status: 'thinking', text: '', error });
+
+    const answering = chatReducer(retrying, { type: 'token', text: 'He led' });
+    expect(latest(answering)).toMatchObject({ status: 'streaming', text: 'He led', error: null });
   });
 
   it('stops only an answer still in progress', () => {

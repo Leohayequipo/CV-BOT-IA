@@ -18,7 +18,7 @@ export function App() {
       <TopBar theme={theme} onToggleTheme={toggleTheme} onAsk={chat.ask} />
       <PhoneHeader theme={theme} onToggleTheme={toggleTheme} />
       <main className="mx-auto flex min-h-0 w-full max-w-[1160px] flex-1 flex-col md:flex-row md:flex-wrap md:items-start md:gap-6 md:px-4 md:pt-6 md:pb-8">
-        <ProfileColumn onAsk={chat.ask} />
+        <ProfileColumn onAsk={chat.ask} activeNode={chat.graphNode} />
         <ChatPanel
           conversation={chat.messages}
           busy={chat.busy}

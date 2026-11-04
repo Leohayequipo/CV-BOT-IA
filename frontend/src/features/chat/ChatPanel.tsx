@@ -22,6 +22,12 @@ type ChatPanelProps = {
   onSendContact: ContactHandlers['onConfirm'];
 };
 
+/** Slides to the end in 320 ms (DESIGN.md); under reduced motion it jumps there. */
+function scrollToEnd(element: HTMLElement) {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  element.scrollTo({ top: element.scrollHeight, behavior: reduce ? 'instant' : 'smooth' });
+}
+
 /** The centre column on desktop and the whole screen on a phone. */
 export function ChatPanel(props: ChatPanelProps) {
   const { conversation, busy, limited, onAsk, onRetry, onStop, onReset, onSendContact } = props;
@@ -35,11 +41,14 @@ export function ChatPanel(props: ChatPanelProps) {
   const suggestions =
     latest?.role === 'assistant' && latest.status === 'done' && !limited ? latest.suggestions : [];
 
+  // What's there on the first render appears at once: the page load never animates
+  const [initialIds] = useState(() => new Set(conversation.map((message) => message.id)));
   const scroller = useRef<HTMLDivElement>(null);
   const list = useRef<HTMLOListElement>(null);
   // The conversation follows new text only while the visitor is at its end, so someone
   // reading an earlier answer isn't pulled down
   const following = useRef(true);
+  const lastTop = useRef(0);
   const [awayFromEnd, setAwayFromEnd] = useState(false);
 
   // A new question always brings the conversation to its end
@@ -53,24 +62,28 @@ export function ChatPanel(props: ChatPanelProps) {
     const content = list.current;
     if (!element || !content || typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(() => {
-      if (following.current) element.scrollTop = element.scrollHeight;
+      if (following.current) scrollToEnd(element);
     });
     observer.observe(content);
     return () => observer.disconnect();
   }, []);
 
+  // Only the visitor scrolls up: the smooth scroll above only goes down, so it can't be
+  // mistaken for the visitor leaving the end
   function onScroll() {
     const element = scroller.current;
     if (!element) return;
-    following.current =
-      element.scrollHeight - element.scrollTop - element.clientHeight <= END_SLACK;
+    const atEnd = element.scrollHeight - element.scrollTop - element.clientHeight <= END_SLACK;
+    if (element.scrollTop < lastTop.current - 1) following.current = false;
+    if (atEnd) following.current = true;
+    lastTop.current = element.scrollTop;
     setAwayFromEnd(!following.current);
   }
 
   function jumpToEnd() {
     following.current = true;
     setAwayFromEnd(false);
-    if (scroller.current) scroller.current.scrollTop = scroller.current.scrollHeight;
+    if (scroller.current) scrollToEnd(scroller.current);
   }
 
   return (
@@ -107,6 +120,7 @@ export function ChatPanel(props: ChatPanelProps) {
                 key={message.id}
                 message={message}
                 contact={contact}
+                enter={!initialIds.has(message.id)}
                 {...(message === latest && {
                   onRetry,
                   footer: (
@@ -121,7 +135,7 @@ export function ChatPanel(props: ChatPanelProps) {
           <button
             type="button"
             onClick={jumpToEnd}
-            className="absolute bottom-3 left-1/2 flex h-9 -translate-x-1/2 items-center gap-1.5 rounded-full border border-accent bg-card px-3.5 text-small font-semibold text-accent hover:bg-accent-soft"
+            className="absolute bottom-3 left-1/2 flex h-9 -translate-x-1/2 animate-fade-in items-center gap-1.5 rounded-full border border-accent bg-card px-3.5 text-small font-semibold text-accent hover:bg-accent-soft"
           >
             {chat.newMessage}
             <ArrowDown size={16} aria-hidden="true" />

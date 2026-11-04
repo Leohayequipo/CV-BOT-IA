@@ -3,6 +3,7 @@ import { messages } from '../../../i18n';
 import type { Citation } from '../api';
 import { InlineText } from '../AnswerText';
 import { CardFrame } from './CardFrame';
+import { rowEntrance } from './rowEntrance';
 import type { JobFitCardData, RequirementStatus } from './cardData';
 
 const STATUS = {
@@ -45,12 +46,14 @@ export function JobFitCard({ data, citations }: { data: JobFitCardData; citation
         </div>
       </div>
       <ul className="px-4 py-1">
-        {data.requirements.map((row) => {
+        {data.requirements.map((row, index) => {
           const { icon: Icon, tone } = STATUS[row.status];
+          const entrance = rowEntrance(index);
           return (
             <li
               key={row.requirement}
-              className="flex gap-2.5 border-border py-2.5 not-first:border-t"
+              className={`flex gap-2.5 border-border py-2.5 not-first:border-t ${entrance.className}`}
+              style={entrance.style}
             >
               <Icon size={18} aria-hidden="true" className={`mt-px shrink-0 ${tone}`} />
               <div className="min-w-0 flex-1">

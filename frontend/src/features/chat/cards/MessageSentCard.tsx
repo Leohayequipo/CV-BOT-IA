@@ -10,9 +10,9 @@ export function MessageSentCard({ at }: { at: Date }) {
     <CardFrame className="flex items-start gap-3 px-4 py-3.5">
       <span
         aria-hidden="true"
-        className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent"
+        className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent motion-safe:animate-pop"
       >
-        <Check size={20} />
+        <Check size={20} className="motion-safe:animate-draw" />
       </span>
       <div className="min-w-0">
         <h3 className="text-card-title font-semibold">{cards.sentTitle}</h3>
