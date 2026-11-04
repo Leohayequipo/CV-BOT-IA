@@ -100,6 +100,8 @@ class Experience(ContentModel):
     description: Localized | None = None
     url: HttpUrl | None = None
     location: Localized | None = None
+    # Whether a current role here is listed under "Works today at" on the profile card
+    profile_card: bool = True
     roles: list[Role] = Field(min_length=1)
 
     @model_validator(mode="after")

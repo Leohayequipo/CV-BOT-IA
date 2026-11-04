@@ -245,6 +245,7 @@
       "description": null,
       "url": null,
       "location": null,
+      "profile_card": true,
       "roles": [
         {
           "title": {
@@ -288,6 +289,7 @@
       "description": null,
       "url": null,
       "location": null,
+      "profile_card": true,
       "roles": [
         {
           "title": {
@@ -333,6 +335,7 @@
       },
       "url": "https://servime.net/",
       "location": null,
+      "profile_card": true,
       "roles": [
         {
           "title": {
@@ -381,6 +384,7 @@
       "description": null,
       "url": null,
       "location": null,
+      "profile_card": true,
       "roles": [
         {
           "title": {
@@ -442,6 +446,7 @@
         "en": "Santa Teresita, Argentina",
         "es": "Santa Teresita, Argentina"
       },
+      "profile_card": false,
       "roles": [
         {
           "title": {
@@ -473,6 +478,7 @@
       "description": null,
       "url": null,
       "location": null,
+      "profile_card": true,
       "roles": [
         {
           "title": {
