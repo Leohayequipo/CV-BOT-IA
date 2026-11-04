@@ -69,7 +69,8 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
       return { ...state, messages: [...state.messages, question, answer(id + 1, action.at)] };
     }
     case 'retry':
-      return updateAnswer(state, (last) => answer(last.id, action.at));
+      // The notice stays, with its icon spinning, until the new answer starts
+      return updateAnswer(state, (last) => ({ ...answer(last.id, action.at), error: last.error }));
     case 'node':
       return { ...state, node: action.node };
     case 'token':
@@ -77,6 +78,7 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
         ...last,
         text: last.text + action.text,
         status: 'streaming',
+        error: null,
       }));
     case 'citation':
       return updateAnswer(state, (last) =>
@@ -92,6 +94,7 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
           ...last,
           status: 'done',
           suggestions: action.suggestions,
+          error: null,
         })),
         node: null,
       };

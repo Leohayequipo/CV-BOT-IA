@@ -311,3 +311,40 @@ describe('Chat contact flow', () => {
     ).toBeInTheDocument();
   });
 });
+
+describe('Chat motion', () => {
+  const rises = 'motion-safe:animate-message-in';
+
+  it('shows the greeting at once and lets new messages rise in', async () => {
+    render(<App />);
+    const greeting = within(chat())
+      .getByText(/^Hi, I'm Leonardo's assistant/)
+      .closest('li');
+
+    await ask('What does he build?');
+
+    expect(greeting).not.toHaveClass(rises);
+    expect(within(chat()).getByText('What does he build?').closest('li')).toHaveClass(rises);
+  });
+
+  it('keeps the error notice while retrying, with the button waiting', async () => {
+    server.use(
+      http.post(CHAT_URL, () => HttpResponse.error(), { once: true }),
+      // The retried answer hasn't started yet
+      http.post(
+        CHAT_URL,
+        () =>
+          new HttpResponse(new ReadableStream(), {
+            headers: { 'Content-Type': 'text/event-stream' },
+          }),
+      ),
+    );
+    render(<App />);
+    const user = await ask('Has he led teams?');
+    const notice = await within(chat()).findByRole('alert');
+
+    await user.click(within(notice).getByRole('button', { name: 'Retry' }));
+
+    expect(await within(chat()).findByRole('button', { name: 'Retrying…' })).toBeDisabled();
+  });
+});

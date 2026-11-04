@@ -50,7 +50,11 @@ export function useChat() {
     }
   }, []);
 
-  const busy = isPending(state.messages.at(-1));
+  const latest = state.messages.at(-1);
+  const busy = isPending(latest);
+  // The cover graph lights up only while the assistant thinks, and rests once words arrive
+  const graphNode =
+    latest?.role === 'assistant' && latest.status === 'thinking' ? state.node : null;
   const limited = state.limitedUntil !== null;
 
   const ask = useCallback(
@@ -99,7 +103,7 @@ export function useChat() {
   // Leaving the page mid-answer closes the connection
   useEffect(() => () => request.current?.abort(), []);
 
-  return { ...state, busy, limited, ask, retry, stop, reset, confirmContact };
+  return { ...state, busy, limited, graphNode, ask, retry, stop, reset, confirmContact };
 }
 
 /** The finished messages before the question, oldest first, as the API expects them. */

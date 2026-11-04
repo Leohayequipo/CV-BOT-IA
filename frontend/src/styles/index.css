@@ -12,13 +12,84 @@
   svg.lucide {
     stroke-width: 1.8;
   }
+
+  /* Buttons and chips: hover changes colour in 120 ms, and pressing scales to 97 % in 80 ms */
+  button,
+  a {
+    transition:
+      color var(--duration-fast) var(--ease-move),
+      background-color var(--duration-fast) var(--ease-move),
+      border-color var(--duration-fast) var(--ease-move),
+      transform 80ms var(--ease-move);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    button:not(:disabled):active {
+      transform: scale(0.97);
+    }
+  }
+
+  /* Switching between light and dark never animates (DESIGN.md); useTheme sets this class
+     for the frame in which the colours change */
+  .theme-switching,
+  .theme-switching * {
+    transition: none !important;
+  }
 }
 
-/* The waiting indicators, the only loops (ADR-020); components turn them off under
-   prefers-reduced-motion with motion-reduce:animate-none */
+/*
+ * Motion from DESIGN.md (ADR-020). What enters rises as it fades in, with --ease-out; under
+ * prefers-reduced-motion, components use fade-in instead (opacity only, 120 ms) and turn the
+ * loops off with motion-reduce:animate-none. Only the waiting indicators loop.
+ */
 @theme {
+  --animate-message-in: rise-8 var(--duration-base) var(--ease-out) both;
+  --animate-card-in: rise-12 var(--duration-slow) var(--ease-out) both;
+  --animate-fade-in: fade-in var(--duration-fast) var(--ease-out) both;
+  --animate-pop: pop var(--duration-base) var(--ease-out) both;
+  --animate-draw: draw 240ms var(--ease-out) both;
   --animate-typing: typing 1.2s var(--ease-move) infinite;
   --animate-caret: caret 1s steps(1) infinite;
+  --animate-hub-pulse: hub-pulse 1.2s var(--ease-move) infinite;
+  --animate-retry-spin: retry-spin 600ms linear infinite;
+
+  @keyframes rise-8 {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  @keyframes rise-12 {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes pop {
+    from {
+      transform: scale(0.6);
+    }
+  }
+
+  /* The tick of "Message sent" draws itself; its path is shorter than 24 units */
+  @keyframes draw {
+    from {
+      stroke-dasharray: 24;
+      stroke-dashoffset: 24;
+    }
+    to {
+      stroke-dasharray: 24;
+      stroke-dashoffset: 0;
+    }
+  }
 
   @keyframes typing {
     0%,
@@ -34,6 +105,22 @@
   @keyframes caret {
     50% {
       opacity: 0;
+    }
+  }
+
+  @keyframes hub-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.35);
+    }
+  }
+
+  @keyframes retry-spin {
+    to {
+      transform: rotate(-360deg);
     }
   }
 }

@@ -64,6 +64,7 @@ export const en = {
     contactHim: 'Contact him',
     onlyCv: 'Only uses data from his CV',
     retry: 'Retry',
+    retrying: 'Retrying…',
     source: 'Source',
     sources: 'Sources',
     newMessage: 'New message',

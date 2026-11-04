@@ -8,11 +8,12 @@ import { CoverGraph } from './CoverGraph';
 import { EuBadge } from './EuBadge';
 import { currentRoles, localize, profile } from './profile';
 
-export function ProfileCard() {
+// activeNode: the graph step working on an answer, which the cover lights up
+export function ProfileCard({ activeNode = null }: { activeNode?: string | null }) {
   const { basics } = profile;
   return (
     <Card className="overflow-hidden">
-      <CoverGraph />
+      <CoverGraph activeNode={activeNode} />
       <div className="px-4 pb-4">
         <Photo
           alt={localize(basics.photo.alt, locale)}

@@ -17,6 +17,8 @@ type MessageProps = {
   footer?: ReactNode;
   onRetry?: () => void;
   contact: ContactHandlers;
+  // New messages rise in; the page load never animates (DESIGN.md)
+  enter: boolean;
 };
 
 export type ContactHandlers = {
@@ -25,10 +27,12 @@ export type ContactHandlers = {
 };
 
 /** No bubbles, as in LinkedIn messaging: avatar, name and time, then the text. */
-export function Message({ message, footer, onRetry, contact }: MessageProps) {
+export function Message({ message, footer, onRetry, contact, enter }: MessageProps) {
   const fromAssistant = message.role === 'assistant';
   return (
-    <li className="flex gap-2.5 pt-3.5 md:gap-3 md:pt-4">
+    <li
+      className={`flex gap-2.5 pt-3.5 md:gap-3 md:pt-4 ${enter ? 'motion-safe:animate-message-in motion-reduce:animate-fade-in' : ''}`}
+    >
       {fromAssistant ? <AssistantAvatar size="message" /> : <VisitorAvatar />}
       <div className="min-w-0 flex-1">
         <p className="flex items-baseline gap-1.5 text-small">
@@ -62,7 +66,8 @@ type AnswerBodyProps = {
 function AnswerBody({ message, onRetry, contact }: AnswerBodyProps) {
   switch (message.status) {
     case 'thinking':
-      return <TypingDots />;
+      // A retry keeps the notice, with its icon spinning, until the new answer starts
+      return message.error ? <ErrorNotice error={message.error} retrying /> : <TypingDots />;
     case 'failed':
       return message.error && onRetry ? (
         <ErrorNotice error={message.error} onRetry={onRetry} />
