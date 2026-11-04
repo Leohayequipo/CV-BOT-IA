@@ -168,6 +168,8 @@ experience:
 
   - id: utn
     company: Universidad Tecnológica Nacional, Facultad Regional Morón
+    # For lists, cards and sources, where the full name takes three lines
+    short_name: UTN, Facultad Regional Morón
     roles:
       - title: { en: "AI R&D Developer", es: "Desarrollador de I+D en IA" }
         start: "2026-01"

@@ -241,6 +241,7 @@
     {
       "id": "simbel",
       "company": "Simbel IA Studio",
+      "short_name": null,
       "formerly": "Simbel",
       "description": null,
       "url": null,
@@ -285,6 +286,7 @@
     {
       "id": "utn",
       "company": "Universidad Tecnológica Nacional, Facultad Regional Morón",
+      "short_name": "UTN, Facultad Regional Morón",
       "formerly": null,
       "description": null,
       "url": null,
@@ -328,6 +330,7 @@
     {
       "id": "servime",
       "company": "ServiME",
+      "short_name": null,
       "formerly": null,
       "description": {
         "en": "AI digital menu and chat SaaS for restaurants",
@@ -380,6 +383,7 @@
     {
       "id": "atlantida",
       "company": "Universidad Atlántida Argentina",
+      "short_name": null,
       "formerly": null,
       "description": null,
       "url": null,
@@ -436,6 +440,7 @@
     {
       "id": "eest1",
       "company": "EEST Nº 1 \"Raúl Scalabrini Ortiz\"",
+      "short_name": null,
       "formerly": null,
       "description": {
         "en": "Technical secondary school",
@@ -474,6 +479,7 @@
     {
       "id": "tres-barbas",
       "company": "Tres Barbas Games",
+      "short_name": null,
       "formerly": null,
       "description": null,
       "url": null,

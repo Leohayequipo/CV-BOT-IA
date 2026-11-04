@@ -96,6 +96,8 @@ class Role(ContentModel):
 class Experience(ContentModel):
     id: Slug
     company: Text
+    # Shown in lists, cards and sources when the full name is long
+    short_name: Text | None = None
     formerly: Text | None = None
     description: Localized | None = None
     url: HttpUrl | None = None
@@ -103,6 +105,10 @@ class Experience(ContentModel):
     # Whether a current role here is listed under "Works today at" on the profile card
     profile_card: bool = True
     roles: list[Role] = Field(min_length=1)
+
+    @property
+    def display_name(self) -> str:
+        return self.short_name or self.company
 
     @model_validator(mode="after")
     def _roles_are_most_recent_first(self) -> Experience:

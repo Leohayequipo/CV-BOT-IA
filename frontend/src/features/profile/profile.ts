@@ -30,7 +30,7 @@ export type Role = {
 const roles: Role[] = profile.experience.flatMap((entry) =>
   entry.roles.map((role) => ({
     key: `${entry.id}-${role.start}`,
-    company: entry.company,
+    company: entry.short_name ?? entry.company,
     url: entry.url,
     initials: entry.initials,
     title: role.title,

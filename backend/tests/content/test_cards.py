@@ -66,3 +66,14 @@ def test_skills_card_keeps_the_requested_groups_in_order(content: Content) -> No
         groups["frontend"].label.es,
         groups["ai"].label.es,
     ]
+
+
+def test_timeline_uses_the_short_name_and_keeps_the_initials(
+    profile_data: dict[str, Any],
+) -> None:
+    profile_data["experience"][0]["company"] = "Universidad Tecnológica Nacional"
+    profile_data["experience"][0]["short_name"] = "UTN"
+
+    card = timeline_card(Profile.model_validate(profile_data), "en")
+
+    assert {(item.company, item.initials) for item in card.items} == {("UTN", "UT")}

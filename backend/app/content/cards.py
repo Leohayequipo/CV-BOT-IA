@@ -32,7 +32,7 @@ def project_card(entry: Experience, highlight: Localized, locale: Locale) -> Pro
     """A company's card from its latest role, with the highlight to show as its key result."""
     role = entry.roles[0]
     return ProjectCard(
-        name=entry.company,
+        name=entry.display_name,
         summary=localize(entry.description, locale) if entry.description else "",
         role=localize(role.title, locale),
         period=format_period(role.start, role.end, locale),
@@ -50,7 +50,7 @@ def timeline_card(profile: Profile, locale: Locale) -> TimelineCard:
             role.start,
             TimelineItem(
                 role=localize(role.title, locale),
-                company=entry.company,
+                company=entry.display_name,
                 period=format_period(role.start, role.end, locale),
                 initials=initials(entry.company),
             ),
