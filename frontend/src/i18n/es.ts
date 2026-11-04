@@ -1,4 +1,5 @@
 import type { Messages } from './en';
+import { lowerFirst } from './format';
 
 /**
  * The interface copy in Spanish, with voseo (ADR-018). It comes from the approved designs;
@@ -38,6 +39,8 @@ export const es: Messages = {
     github: 'GitHub',
     leaveMessage: 'Dejarle un mensaje',
     workMode: 'Modalidad',
+    citizenship: (location, citizenship) => `${location} · Ciudadanía ${lowerFirst(citizenship)}`,
+    language: (name, level) => `${name} ${lowerFirst(level)}`,
   },
   workModes: {
     remote: 'Remoto',

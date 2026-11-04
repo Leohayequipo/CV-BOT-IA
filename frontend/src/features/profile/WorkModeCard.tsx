@@ -7,7 +7,9 @@ export function WorkModeCard() {
   const { messages, locale } = useI18n();
   const titleId = useId();
   const languages = profile.languages
-    .map((language) => `${localize(language.name, locale)}: ${localize(language.level, locale)}`)
+    .map((language) =>
+      messages.profile.language(localize(language.name, locale), localize(language.level, locale)),
+    )
     .join(' · ');
   return (
     <Card aria-labelledby={titleId} className="p-4">

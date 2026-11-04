@@ -24,7 +24,10 @@ export function ProfileCard({ activeNode = null }: { activeNode?: string | null 
         <p className="mt-1">{localize(basics.headline, locale)}</p>
         <p className="mt-0.5 text-small text-muted">{localize(basics.focus, locale)}</p>
         <p className="mt-2 text-small text-muted">
-          {localize(basics.location, locale)} · {localize(basics.citizenship, locale)}
+          {messages.profile.citizenship(
+            localize(basics.location, locale),
+            localize(basics.citizenship, locale),
+          )}
         </p>
         <EuBadge label={messages.profile.euBadge} className="mt-2.5 px-2.5 py-1 text-label" />
       </div>
