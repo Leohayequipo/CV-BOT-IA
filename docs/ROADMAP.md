@@ -111,11 +111,11 @@ Goal: build the approved design with a fake server that streams pre-written answ
 - [x] 4.4 Layout: profile card + conversation; on mobile the card collapses into a header
 - [x] 4.5 Chat: streamed messages, Markdown, suggested questions, typing indicator, citations, retry on error, empty, loading and error states (Markdown subset: ADR-024)
 - [x] 4.6 Cards: project, timeline, skills, job-fit report; the contact summary to confirm and the message-sent card (states 8 and 9 in `DESIGN.md`)
-- [x] 4.7 Motion and micro-interactions as specified in `DESIGN.md` (open for 4.11: what leaves disappears at once instead of fading out in 120 ms)
+- [x] 4.7 Motion and micro-interactions as specified in `DESIGN.md`
 - [x] 4.8 i18n EN/ES (English by default, follows the browser; the ES / EN switch is on desktop, as in the design)
 - [x] 4.9 Accessibility: keyboard only, screen reader (`aria-live`), contrast, `prefers-reduced-motion`; axe checks in tests
 - [x] 4.10 SEO and sharing: meta tags, Open Graph image, favicon
-- [ ] 4.11 Design QA: built UI compared side by side with the mockups on phone and desktop, in both themes; differences fixed or approved
+- [x] 4.11 Design QA: built UI compared side by side with the mockups on phone and desktop, in both themes; differences fixed or approved (the CV download appears once step 1.7 publishes the PDF)
 - [ ] 4.12 Lighthouse ≥ 95 in every category
 
 **Done when:** the interface looks like the approved mockups and feels finished on phone and desktop; only the answers are placeholders.
