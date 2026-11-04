@@ -13,6 +13,9 @@ beforeAll(() => server.listen({ onUnhandledFrame: 'error' }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
+// jsdom has no canvas; axe asks for one to look at icon fonts and copes without it
+HTMLCanvasElement.prototype.getContext = () => null;
+
 // jsdom has no matchMedia; this one answers the colour-scheme query the theme reads
 let systemTheme: 'light' | 'dark' = 'light';
 

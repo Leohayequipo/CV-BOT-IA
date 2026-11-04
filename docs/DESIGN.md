@@ -45,7 +45,10 @@ Components use these tokens, never raw hex values. Each one has a light and a da
 | `--text` on `--card` | 16.6:1 | 13.6:1 |
 | `--muted` on `--card` | 6.5:1 | 7.0:1 |
 | `--muted` on `--subtle` | 5.8:1 | 6.1:1 |
+| `--muted` on `--bg` (text on the page, outside cards) | 5.9:1 | 7.9:1 |
+| `--text` on `--subtle` (pills) | 14.9:1 | 11.9:1 |
 | `--accent` on `--card` | 6.0:1 | 8.2:1 |
+| `--accent` on `--bg` (links on the page, outside cards) | 5.4:1 | 9.2:1 |
 | `--accent` on `--accent-soft` | 5.1:1 | 6.2:1 |
 | `--accent-ink` on `--accent` (buttons) | 6.0:1 | 8.5:1 |
 | `--danger` on `--card` | 6.6:1 | 5.9:1 |
@@ -370,10 +373,14 @@ Clear, short and honest; English first, Spanish second. The Spanish copy uses vo
 - **Focus:** a 2 px `--accent` outline with a 2 px offset on every interactive element. It appears instantly, without animation.
 - **Targets:** primary controls are 40 to 46 px; chips and small buttons are at least 36 px high.
 - **Screen readers:**
-  - the message list is `aria-live="polite"`;
+  - each answer is announced once it's complete, through a polite live region, rather than word by word;
   - the typing dots and the question-limit notice are `role="status"`, and errors are `role="alert"`;
   - icon-only buttons have labels: send question, stop answer, new conversation, switch theme, download CV;
   - the question box has a visually hidden label;
   - each citation badge's accessible name includes its source.
+- **Keyboard:**
+  - the first Tab shows the link "Ir al cuadro de preguntas" ("Skip to the question box");
+  - Enter sends and Shift+Enter adds a line;
+  - when the control that started a question goes away (a suggested question, "Reintentar", the stop button), the keyboard moves to the question box.
 - **Images:** the profile photo has the alt text "Retrato de Leonardo Mannanice" ("Portrait of Leonardo Mannanice"). Avatars next to a name, the badge, the cover and decorative icons are hidden from assistive technology.
 - **Motion:** reduced motion as specified in [Motion](#motion).

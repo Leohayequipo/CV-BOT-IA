@@ -8,6 +8,7 @@ import { type ContactHandlers, Message } from './Message';
 import { LimitNotice } from './Notices';
 import { SuggestedQuestions } from './SuggestedQuestions';
 import { suggestionsOf, textOf } from './displayText';
+import { focusQuestionBox } from './questionBox';
 
 // How close to the end still counts as "at the end", in pixels
 const END_SLACK = 32;
@@ -33,6 +34,15 @@ function scrollToEnd(element: HTMLElement) {
 export function ChatPanel(props: ChatPanelProps) {
   const { messages } = useI18n();
   const { conversation, busy, limited, onAsk, onRetry, onStop, onReset, onSendContact } = props;
+  // A chip or the retry button goes away once used: the keyboard moves to the question box
+  const askFromChip = (question: string) => {
+    onAsk(question);
+    focusQuestionBox();
+  };
+  const retry = () => {
+    onRetry();
+    focusQuestionBox();
+  };
   const contact: ContactHandlers = {
     onConfirm: onSendContact,
     // The assistant asks again what to change, as the contact agent will (step 6.3)
@@ -118,7 +128,7 @@ export function ChatPanel(props: ChatPanelProps) {
           onScroll={onScroll}
           className="h-full overflow-y-auto px-3.5 pb-2 md:px-4 md:pb-[18px]"
         >
-          <ol ref={list}>
+          <ol ref={list} aria-label={chat.conversation}>
             {conversation.map((message) => (
               <Message
                 key={message.id}
@@ -126,9 +136,9 @@ export function ChatPanel(props: ChatPanelProps) {
                 contact={contact}
                 enter={!initialIds.has(message.id)}
                 {...(message === latest && {
-                  onRetry,
+                  onRetry: retry,
                   footer: (
-                    <SuggestedQuestions questions={suggestions} onAsk={onAsk} layout="wrap" />
+                    <SuggestedQuestions questions={suggestions} onAsk={askFromChip} layout="wrap" />
                   ),
                 })}
               />
@@ -147,7 +157,7 @@ export function ChatPanel(props: ChatPanelProps) {
         )}
       </div>
       <Announcement latest={latest} />
-      <SuggestedQuestions questions={suggestions} onAsk={onAsk} layout="row" />
+      <SuggestedQuestions questions={suggestions} onAsk={askFromChip} layout="row" />
       {limited && <LimitNotice />}
       <Composer busy={busy} limited={limited} onSend={onAsk} onStop={onStop} />
     </section>

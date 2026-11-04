@@ -1,14 +1,8 @@
 import { ArrowUp, FileText, Mail, Square } from 'lucide-react';
-import {
-  type ChangeEvent,
-  type FormEvent,
-  type KeyboardEvent,
-  useId,
-  useRef,
-  useState,
-} from 'react';
+import { type ChangeEvent, type FormEvent, type KeyboardEvent, useRef, useState } from 'react';
 import { useI18n } from '../../i18n/useI18n';
 import { useMediaQuery } from '../../lib/useMediaQuery';
+import { QUESTION_BOX_ID } from './questionBox';
 
 // The box grows with the text up to this height, then scrolls (a pasted job offer is long)
 const MAX_HEIGHT = 140;
@@ -27,7 +21,6 @@ export function Composer({ busy, limited, onSend, onStop }: ComposerProps) {
   // Tailwind's md breakpoint, where the phone layout ends (DESIGN.md)
   const wide = useMediaQuery('(min-width: 768px)');
   const { chat, questions } = messages;
-  const inputId = useId();
   const [draft, setDraft] = useState('');
   const input = useRef<HTMLTextAreaElement>(null);
 
@@ -58,11 +51,11 @@ export function Composer({ busy, limited, onSend, onStop }: ComposerProps) {
   return (
     <div className="border-t border-border px-3 pt-2.5 pb-4 md:px-4 md:pt-3 md:pb-2.5">
       <form onSubmit={send} className="flex items-end gap-2">
-        <label htmlFor={inputId} className="sr-only">
+        <label htmlFor={QUESTION_BOX_ID} className="sr-only">
           {chat.questionLabel}
         </label>
         <textarea
-          id={inputId}
+          id={QUESTION_BOX_ID}
           ref={input}
           rows={1}
           value={draft}
@@ -77,7 +70,11 @@ export function Composer({ busy, limited, onSend, onStop }: ComposerProps) {
         {busy ? (
           <button
             type="button"
-            onClick={onStop}
+            onClick={() => {
+              onStop();
+              // The stop button becomes the send button: keep the keyboard in the box
+              input.current?.focus();
+            }}
             aria-label={chat.stop}
             title={chat.stop}
             className="flex size-[46px] shrink-0 items-center justify-center rounded-full border border-accent text-accent hover:bg-accent-soft"
