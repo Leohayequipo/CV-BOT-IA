@@ -1,5 +1,5 @@
 import { Moon, Sun } from 'lucide-react';
-import { messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 import type { Theme } from './useTheme';
 
 type ThemeToggleProps = {
@@ -10,6 +10,7 @@ type ThemeToggleProps = {
 };
 
 export function ThemeToggle({ theme, onToggle, size }: ThemeToggleProps) {
+  const { messages } = useI18n();
   const label = theme === 'dark' ? messages.theme.toLight : messages.theme.toDark;
   const Icon = theme === 'dark' ? Sun : Moon;
   return (

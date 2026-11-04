@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useMediaQuery } from '../../lib/useMediaQuery';
 
 export type Theme = 'light' | 'dark';
 
@@ -11,10 +12,7 @@ const DARK_QUERY = '(prefers-color-scheme: dark)';
  * tokens.css switches every colour from the data-theme attribute on <html>.
  */
 export function useTheme() {
-  const systemIsDark = useSyncExternalStore(
-    subscribeToSystem,
-    () => matchMedia(DARK_QUERY).matches,
-  );
+  const systemIsDark = useMediaQuery(DARK_QUERY);
   const [chosen, setChosen] = useState<Theme | null>(readChoice);
   const theme: Theme = chosen ?? (systemIsDark ? 'dark' : 'light');
 
@@ -34,12 +32,6 @@ export function useTheme() {
   const toggleTheme = useCallback(() => setChosen(theme === 'dark' ? 'light' : 'dark'), [theme]);
 
   return { theme, toggleTheme };
-}
-
-function subscribeToSystem(onChange: () => void): () => void {
-  const query = matchMedia(DARK_QUERY);
-  query.addEventListener('change', onChange);
-  return () => query.removeEventListener('change', onChange);
 }
 
 // Storage can be unavailable (private browsing, blocked cookies): the theme then lasts the visit

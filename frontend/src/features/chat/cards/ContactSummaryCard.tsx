@@ -1,6 +1,6 @@
 import { ArrowUp, Check, Mail, Pencil } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { messages } from '../../../i18n';
+import { useI18n } from '../../../i18n/useI18n';
 import { ChatRequestError } from '../api';
 import { formatTime } from '../time';
 import { CardFrame } from './CardFrame';
@@ -23,6 +23,7 @@ export function ContactSummaryCard({
   data: ContactSummaryData;
   actions: ContactActions;
 }) {
+  const { messages, locale } = useI18n();
   const { cards } = messages;
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,7 +71,7 @@ export function ContactSummaryCard({
           className="flex items-center gap-1.5 px-4 pb-3.5 text-small font-semibold text-accent"
         >
           <Check size={16} aria-hidden="true" />
-          {cards.contactConfirmed(formatTime(actions.confirmedAt))}
+          {cards.contactConfirmed(formatTime(actions.confirmedAt, locale))}
         </output>
       ) : (
         <div className="px-4 pb-3.5">

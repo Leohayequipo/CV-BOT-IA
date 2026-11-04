@@ -2,7 +2,6 @@
  * The conversation as a reducer: the stream's events are actions, so the API contract and the
  * state change in one place. Only the latest answer ever changes.
  */
-import { messages } from '../../i18n';
 import type { ChatError, Citation, StreamEvent } from './api';
 import type { Card } from './cards/cardData';
 
@@ -10,9 +9,14 @@ export type AnswerStatus = 'thinking' | 'streaming' | 'done' | 'stopped' | 'fail
 
 export type VisitorMessage = { id: number; role: 'visitor'; text: string; sentAt: Date };
 
+// The greeting and the "message sent" reply are written by the site, not the API: their text
+// comes from the interface copy when they're drawn, so they follow the language
+export type AnswerKind = 'answer' | 'greeting' | 'contact_sent';
+
 export type AssistantMessage = {
   id: number;
   role: 'assistant';
+  kind: AnswerKind;
   text: string;
   sentAt: Date;
   status: AnswerStatus;
@@ -47,12 +51,7 @@ export type ChatAction =
   | { type: 'reset'; at: Date };
 
 export function initialChat(at = new Date()): ChatState {
-  const greeting: AssistantMessage = {
-    ...answer(0, at),
-    text: messages.chat.greeting,
-    status: 'done',
-    suggestions: [...messages.chat.firstSuggestions],
-  };
+  const greeting: AssistantMessage = { ...answer(0, at), kind: 'greeting', status: 'done' };
   return { messages: [greeting], node: null, limitedUntil: null };
 }
 
@@ -129,10 +128,9 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
       );
       const reply: AssistantMessage = {
         ...answer(conversation.length, action.at),
-        text: messages.chat.contactSent,
+        kind: 'contact_sent',
         status: 'done',
         contactSentAt: action.at,
-        suggestions: [...messages.chat.afterContact],
       };
       return { ...state, messages: [...conversation, reply] };
     }
@@ -153,6 +151,7 @@ function answer(id: number, at: Date): AssistantMessage {
   return {
     id,
     role: 'assistant',
+    kind: 'answer',
     text: '',
     sentAt: at,
     status: 'thinking',

@@ -1,11 +1,12 @@
 import { lazy, type ReactNode, Suspense } from 'react';
 import { AssistantAvatar, VisitorAvatar } from '../../components/ui/Avatar';
-import { messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 import { AnswerText, SourcesRow } from './AnswerText';
 import type { ContactSummaryData } from './cards/cardData';
 import { MessageSentCard } from './cards/MessageSentCard';
 import type { AssistantMessage, ChatMessage } from './chatState';
 import { ErrorNotice } from './Notices';
+import { textOf } from './displayText';
 import { formatTime } from './time';
 
 // Loaded only when an answer has cards (frontend standards: keep the first load small)
@@ -28,6 +29,7 @@ export type ContactHandlers = {
 
 /** No bubbles, as in LinkedIn messaging: avatar, name and time, then the text. */
 export function Message({ message, footer, onRetry, contact, enter }: MessageProps) {
+  const { messages, locale } = useI18n();
   const fromAssistant = message.role === 'assistant';
   return (
     <li
@@ -43,7 +45,7 @@ export function Message({ message, footer, onRetry, contact, enter }: MessagePro
             ·
           </span>
           <time dateTime={message.sentAt.toISOString()} className="text-label text-muted">
-            {formatTime(message.sentAt)}
+            {formatTime(message.sentAt, locale)}
           </time>
         </p>
         {fromAssistant ? (
@@ -64,6 +66,7 @@ type AnswerBodyProps = {
 };
 
 function AnswerBody({ message, onRetry, contact }: AnswerBodyProps) {
+  const { messages } = useI18n();
   switch (message.status) {
     case 'thinking':
       // A retry keeps the notice, with its icon spinning, until the new answer starts
@@ -76,7 +79,7 @@ function AnswerBody({ message, onRetry, contact }: AnswerBodyProps) {
       return (
         <>
           <AnswerText
-            text={message.text}
+            text={textOf(message, messages)}
             citations={message.citations}
             trailing={message.status === 'streaming' && <Caret />}
           />
@@ -105,6 +108,7 @@ function AnswerBody({ message, onRetry, contact }: AnswerBodyProps) {
 }
 
 function TypingDots() {
+  const { messages } = useI18n();
   // <output> is a status region: screen readers say "Typing" once, instead of nothing
   return (
     <output aria-label={messages.chat.typing} className="mt-2 flex h-[18px] items-center gap-1">

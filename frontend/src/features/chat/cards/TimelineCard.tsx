@@ -1,10 +1,11 @@
 import { InitialsTile } from '../../../components/ui/InitialsTile';
-import { messages } from '../../../i18n';
+import { useI18n } from '../../../i18n/useI18n';
 import { CardFrame } from './CardFrame';
 import { rowEntrance } from './rowEntrance';
 import type { TimelineCardData } from './cardData';
 
 export function TimelineCard({ data }: { data: TimelineCardData }) {
+  const { messages } = useI18n();
   return (
     <CardFrame className="px-4 py-3.5">
       <h3 className="mb-3 text-card-title font-semibold">{messages.cards.experience}</h3>

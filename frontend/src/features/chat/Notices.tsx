@@ -1,5 +1,5 @@
 import { CircleAlert, Clock, RotateCcw } from 'lucide-react';
-import { messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 import type { ChatError } from './api';
 
 /** Takes the place of an answer that failed. Every error message reads "what happened. What
@@ -12,6 +12,7 @@ type ErrorNoticeProps = {
 };
 
 export function ErrorNotice({ error, onRetry, retrying = false }: ErrorNoticeProps) {
+  const { messages } = useI18n();
   const text = error.message || messages.chat.networkError;
   const [title = text, ...rest] = text.split(/(?<=\.)\s+/);
   return (
@@ -43,6 +44,7 @@ export function ErrorNotice({ error, onRetry, retrying = false }: ErrorNoticePro
 
 /** Above the disabled question box while the question limit applies. */
 export function LimitNotice() {
+  const { messages } = useI18n();
   return (
     <output className="mx-3.5 mb-2.5 flex items-start gap-2.5 rounded-card border border-border bg-subtle px-3 py-2.5 text-small md:mx-4 motion-safe:animate-message-in motion-reduce:animate-fade-in">
       <Clock size={18} aria-hidden="true" className="mt-px shrink-0 text-muted" />

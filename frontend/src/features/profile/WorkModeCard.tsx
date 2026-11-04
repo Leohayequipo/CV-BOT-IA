@@ -1,9 +1,10 @@
 import { useId } from 'react';
 import { Card } from '../../components/ui/Card';
-import { locale, messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 import { localize, profile } from './profile';
 
 export function WorkModeCard() {
+  const { messages, locale } = useI18n();
   const titleId = useId();
   const languages = profile.languages
     .map((language) => `${localize(language.name, locale)}: ${localize(language.level, locale)}`)

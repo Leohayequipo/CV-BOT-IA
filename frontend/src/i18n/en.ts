@@ -1,4 +1,4 @@
-/** The interface copy in English, the default language (ADR-015). */
+/** The interface copy in English, the default language (ADR-015). es.ts has the same shape. */
 export const en = {
   site: {
     monogram: 'LM',
@@ -13,6 +13,9 @@ export const en = {
     projects: 'Projects',
     skills: 'Skills',
     contact: 'Contact',
+  },
+  language: {
+    label: 'Language',
   },
   theme: {
     toDark: 'Switch to dark mode',
@@ -55,6 +58,8 @@ export const en = {
     suggestionsLabel: 'Suggested questions',
     questionLabel: 'Your question',
     placeholder: 'Ask anything or paste a job offer…',
+    // On a phone, where the box is narrower
+    placeholderShort: 'Ask anything or paste a job offer…',
     limitedPlaceholder: 'You can ask again in a few minutes',
     send: 'Send question',
     stop: 'Stop answer',
@@ -125,4 +130,6 @@ export const en = {
     offer: 'Analyse a job offer',
     correct: "I'd like to change something in the message",
   },
-} as const;
+};
+
+export type Messages = typeof en;

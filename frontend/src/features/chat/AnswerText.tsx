@@ -1,5 +1,5 @@
 import { type ReactNode, useMemo } from 'react';
-import { messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
 import { type Block, type Inline, parseInline, parseMarkdown } from '../../lib/markdown';
 import type { Citation } from './api';
 
@@ -103,6 +103,7 @@ function renderNode(node: Inline, key: number, sources: Map<number, Citation>): 
 }
 
 export function CitationBadge({ citation }: { citation: Citation }) {
+  const { messages } = useI18n();
   return (
     <span
       title={citation.label}
@@ -119,6 +120,7 @@ export function CitationBadge({ citation }: { citation: Citation }) {
 
 /** Under a finished answer: every source it cited. */
 export function SourcesRow({ citations }: { citations: Citation[] }) {
+  const { messages } = useI18n();
   if (citations.length === 0) return null;
   return (
     <div className="mt-2.5 flex flex-wrap items-center gap-1.5">

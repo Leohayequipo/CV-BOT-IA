@@ -7,7 +7,8 @@ import {
   useRef,
   useState,
 } from 'react';
-import { messages } from '../../i18n';
+import { useI18n } from '../../i18n/useI18n';
+import { useMediaQuery } from '../../lib/useMediaQuery';
 
 // The box grows with the text up to this height, then scrolls (a pasted job offer is long)
 const MAX_HEIGHT = 140;
@@ -22,6 +23,9 @@ type ComposerProps = {
 /** The question box. Enter sends, Shift+Enter adds a line, and while an answer streams the
  * send button becomes the stop button. */
 export function Composer({ busy, limited, onSend, onStop }: ComposerProps) {
+  const { messages } = useI18n();
+  // Tailwind's md breakpoint, where the phone layout ends (DESIGN.md)
+  const wide = useMediaQuery('(min-width: 768px)');
   const { chat, questions } = messages;
   const inputId = useId();
   const [draft, setDraft] = useState('');
@@ -65,7 +69,9 @@ export function Composer({ busy, limited, onSend, onStop }: ComposerProps) {
           disabled={limited}
           onChange={onChange}
           onKeyDown={onKeyDown}
-          placeholder={limited ? chat.limitedPlaceholder : chat.placeholder}
+          placeholder={
+            limited ? chat.limitedPlaceholder : wide ? chat.placeholder : chat.placeholderShort
+          }
           className="block min-h-[46px] min-w-0 flex-1 resize-none rounded-[23px] border border-border-strong bg-card px-[18px] py-3 text-body placeholder:text-muted disabled:border-border disabled:bg-subtle disabled:text-muted"
         />
         {busy ? (

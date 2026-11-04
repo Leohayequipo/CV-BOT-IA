@@ -11,7 +11,8 @@ import { cvUrl } from '../config';
 import { profile } from '../features/profile/profile';
 import { ThemeToggle } from '../features/theme/ThemeToggle';
 import type { Theme } from '../features/theme/useTheme';
-import { messages } from '../i18n';
+import { useI18n } from '../i18n/useI18n';
+import { LanguageSwitch } from './LanguageSwitch';
 
 type TopBarProps = {
   theme: Theme;
@@ -21,6 +22,7 @@ type TopBarProps = {
 
 /** The desktop top bar. Each section asks the assistant, since the chat is the page. */
 export function TopBar({ theme, onToggleTheme, onAsk }: TopBarProps) {
+  const { messages } = useI18n();
   const { nav, questions } = messages;
   const cv = cvUrl();
   return (
@@ -57,6 +59,7 @@ export function TopBar({ theme, onToggleTheme, onAsk }: TopBarProps) {
           <NavButton icon={Mail} label={nav.contact} onClick={() => onAsk(questions.contact)} />
         </nav>
         <div className="flex items-center gap-2 border-l border-border py-1.5 pl-3">
+          <LanguageSwitch />
           <ThemeToggle theme={theme} onToggle={onToggleTheme} size="md" />
           {cv && (
             <a
