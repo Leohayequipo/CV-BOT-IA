@@ -7,7 +7,7 @@ The interface is the first thing a recruiter judges, in under 30 seconds and oft
 - Latest stable React, Vite and Tailwind, on Node 26 LTS (pinned in `frontend/.nvmrc`). `npm` with a committed `package-lock.json`.
 - TypeScript 7 with `strict: true` plus `noUncheckedIndexedAccess`. No `any`; use `unknown` and narrow it.
 - oxlint with its React, hooks, jsx-a11y and Vitest rules, failing on warnings, plus Prettier. Vite's template ships oxlint, and typescript-eslint doesn't support TypeScript 7 yet.
-- Vitest + Testing Library + `@testing-library/user-event` + MSW + `vitest-axe`. Playwright for end-to-end tests.
+- Vitest + Testing Library + `@testing-library/user-event` + MSW + `axe-core` (through `src/test/axe.ts`; `vitest-axe` is no longer maintained). Playwright for end-to-end tests.
 
 ## Layout
 
@@ -56,7 +56,7 @@ Organise by feature. Tests sit next to the code: `ChatInput.tsx` + `ChatInput.te
 - The message list is a polite live region, announcing complete messages rather than every token.
 - Everything works with the keyboard: Enter sends, Shift+Enter adds a new line, Esc closes overlays, and focus returns to the input after sending.
 - Contrast ≥ 4.5:1 for text in both themes. Images have alt text.
-- `vitest-axe` assertions in component tests; Playwright + axe on the main page.
+- axe checks (`a11yViolations()` in `src/test/axe.ts`) on every state of the page; Playwright + axe on the main page.
 
 ## Performance budget
 

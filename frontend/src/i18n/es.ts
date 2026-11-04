@@ -10,6 +10,7 @@ export const es: Messages = {
     subtitle: 'CV conversacional',
     downloadCv: 'Descargar CV',
     opensInNewTab: '(se abre en una pestaña nueva)',
+    skipToQuestion: 'Ir al cuadro de preguntas',
   },
   nav: {
     label: 'Secciones',
@@ -48,6 +49,7 @@ export const es: Messages = {
     assistant: 'Asistente de Leonardo',
     subtitle: 'Responde con datos de su CV y cita cada fuente',
     visitor: 'Vos',
+    conversation: 'Conversación',
     newConversation: 'Nueva conversación',
     greeting:
       'Hola, soy el asistente de Leonardo. Te cuento sobre su experiencia, sus proyectos y su ' +

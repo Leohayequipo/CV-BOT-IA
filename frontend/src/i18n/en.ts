@@ -5,6 +5,7 @@ export const en = {
     subtitle: 'Conversational CV',
     downloadCv: 'Download CV',
     opensInNewTab: '(opens in a new tab)',
+    skipToQuestion: 'Skip to the question box',
   },
   nav: {
     label: 'Sections',
@@ -43,6 +44,7 @@ export const en = {
     assistant: "Leonardo's assistant",
     subtitle: 'Answers from his CV and cites every source',
     visitor: 'You',
+    conversation: 'Conversation',
     newConversation: 'New conversation',
     greeting:
       "Hi, I'm Leonardo's assistant. I can tell you about his experience, his projects and his " +
