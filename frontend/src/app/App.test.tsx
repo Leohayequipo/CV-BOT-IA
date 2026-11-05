@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
+import { setViewport } from '../test/setup';
 import { App } from './App';
 
 function chat() {
@@ -44,5 +45,24 @@ describe('App', () => {
 
     expect(within(chat()).queryByText('Show me his experience')).not.toBeInTheDocument();
     expect(within(chat()).getByText(/^Hi, I'm Leonardo's assistant/)).toBeInTheDocument();
+  });
+});
+
+describe('App layout', () => {
+  it('draws only the desktop layout on a wide screen', () => {
+    render(<App />);
+
+    expect(screen.getByRole('navigation', { name: 'Sections' })).toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+  });
+
+  it('draws only the phone layout on a narrow screen', () => {
+    setViewport('phone');
+
+    render(<App />);
+
+    expect(screen.queryByRole('navigation', { name: 'Sections' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('complementary', { name: 'Shortcuts' })).not.toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
   });
 });

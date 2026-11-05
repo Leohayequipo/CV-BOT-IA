@@ -11,3 +11,14 @@ export function useMediaQuery(query: string): boolean {
     () => matchMedia(query).matches,
   );
 }
+
+// Tailwind's md breakpoint, where the phone layout ends (DESIGN.md)
+export const DESKTOP = '(min-width: 768px)';
+
+/**
+ * Whether the desktop layout applies. The page draws only the layout that fits the screen,
+ * which halves the work a phone does on load (roadmap step 4.12).
+ */
+export function useIsDesktop(): boolean {
+  return useMediaQuery(DESKTOP);
+}

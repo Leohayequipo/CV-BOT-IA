@@ -1,7 +1,7 @@
 import { ArrowUp, FileText, Mail, Square } from 'lucide-react';
 import { type ChangeEvent, type FormEvent, type KeyboardEvent, useRef, useState } from 'react';
 import { useI18n } from '../../i18n/useI18n';
-import { useMediaQuery } from '../../lib/useMediaQuery';
+import { useIsDesktop } from '../../lib/useMediaQuery';
 import { QUESTION_BOX_ID } from './questionBox';
 
 // The box grows with the text up to this height, then scrolls (a pasted job offer is long)
@@ -18,8 +18,7 @@ type ComposerProps = {
  * send button becomes the stop button. */
 export function Composer({ busy, limited, onSend, onStop }: ComposerProps) {
   const { messages } = useI18n();
-  // Tailwind's md breakpoint, where the phone layout ends (DESIGN.md)
-  const wide = useMediaQuery('(min-width: 768px)');
+  const wide = useIsDesktop();
   const { chat, questions } = messages;
   const [draft, setDraft] = useState('');
   const input = useRef<HTMLTextAreaElement>(null);
@@ -93,21 +92,23 @@ export function Composer({ busy, limited, onSend, onStop }: ComposerProps) {
           </button>
         )}
       </form>
-      <div className="mt-2 hidden flex-wrap items-center gap-x-2 gap-y-1 md:flex">
-        <ActionButton
-          icon={FileText}
-          label={chat.analyseOffer}
-          onClick={() => onSend(questions.offer)}
-          disabled={busy || limited}
-        />
-        <ActionButton
-          icon={Mail}
-          label={chat.contactHim}
-          onClick={() => onSend(questions.contact)}
-          disabled={busy || limited}
-        />
-        <span className="ml-auto text-label text-muted">{chat.onlyCv}</span>
-      </div>
+      {wide && (
+        <div className="mt-2 hidden flex-wrap items-center gap-x-2 gap-y-1 md:flex">
+          <ActionButton
+            icon={FileText}
+            label={chat.analyseOffer}
+            onClick={() => onSend(questions.offer)}
+            disabled={busy || limited}
+          />
+          <ActionButton
+            icon={Mail}
+            label={chat.contactHim}
+            onClick={() => onSend(questions.contact)}
+            disabled={busy || limited}
+          />
+          <span className="ml-auto text-label text-muted">{chat.onlyCv}</span>
+        </div>
+      )}
     </div>
   );
 }
