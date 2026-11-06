@@ -16,15 +16,25 @@ afterAll(() => server.close());
 // jsdom has no canvas; axe asks for one to look at icon fonts and copes without it
 HTMLCanvasElement.prototype.getContext = () => null;
 
-// jsdom has no matchMedia; this one answers the colour-scheme query the theme reads
+// jsdom has no matchMedia; this one answers the colour scheme and the layout. Tests run on
+// desktop unless they ask for a phone
 let systemTheme: 'light' | 'dark' = 'light';
+let viewport: 'desktop' | 'phone' = 'desktop';
 
 export function setSystemTheme(theme: 'light' | 'dark'): void {
   systemTheme = theme;
 }
 
+export function setViewport(size: 'desktop' | 'phone'): void {
+  viewport = size;
+}
+
+afterEach(() => setViewport('desktop'));
+
 window.matchMedia = (query: string): MediaQueryList => ({
-  matches: query === '(prefers-color-scheme: dark)' && systemTheme === 'dark',
+  matches:
+    (query === '(prefers-color-scheme: dark)' && systemTheme === 'dark') ||
+    (query === '(min-width: 768px)' && viewport === 'desktop'),
   media: query,
   onchange: null,
   addEventListener: () => undefined,

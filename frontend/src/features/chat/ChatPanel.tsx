@@ -2,6 +2,7 @@ import { ArrowDown, RotateCcw } from 'lucide-react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AssistantAvatar } from '../../components/ui/Avatar';
 import { useI18n } from '../../i18n/useI18n';
+import { useIsDesktop } from '../../lib/useMediaQuery';
 import type { ChatMessage } from './chatState';
 import { Composer } from './Composer';
 import { type ContactHandlers, Message } from './Message';
@@ -33,6 +34,7 @@ function scrollToEnd(element: HTMLElement) {
 /** The centre column on desktop and the whole screen on a phone. */
 export function ChatPanel(props: ChatPanelProps) {
   const { messages } = useI18n();
+  const desktop = useIsDesktop();
   const { conversation, busy, limited, onAsk, onRetry, onStop, onReset, onSendContact } = props;
   // A chip or the retry button goes away once used: the keyboard moves to the question box
   const askFromChip = (question: string) => {
@@ -106,22 +108,24 @@ export function ChatPanel(props: ChatPanelProps) {
       aria-label={chat.label}
       className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-card md:h-[700px] md:flex-[999_1_480px] md:rounded-card md:border md:border-border"
     >
-      <div className="hidden items-center gap-3 border-b border-border px-4 py-3 md:flex">
-        <AssistantAvatar size="header" />
-        <div className="min-w-0 flex-1">
-          <h2 className="text-heading font-semibold">{chat.assistant}</h2>
-          <p className="mt-0.5 text-label text-muted">{chat.subtitle}</p>
+      {desktop && (
+        <div className="hidden items-center gap-3 border-b border-border px-4 py-3 md:flex">
+          <AssistantAvatar size="header" />
+          <div className="min-w-0 flex-1">
+            <h2 className="text-heading font-semibold">{chat.assistant}</h2>
+            <p className="mt-0.5 text-label text-muted">{chat.subtitle}</p>
+          </div>
+          <button
+            type="button"
+            onClick={onReset}
+            aria-label={chat.newConversation}
+            title={chat.newConversation}
+            className="flex size-10 items-center justify-center rounded-full text-muted hover:bg-subtle"
+          >
+            <RotateCcw size={20} aria-hidden="true" />
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={onReset}
-          aria-label={chat.newConversation}
-          title={chat.newConversation}
-          className="flex size-10 items-center justify-center rounded-full text-muted hover:bg-subtle"
-        >
-          <RotateCcw size={20} aria-hidden="true" />
-        </button>
-      </div>
+      )}
       <div className="relative min-h-0 flex-1">
         <div
           ref={scroller}
@@ -139,7 +143,11 @@ export function ChatPanel(props: ChatPanelProps) {
                 {...(message === latest && {
                   onRetry: retry,
                   footer: (
-                    <SuggestedQuestions questions={suggestions} onAsk={askFromChip} layout="wrap" />
+                    <SuggestedQuestions
+                      questions={desktop ? suggestions : []}
+                      onAsk={askFromChip}
+                      layout="wrap"
+                    />
                   ),
                 })}
               />
@@ -158,7 +166,7 @@ export function ChatPanel(props: ChatPanelProps) {
         )}
       </div>
       <Announcement latest={latest} />
-      <SuggestedQuestions questions={suggestions} onAsk={askFromChip} layout="row" />
+      {!desktop && <SuggestedQuestions questions={suggestions} onAsk={askFromChip} layout="row" />}
       {limited && <LimitNotice />}
       <Composer busy={busy} limited={limited} onSend={onAsk} onStop={onStop} />
     </section>
