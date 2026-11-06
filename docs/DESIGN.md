@@ -147,6 +147,13 @@ The badge is a `--accent` circle with a 2 px `--card` border, at the bottom righ
 
 Edges are `--cover-line` at 1.5 px; nodes are `--card` with a 2 px `--accent` stroke; the hub is filled `--accent`. While the assistant thinks, the graph lights up the path of the question (see [Motion](#motion)).
 
+## Sharing
+
+- **Tab icon:** the "LM" monogram of the top bar, white on a `--accent` tile (`frontend/public/favicon.svg`), with a 180 px square version for phone home screens.
+- **Link preview** (Open Graph, 1200 × 630): the profile card at large size, with the cover and its graph, the photo, the name, the headline, a teal "Ask his AI assistant" pill and the EU citizen badge. The template is `docs/design/og-image.html`, and the image `frontend/public/og-image.png`.
+
+![Link preview](../frontend/public/og-image.png)
+
 ## Layout
 
 ### Desktop
