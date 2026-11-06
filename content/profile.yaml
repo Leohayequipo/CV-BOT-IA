@@ -56,25 +56,27 @@ summary:
     educación: está acostumbrado a convertir necesidades de negocio en sistemas que funcionan
     y a explicar decisiones técnicas a perfiles no técnicos.
 
-# Items are plain strings when they read the same in both languages.
+# Items are plain strings when they read the same in both languages. `main` says how many of the
+# first items the "Main stack" card shows; the assistant always reads the whole group.
 skills:
   - id: ai
     label: { en: "LLMs & AI", es: "LLMs e IA" }
+    main: 8
     items:
       - OpenAI
       - Anthropic Claude
       - Gemini
+      - RAG
+      - LangGraph
+      - LangChain
+      - MCP
+      - evals
       - { en: "local models (Ollama)", es: "modelos locales (Ollama)" }
       - Hugging Face
-      - RAG
       - embeddings
       - { en: "vector databases", es: "bases vectoriales" }
-      - LangChain
       - LlamaIndex
-      - LangGraph
-      - MCP
       - fine-tuning
-      - evals
       - prompt engineering
       - { en: "cost optimization (prompt caching)", es: "optimización de costos (prompt caching)" }
       - { en: "AI security (prompt injection, guardrails)", es: "seguridad en IA (prompt injection, guardrails)" }
@@ -89,6 +91,7 @@ skills:
       - OCR
   - id: backend
     label: { en: "Backend", es: "Backend" }
+    main: 4
     items:
       - Python (FastAPI)
       - PHP (Laravel, Livewire, FilamentPHP, Symfony, CodeIgniter)
@@ -101,21 +104,23 @@ skills:
       - web scraping
   - id: frontend
     label: { en: "Frontend", es: "Frontend" }
+    main: 4
     items:
       - React
       - TypeScript
-      - JavaScript
       - Tailwind CSS
       - Vite
+      - JavaScript
       - Figma
   - id: data
     label: { en: "Data", es: "Datos" }
+    main: 4
     items:
       - PostgreSQL
       - MySQL
-      - Microsoft SQL Server
-      - Supabase (Edge Functions)
       - Redis
+      - Supabase (Edge Functions)
+      - Microsoft SQL Server
       - { en: "data modeling and normalization", es: "modelado y normalización de datos" }
   - id: devops
     label: { en: "DevOps & quality", es: "DevOps y calidad" }
@@ -168,6 +173,8 @@ experience:
 
   - id: utn
     company: Universidad Tecnológica Nacional, Facultad Regional Morón
+    # For lists, cards and sources, where the full name takes three lines
+    short_name: UTN, Facultad Regional Morón
     roles:
       - title: { en: "AI R&D Developer", es: "Desarrollador de I+D en IA" }
         start: "2026-01"
@@ -219,6 +226,9 @@ experience:
     company: 'EEST Nº 1 "Raúl Scalabrini Ortiz"'
     description: { en: "Technical secondary school", es: "Escuela técnica" }
     location: { en: "Santa Teresita, Argentina", es: "Santa Teresita, Argentina" }
+    # Left out of "Works today at" on the profile card, which shows his tech roles; it still
+    # appears in the experience list and in the assistant's answers
+    profile_card: false
     roles:
       - title: { en: "IT Teacher", es: "Docente de Informática" }
         start: "2019-03"

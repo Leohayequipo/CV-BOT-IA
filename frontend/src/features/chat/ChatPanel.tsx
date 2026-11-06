@@ -126,9 +126,10 @@ export function ChatPanel(props: ChatPanelProps) {
         <div
           ref={scroller}
           onScroll={onScroll}
-          className="h-full overflow-y-auto px-3.5 pb-2 md:px-4 md:pb-[18px]"
+          className="flex h-full flex-col overflow-y-auto px-3.5 pb-2 md:px-4 md:pb-[18px]"
         >
-          <ol ref={list} aria-label={chat.conversation}>
+          {/* mt-auto anchors a short conversation to the bottom, next to the question box */}
+          <ol ref={list} aria-label={chat.conversation} className="mt-auto">
             {conversation.map((message) => (
               <Message
                 key={message.id}

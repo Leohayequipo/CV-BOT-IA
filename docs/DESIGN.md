@@ -328,12 +328,12 @@ Plain CSS transitions and keyframes, with no animation library (ADR-020). The sh
 | `--duration-base` | 200 ms | Messages, notices and the steps of the cover graph |
 | `--duration-slow` | 320 ms | Cards and scrolling |
 | `--ease-out` | `cubic-bezier(0.2, 0, 0, 1)` | What enters: starts fast and settles |
-| `--ease-in` | `cubic-bezier(0.4, 0, 1, 1)` | What leaves, in 120 ms |
+| `--ease-in` | `cubic-bezier(0.4, 0, 1, 1)` | Kept for what leaves; unused since what leaves disappears at once (step 4.11) |
 | `--ease-move` | `cubic-bezier(0.4, 0, 0.2, 1)` | What moves or changes state, and loops |
 
 **Rules**
 
-- What enters uses `--ease-out` and rises 8 px as it fades in (cards rise 12 px). What leaves doesn't move: it fades out in 120 ms.
+- What enters uses `--ease-out` and rises 8 px as it fades in (cards rise 12 px). What leaves disappears at once, without moving: in the design QA (step 4.11) Leonardo chose this over a 120 ms fade, which is barely visible.
 - Nothing lasts longer than 320 ms except the waiting indicators (dots, caret and spinner), which run while there is something to wait for.
 - Animation never blocks: the visitor can type, click or stop the answer while something moves.
 - Under `prefers-reduced-motion`, nothing moves, scales or rotates: only opacity and colour change, in 120 ms at most, and nothing loops.

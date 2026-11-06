@@ -73,8 +73,17 @@ class Basics(ContentModel):
 class SkillGroup(ContentModel):
     id: Slug
     label: Localized
+    # How many of the first items the "Main stack" card shows; all of them when it's not set
+    main: int | None = Field(default=None, ge=1)
     # A plain string when the item reads the same in both languages.
     items: list[Text | Localized] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def _main_fits_the_items(self) -> SkillGroup:
+        if self.main is not None and self.main > len(self.items):
+            msg = f"main is {self.main}, but the group has only {len(self.items)} items"
+            raise ValueError(msg)
+        return self
 
 
 class Role(ContentModel):
@@ -96,11 +105,19 @@ class Role(ContentModel):
 class Experience(ContentModel):
     id: Slug
     company: Text
+    # Shown in lists, cards and sources when the full name is long
+    short_name: Text | None = None
     formerly: Text | None = None
     description: Localized | None = None
     url: HttpUrl | None = None
     location: Localized | None = None
+    # Whether a current role here is listed under "Works today at" on the profile card
+    profile_card: bool = True
     roles: list[Role] = Field(min_length=1)
+
+    @property
+    def display_name(self) -> str:
+        return self.short_name or self.company
 
     @model_validator(mode="after")
     def _roles_are_most_recent_first(self) -> Experience:

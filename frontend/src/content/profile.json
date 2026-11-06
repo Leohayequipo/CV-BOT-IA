@@ -48,27 +48,28 @@
         "en": "LLMs & AI",
         "es": "LLMs e IA"
       },
+      "main": 8,
       "items": [
         "OpenAI",
         "Anthropic Claude",
         "Gemini",
+        "RAG",
+        "LangGraph",
+        "LangChain",
+        "MCP",
+        "evals",
         {
           "en": "local models (Ollama)",
           "es": "modelos locales (Ollama)"
         },
         "Hugging Face",
-        "RAG",
         "embeddings",
         {
           "en": "vector databases",
           "es": "bases vectoriales"
         },
-        "LangChain",
         "LlamaIndex",
-        "LangGraph",
-        "MCP",
         "fine-tuning",
-        "evals",
         "prompt engineering",
         {
           "en": "cost optimization (prompt caching)",
@@ -91,6 +92,7 @@
         "en": "Voice & vision",
         "es": "Voz y visión"
       },
+      "main": null,
       "items": [
         {
           "en": "Whisper (speech-to-text)",
@@ -110,6 +112,7 @@
         "en": "Backend",
         "es": "Backend"
       },
+      "main": 4,
       "items": [
         "Python (FastAPI)",
         "PHP (Laravel, Livewire, FilamentPHP, Symfony, CodeIgniter)",
@@ -140,12 +143,13 @@
         "en": "Frontend",
         "es": "Frontend"
       },
+      "main": 4,
       "items": [
         "React",
         "TypeScript",
-        "JavaScript",
         "Tailwind CSS",
         "Vite",
+        "JavaScript",
         "Figma"
       ]
     },
@@ -155,12 +159,13 @@
         "en": "Data",
         "es": "Datos"
       },
+      "main": 4,
       "items": [
         "PostgreSQL",
         "MySQL",
-        "Microsoft SQL Server",
-        "Supabase (Edge Functions)",
         "Redis",
+        "Supabase (Edge Functions)",
+        "Microsoft SQL Server",
         {
           "en": "data modeling and normalization",
           "es": "modelado y normalización de datos"
@@ -173,6 +178,7 @@
         "en": "DevOps & quality",
         "es": "DevOps y calidad"
       },
+      "main": null,
       "items": [
         "Docker",
         "Git",
@@ -195,6 +201,7 @@
         "en": "Automation",
         "es": "Automatización"
       },
+      "main": null,
       "items": [
         "n8n",
         "Google Apps Script",
@@ -210,6 +217,7 @@
         "en": "Ways of working",
         "es": "Forma de trabajo"
       },
+      "main": null,
       "items": [
         "Scrum",
         "Kanban",
@@ -241,10 +249,12 @@
     {
       "id": "simbel",
       "company": "Simbel IA Studio",
+      "short_name": null,
       "formerly": "Simbel",
       "description": null,
       "url": null,
       "location": null,
+      "profile_card": true,
       "roles": [
         {
           "title": {
@@ -284,10 +294,12 @@
     {
       "id": "utn",
       "company": "Universidad Tecnológica Nacional, Facultad Regional Morón",
+      "short_name": "UTN, Facultad Regional Morón",
       "formerly": null,
       "description": null,
       "url": null,
       "location": null,
+      "profile_card": true,
       "roles": [
         {
           "title": {
@@ -326,6 +338,7 @@
     {
       "id": "servime",
       "company": "ServiME",
+      "short_name": null,
       "formerly": null,
       "description": {
         "en": "AI digital menu and chat SaaS for restaurants",
@@ -333,6 +346,7 @@
       },
       "url": "https://servime.net/",
       "location": null,
+      "profile_card": true,
       "roles": [
         {
           "title": {
@@ -377,10 +391,12 @@
     {
       "id": "atlantida",
       "company": "Universidad Atlántida Argentina",
+      "short_name": null,
       "formerly": null,
       "description": null,
       "url": null,
       "location": null,
+      "profile_card": true,
       "roles": [
         {
           "title": {
@@ -432,6 +448,7 @@
     {
       "id": "eest1",
       "company": "EEST Nº 1 \"Raúl Scalabrini Ortiz\"",
+      "short_name": null,
       "formerly": null,
       "description": {
         "en": "Technical secondary school",
@@ -442,6 +459,7 @@
         "en": "Santa Teresita, Argentina",
         "es": "Santa Teresita, Argentina"
       },
+      "profile_card": false,
       "roles": [
         {
           "title": {
@@ -469,10 +487,12 @@
     {
       "id": "tres-barbas",
       "company": "Tres Barbas Games",
+      "short_name": null,
       "formerly": null,
       "description": null,
       "url": null,
       "location": null,
+      "profile_card": true,
       "roles": [
         {
           "title": {

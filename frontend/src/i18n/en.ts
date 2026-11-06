@@ -1,3 +1,5 @@
+import { lowerFirst } from './format';
+
 /** The interface copy in English, the default language (ADR-015). es.ts has the same shape. */
 export const en = {
   site: {
@@ -33,6 +35,10 @@ export const en = {
     github: 'GitHub',
     leaveMessage: 'Leave him a message',
     workMode: 'Work mode',
+    // How the profile's values read in a sentence (content/profile.yaml)
+    citizenship: (location: string, citizenship: string) =>
+      `${location} · Citizenship: ${citizenship}`,
+    language: (name: string, level: string) => `${name} (${lowerFirst(level)})`,
   },
   workModes: {
     remote: 'Remote',

@@ -32,7 +32,7 @@ def project_card(entry: Experience, highlight: Localized, locale: Locale) -> Pro
     """A company's card from its latest role, with the highlight to show as its key result."""
     role = entry.roles[0]
     return ProjectCard(
-        name=entry.company,
+        name=entry.display_name,
         summary=localize(entry.description, locale) if entry.description else "",
         role=localize(role.title, locale),
         period=format_period(role.start, role.end, locale),
@@ -50,7 +50,7 @@ def timeline_card(profile: Profile, locale: Locale) -> TimelineCard:
             role.start,
             TimelineItem(
                 role=localize(role.title, locale),
-                company=entry.company,
+                company=entry.display_name,
                 period=format_period(role.start, role.end, locale),
                 initials=initials(entry.company),
             ),
@@ -64,13 +64,16 @@ def timeline_card(profile: Profile, locale: Locale) -> TimelineCard:
 
 
 def skills_card(profile: Profile, group_ids: tuple[str, ...], locale: Locale) -> SkillsCard:
-    """The chosen skill groups, in the order given."""
+    """The chosen skill groups, in the order given, each with its main items."""
     groups = {group.id: group for group in profile.skills}
     return SkillsCard(
         groups=[
             SkillsGroup(
                 label=localize(groups[group_id].label, locale),
-                items=[localize(item, locale) for item in groups[group_id].items],
+                items=[
+                    localize(item, locale)
+                    for item in groups[group_id].items[: groups[group_id].main]
+                ],
             )
             for group_id in group_ids
         ]

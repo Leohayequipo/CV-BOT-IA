@@ -4,6 +4,7 @@ import { http } from 'msw';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { App } from '../app/App';
 import { answer, CHAT_URL, server, sse } from '../test/server';
+import { lowerFirst } from './format';
 import { pickLocale } from './index';
 
 function chat(name: RegExp) {
@@ -72,5 +73,12 @@ describe('the interface language', () => {
     await screen.findByText('Leonardo builds AI products.');
 
     expect(bodies[0]).toMatchObject({ message: '¿Lideró equipos?', locale: 'es' });
+  });
+});
+
+describe('lowerFirst', () => {
+  it('lets a value follow other words, but keeps codes as they are', () => {
+    expect(lowerFirst('Italiana (UE)')).toBe('italiana (UE)');
+    expect(lowerFirst('B1, con práctica diaria')).toBe('B1, con práctica diaria');
   });
 });

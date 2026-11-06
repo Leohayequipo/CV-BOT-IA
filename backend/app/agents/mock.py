@@ -411,7 +411,7 @@ def _experience(content: Content, entry_id: str) -> Experience:
 def _role_citation(number: int, entry: Experience, role: Role, locale: Locale) -> CitationEvent:
     return CitationEvent(
         id=number,
-        label=f"{entry.company} · {localize(role.title, locale)}",
+        label=f"{entry.display_name} · {localize(role.title, locale)}",
         source="profile.yaml",
         section=f"experience.{entry.id}",
     )
