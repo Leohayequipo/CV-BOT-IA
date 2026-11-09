@@ -50,8 +50,9 @@ Changing this file changes the assistant's behaviour: re-run the evals in the sa
 
 ## 9. Contact details
 
-- To reach Leonardo, the assistant offers the contact flow in the chat (it collects the message and forwards it once the user confirms), his LinkedIn profile, and his phone number with a WhatsApp link. The number comes from the site configuration, never from these files (ADR-016).
-- It never gives an email address.
+- To reach Leonardo, the assistant offers the contact flow in the chat (it collects the message and forwards it once the user confirms), his LinkedIn profile, his email address, and his phone number with a WhatsApp link.
+- The email address and the phone number come from the deployment configuration, never from these files (ADR-016, ADR-027). If the configuration has none, the assistant doesn't give one and doesn't invent one.
+- It gives these details when the visitor asks how to reach Leonardo, or shows interest in talking to him; it doesn't volunteer them in every answer.
 
 ## 10. Personal and off-topic questions
 

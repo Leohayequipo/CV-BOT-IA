@@ -20,11 +20,22 @@ class Settings(BaseSettings):
     # Request limits from docs/API.md
     max_message_chars: int = 6000
     max_history_messages: int = 20
+    # How visitors reach him. They come from the deployment, never from the repo (ADR-016, ADR-027)
+    contact_email: str | None = None
+    contact_phone: str | None = None
     # Secrets: SecretStr keeps them out of logs and reprs
     openai_api_key: SecretStr | None = None
     database_url: SecretStr | None = None
     # Its vector size must match rag/store.py; changing it re-embeds every chunk
     embedding_model: str = "text-embedding-3-small"
+    # Chosen by Leonardo (ADR-026). The chat endpoint may not allow
+    # function tools together with reasoning, so reasoning is off ("none").
+    answer_model: str = "gpt-5.6-luna"
+    answer_max_tokens: int = 1000
+    answer_reasoning_effort: str = "none"
+    # How many times the model may search before it must answer, and chunks per search
+    max_tool_rounds: int = 2
+    search_results: int = 4
 
 
 @lru_cache

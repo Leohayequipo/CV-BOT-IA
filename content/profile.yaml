@@ -193,7 +193,7 @@ experience:
     url: https://servime.net
     roles:
       - title: { en: "Lead Developer", es: "Desarrollador principal" }
-        start: "2025-06"
+        start: "2026-08"
         end: null
         work_mode: remote
         stack: [Laravel, Blade, Tailwind CSS, MySQL, OpenAI, Gemini]
@@ -221,6 +221,12 @@ experience:
         highlights:
           - en: "Academic systems with PHP, JavaScript and MySQL; evolution of existing platforms and optimization of internal processes."
             es: "Sistemas académicos con PHP, JavaScript y MySQL; evolución de plataformas y optimización de procesos internos."
+      - title: { en: "Researcher", es: "Investigador" }
+        start: "2016"
+        end: "2018"
+        highlights:
+          - en: "Member of an interdisciplinary team that built video games and mobile apps to help first-year students adapt to university life."
+            es: "Integrante de un equipo interdisciplinario que desarrolló videojuegos y apps móviles para ayudar a los ingresantes a adaptarse a la vida universitaria."
 
   - id: eest1
     company: 'EEST Nº 1 "Raúl Scalabrini Ortiz"'
@@ -283,13 +289,13 @@ projects:
 
 education:
   - degree:
-      en: "Licenciatura en Sistemas Informáticos (Bachelor's in Information Systems)"
-      es: "Licenciatura en Sistemas Informáticos"
+      en: "Licenciado en Informática (Bachelor's in Computer Science)"
+      es: "Licenciado en Informática"
     institution: Universidad Atlántida Argentina
-    year: "2014"
+    year: "2013"
     note:
-      en: "Intermediate degree: Analista de Sistemas (2013)"
-      es: "Título intermedio: Analista de Sistemas (2013)"
+      en: "Intermediate degree: Analista de Sistemas (2012). Teaching assistant in Applied Computing. Award-winning final project that received funding for its rollout: an in-room tablet system for hotels (bookings, dining, events, tourist information)."
+      es: "Título intermedio: Analista de Sistemas (2012). Ayudante de cátedra en Informática Aplicada. Proyecto final premiado que recibió financiamiento para su implementación: un sistema de tablets en las habitaciones de hoteles (reservas, gastronomía, eventos, información turística)."
   - degree:
       en: "Profesorado en Educación (Teaching degree)"
       es: "Profesorado en Educación"
@@ -301,3 +307,19 @@ languages:
     level: { en: "Native", es: "Nativo" }
   - name: { en: "English", es: "Inglés" }
     level: { en: "B1, currently in daily conversation training", es: "B1, con práctica diaria de conversación" }
+
+# The assistant states these plainly and offers the closest related experience (policy 2)
+gaps:
+  no_experience:
+    - AWS and other major cloud providers
+    - Kubernetes
+    - Java / Spring
+    - C# / .NET
+    - RabbitMQ / Kafka
+    - microservices in production
+    - PyTorch / TensorFlow
+    - MongoDB
+    - Grafana
+    - OpenTelemetry
+  learning:
+    - AWS

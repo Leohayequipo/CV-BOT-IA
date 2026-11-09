@@ -353,7 +353,7 @@
             "en": "Lead Developer",
             "es": "Desarrollador principal"
           },
-          "start": "2025-06",
+          "start": "2026-08",
           "end": null,
           "work_mode": "remote",
           "stack": [
@@ -379,8 +379,8 @@
             }
           ],
           "period": {
-            "en": "Jun 2025 – present",
-            "es": "jun. 2025 – hoy"
+            "en": "Aug 2026 – present",
+            "es": "ago. 2026 – hoy"
           }
         }
       ],
@@ -438,6 +438,26 @@
           "period": {
             "en": "2017 – 2022",
             "es": "2017 – 2022"
+          }
+        },
+        {
+          "title": {
+            "en": "Researcher",
+            "es": "Investigador"
+          },
+          "start": "2016",
+          "end": "2018",
+          "work_mode": null,
+          "stack": [],
+          "highlights": [
+            {
+              "en": "Member of an interdisciplinary team that built video games and mobile apps to help first-year students adapt to university life.",
+              "es": "Integrante de un equipo interdisciplinario que desarrolló videojuegos y apps móviles para ayudar a los ingresantes a adaptarse a la vida universitaria."
+            }
+          ],
+          "period": {
+            "en": "2016 – 2018",
+            "es": "2016 – 2018"
           }
         }
       ],
@@ -598,14 +618,14 @@
   "education": [
     {
       "degree": {
-        "en": "Licenciatura en Sistemas Informáticos (Bachelor's in Information Systems)",
-        "es": "Licenciatura en Sistemas Informáticos"
+        "en": "Licenciado en Informática (Bachelor's in Computer Science)",
+        "es": "Licenciado en Informática"
       },
       "institution": "Universidad Atlántida Argentina",
-      "year": "2014",
+      "year": "2013",
       "note": {
-        "en": "Intermediate degree: Analista de Sistemas (2013)",
-        "es": "Título intermedio: Analista de Sistemas (2013)"
+        "en": "Intermediate degree: Analista de Sistemas (2012). Teaching assistant in Applied Computing. Award-winning final project that received funding for its rollout: an in-room tablet system for hotels (bookings, dining, events, tourist information).",
+        "es": "Título intermedio: Analista de Sistemas (2012). Ayudante de cátedra en Informática Aplicada. Proyecto final premiado que recibió financiamiento para su implementación: un sistema de tablets en las habitaciones de hoteles (reservas, gastronomía, eventos, información turística)."
       }
     },
     {
@@ -639,5 +659,22 @@
         "es": "B1, con práctica diaria de conversación"
       }
     }
-  ]
+  ],
+  "gaps": {
+    "no_experience": [
+      "AWS and other major cloud providers",
+      "Kubernetes",
+      "Java / Spring",
+      "C# / .NET",
+      "RabbitMQ / Kafka",
+      "microservices in production",
+      "PyTorch / TensorFlow",
+      "MongoDB",
+      "Grafana",
+      "OpenTelemetry"
+    ],
+    "learning": [
+      "AWS"
+    ]
+  }
 }
