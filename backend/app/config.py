@@ -3,6 +3,7 @@
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -19,6 +20,11 @@ class Settings(BaseSettings):
     # Request limits from docs/API.md
     max_message_chars: int = 6000
     max_history_messages: int = 20
+    # Secrets: SecretStr keeps them out of logs and reprs
+    openai_api_key: SecretStr | None = None
+    database_url: SecretStr | None = None
+    # Its vector size must match rag/store.py; changing it re-embeds every chunk
+    embedding_model: str = "text-embedding-3-small"
 
 
 @lru_cache

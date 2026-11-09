@@ -1,0 +1,56 @@
+name: Ingest content
+
+# Keeps the vector database equal to content/. Idempotent: unchanged chunks cost nothing.
+on:
+  push:
+    branches: [main]
+    paths:
+      - content/case-studies/**
+      - backend/app/rag/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    name: Embed and store the case studies
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      # Until the two secrets exist in the repository settings, the job says so and passes
+      - name: Check the secrets
+        id: secrets
+        run: |
+          if [ -z "$DATABASE_URL" ] || [ -z "$OPENAI_API_KEY" ]; then
+            echo "::notice::DATABASE_URL or OPENAI_API_KEY is not set; skipping the ingestion"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v7
+        if: steps.secrets.outputs.ready == 'true'
+
+      - uses: astral-sh/setup-uv@v7
+        if: steps.secrets.outputs.ready == 'true'
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        if: steps.secrets.outputs.ready == 'true'
+        run: uv sync --locked
+
+      - name: Ingest
+        if: steps.secrets.outputs.ready == 'true'
+        run: uv run python -m app.rag.ingest
