@@ -31,6 +31,8 @@ jobs:
       # Until the two secrets exist in the repository settings, the job says so and passes
       - name: Check the secrets
         id: secrets
+        # The code isn't checked out yet, so backend/ doesn't exist at this point
+        working-directory: .
         run: |
           if [ -z "$DATABASE_URL" ] || [ -z "$OPENAI_API_KEY" ]; then
             echo "::notice::DATABASE_URL or OPENAI_API_KEY is not set; skipping the ingestion"
