@@ -51,7 +51,7 @@ Goal: one reviewed source of truth that both the page and the assistant read. Th
 - [x] 1.2 `content/policies.md`: how the assistant handles sensitive topics (salary, start date, citizenship, concurrent roles, English level, NDA work, unknown answers)
 - [x] 1.3 `content/case-studies/_TEMPLATE.md`
 - [ ] 1.4 Case studies, one per PR. Leonardo drafts in Spanish, then we edit them into English together:
-  - [ ] ServiME
+  - [x] ServiME
   - [ ] RAG document assistant
   - [ ] AI agent with tool use
   - [ ] Real-time conversational AI avatars
