@@ -353,27 +353,25 @@
             "en": "Lead Developer",
             "es": "Desarrollador principal"
           },
-          "start": "2026-08",
+          "start": "2025-06",
           "end": null,
           "work_mode": "remote",
           "stack": [
             "Laravel",
-            "FilamentPHP",
-            "React",
-            "TypeScript",
-            "PostgreSQL",
-            "Redis",
+            "Blade",
+            "Tailwind CSS",
+            "MySQL",
             "OpenAI",
             "Gemini"
           ],
           "highlights": [
             {
-              "en": "Designed and built the full platform: Laravel + FilamentPHP backend, React / TypeScript frontend, PostgreSQL and Redis.",
-              "es": "Diseñó y desarrolló la plataforma completa: backend en Laravel + FilamentPHP, frontend en React / TypeScript, PostgreSQL y Redis."
+              "en": "Designed and built the full platform: Laravel backend, Blade and Tailwind CSS frontend, MySQL.",
+              "es": "Diseñó y desarrolló la plataforma completa: backend en Laravel, frontend en Blade y Tailwind CSS, MySQL."
             },
             {
-              "en": "AI chat assistant (OpenAI, Gemini) that answers menu questions and recommends products; embeddable widget SDK secured with CORS and ephemeral session tokens; real-time streaming (SSE); CI/CD.",
-              "es": "Asistente de chat con IA (OpenAI, Gemini) que responde consultas y recomienda productos; SDK de widget embebible con seguridad CORS y tokens de sesión efímeros; streaming en tiempo real (SSE); CI/CD."
+              "en": "AI chat assistant (OpenAI, Gemini) that answers menu questions and recommends products, with real-time streaming (SSE) and automated deploys (CI/CD).",
+              "es": "Asistente de chat con IA (OpenAI, Gemini) que responde consultas y recomienda productos, con streaming en tiempo real (SSE) y deploy automatizado (CI/CD)."
             },
             {
               "en": "In production at Azopardo Café Bar, where it improved service speed by 20%.",
@@ -381,8 +379,8 @@
             }
           ],
           "period": {
-            "en": "Aug 2026 – present",
-            "es": "ago. 2026 – hoy"
+            "en": "Jun 2025 – present",
+            "es": "jun. 2025 – hoy"
           }
         }
       ],
