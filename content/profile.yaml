@@ -301,3 +301,19 @@ languages:
     level: { en: "Native", es: "Nativo" }
   - name: { en: "English", es: "Inglés" }
     level: { en: "B1, currently in daily conversation training", es: "B1, con práctica diaria de conversación" }
+
+# The assistant states these plainly and offers the closest related experience (policy 2)
+gaps:
+  no_experience:
+    - AWS and other major cloud providers
+    - Kubernetes
+    - Java / Spring
+    - C# / .NET
+    - RabbitMQ / Kafka
+    - microservices in production
+    - PyTorch / TensorFlow
+    - MongoDB
+    - Grafana
+    - OpenTelemetry
+  learning:
+    - AWS

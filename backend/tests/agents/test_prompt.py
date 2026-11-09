@@ -73,3 +73,11 @@ def test_a_contact_detail_that_isnt_configured_is_never_given(content: Content) 
     assert "Email: not available, never invent one." in text
     assert "Phone: not available, never invent one." in text
     assert "@" not in text
+
+
+def test_the_known_gaps_reach_the_prompt(content: Content) -> None:
+    text = render_profile(content.profile)
+
+    assert '<source id="profile:gaps">' in text
+    assert "No professional experience with:" in text
+    assert "Kubernetes" in text

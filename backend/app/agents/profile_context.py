@@ -48,12 +48,22 @@ def render_profile(
             f"- {localize(language.name, 'en')}: {localize(language.level, 'en')}"
             for language in profile.languages
         ],
+        "gaps": _gaps(profile),
         "contact": _contact(contact_email, contact_phone),
     }
     return "\n\n".join(
         f'<source id="profile:{key}">\n' + "\n".join(lines) + "\n</source>"
         for key, lines in blocks.items()
     )
+
+
+def _gaps(profile: Profile) -> list[str]:
+    if profile.gaps is None:
+        return ["No gaps are listed."]
+    lines = ["No professional experience with: " + ", ".join(profile.gaps.no_experience) + "."]
+    if profile.gaps.learning:
+        lines.append("Currently learning: " + ", ".join(profile.gaps.learning) + ".")
+    return lines
 
 
 def _contact(email: str | None, phone: str | None) -> list[str]:

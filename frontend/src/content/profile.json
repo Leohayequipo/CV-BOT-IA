@@ -639,5 +639,22 @@
         "es": "B1, con práctica diaria de conversación"
       }
     }
-  ]
+  ],
+  "gaps": {
+    "no_experience": [
+      "AWS and other major cloud providers",
+      "Kubernetes",
+      "Java / Spring",
+      "C# / .NET",
+      "RabbitMQ / Kafka",
+      "microservices in production",
+      "PyTorch / TensorFlow",
+      "MongoDB",
+      "Grafana",
+      "OpenTelemetry"
+    ],
+    "learning": [
+      "AWS"
+    ]
+  }
 }

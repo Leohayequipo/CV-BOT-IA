@@ -153,6 +153,13 @@ class Language(ContentModel):
     level: Localized
 
 
+class Gaps(ContentModel):
+    """What he hasn't done, so the assistant can say so plainly instead of stretching the truth."""
+
+    no_experience: list[Text] = Field(min_length=1)
+    learning: list[Text] = Field(default_factory=list)
+
+
 class Profile(ContentModel):
     """content/profile.yaml: what the profile card, the chat cards and the assistant read."""
 
@@ -163,6 +170,7 @@ class Profile(ContentModel):
     projects: Projects
     education: list[Education] = Field(min_length=1)
     languages: list[Language] = Field(min_length=1)
+    gaps: Gaps | None = None
 
     @property
     def entry_ids(self) -> set[str]:
