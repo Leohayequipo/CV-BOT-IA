@@ -274,7 +274,7 @@ cases:
     route: profile
     question: "What did he study?"
     must_include:
-      - "Licenciatura en Sistemas Informáticos (Bachelor's in Information Systems), Universidad Atlántida Argentina, 2014"
+      - "Licenciado en Informática (Bachelor's in Computer Science), Universidad Atlántida Argentina, 2013"
       - "intermediate degree as Analista de Sistemas, 2013"
       - "Profesorado en Educación (teaching degree), Universidad Tecnológica Nacional, 2017"
 
