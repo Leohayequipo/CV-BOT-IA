@@ -11,6 +11,7 @@ from fastapi.sse import EventSourceResponse, ServerSentEvent
 
 from app.agents.mock import MockChat
 from app.api.errors import error_message
+from app.api.limits import Limits, get_limits, visitor_ip
 from app.config import Settings, get_settings
 from app.content.loader import load_content
 from app.content.models import Content
@@ -36,6 +37,8 @@ async def accepted_question(
     question: ChatRequest,
     settings: Annotated[Settings, Depends(get_settings)],
     mock: Annotated[MockChat, Depends(get_mock_chat)],
+    limits: Annotated[Limits, Depends(get_limits)],
+    ip: Annotated[str, Depends(visitor_ip)],
 ) -> ChatRequest:
     """Refuse a question with a normal error response, before any event is streamed."""
     # The error handler answers in the question's language
@@ -44,6 +47,9 @@ async def accepted_question(
         raise MessageTooLongError
     if len(question.history) > settings.max_history_messages:
         raise InvalidRequestError
+    limits.budget.check()
+    limits.chat_by_session.check(str(question.session_id))
+    limits.chat_by_ip.check(ip)
     mock.check_limit(question)
     return question
 

@@ -31,7 +31,14 @@ class ToolCalls:
     calls: list[ToolCall]
 
 
-ModelEvent = TextDelta | ToolCalls
+@dataclass(frozen=True)
+class Usage:
+    """Tokens a call used, prompt and answer together; sent once, last."""
+
+    tokens: int
+
+
+ModelEvent = TextDelta | ToolCalls | Usage
 
 
 class ChatModel(Protocol):
@@ -53,17 +60,21 @@ class OpenAIChatModel:
         self, messages: list[Message], tools: list[Message]
     ) -> AsyncIterator[ModelEvent]:
         calls: dict[int, ToolCall] = {}
+        tokens = 0
         try:
             # The SDK's typed message dicts are strict; ours are plain dicts in the same shape
             response = await self._client.chat.completions.create(  # type: ignore[call-overload]
                 model=self._model,
                 messages=messages,
                 stream=True,
+                stream_options={"include_usage": True},
                 max_completion_tokens=self._max_completion_tokens,
                 reasoning_effort=self._reasoning_effort,
                 tools=tools or openai.omit,
             )
             async for chunk in response:
+                if chunk.usage:
+                    tokens = chunk.usage.total_tokens
                 if not chunk.choices:
                     continue
                 delta = chunk.choices[0].delta
@@ -84,3 +95,5 @@ class OpenAIChatModel:
             raise UpstreamUnavailableError from error
         if calls:
             yield ToolCalls([calls[index] for index in sorted(calls)])
+        if tokens:
+            yield Usage(tokens)

@@ -38,7 +38,8 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 025 | One chunk per case-study section, re-embedded only when it changes |
 | 026 | The profile agent cites by source id, and the backend numbers the citations |
 | 027 | The assistant gives his email address, read from the deployment configuration |
-| 028 | The guardrail: rules first, a small model second, fixed redirects |
+| 028 | The guardrail: rules first, a model second, fixed redirects |
+| 029 | Abuse and cost protection: in-memory limits and a daily token budget |
 
 ---
 
@@ -385,7 +386,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 
 **Trade-offs:** the live assistant exposes the address to anyone who asks, including scrapers that automate the chat. The rate limit of step 5.5 bounds that. A prompt change that leaks the address to a question that didn't ask for it is a policy failure the evals check (`email-address`).
 
-## ADR-028 · The guardrail: rules first, a small model second, fixed redirects
+## ADR-028 · The guardrail: rules first, a model second, fixed redirects
 
 *Accepted · 2026-11-09*
 
@@ -398,3 +399,15 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Alternatives considered:** one model call that classifies and answers (cheaper, but an injection then reaches the model that holds the profile); a moderation endpoint (it detects abuse, not off-topic or injection); no rules, only the model (every attack pays a call and depends on the model's mood).
 
 **Trade-offs:** failing open means a garbled classification costs one answer under the agent's own policies, and in exchange a model hiccup never turns away a recruiter. A short message with a rephrased attack that the rules miss depends on the small model, so the injection cases of `evals/questions.yaml` guard it (step 5.7). One extra call adds latency to every question; the one-word reply and a 10-token cap keep it short.
+
+## ADR-029 · Abuse and cost protection: in-memory limits and a daily token budget
+
+*Accepted · 2026-11-09*
+
+**Decision:** four limits protect the API, all configurable and all answering with the `rate_limited` error and a `Retry-After` header. A session (one page load) may ask 15 questions in 10 minutes; an IP address 60 in an hour; an IP may send 3 contact messages in an hour; and the models together may use 2,000,000 tokens per UTC day, after which the chat refuses until midnight. The counts live in the API's memory. Every model call goes through a `MeteredModel` that reads the token usage the provider reports and spends it from the budget. The visitor's IP is the socket's peer unless `TRUSTED_PROXY_HOPS` says how many proxies of ours sit in front (1 on Railway); then the entry that many places from the right of `X-Forwarded-For` is used, never one the visitor could have written. The message length and the history size were already limited, and CORS already allows only the site's origin (step 3.2).
+
+**Why:** the chat spends Leonardo's money on every question, and the contact form sends email. The session limit stops a runaway page, the IP limit stops someone who opens a new session each time, and the daily budget caps the worst case whatever else fails. Tokens are what the provider reports and bills, so a budget in tokens needs no price table that would go stale when a model changes.
+
+**Alternatives considered:** Redis or a database for the counts (shared across instances and surviving restarts, but one more service to run for a single-instance API); a library such as slowapi (one more dependency for forty lines that need their own tests anyway); a budget in dollars (needs the prices of every model); trusting `X-Forwarded-For` as is (a visitor sets it, and gets a new IP on every request).
+
+**Trade-offs:** a restart forgets the counts, which can only let a visitor ask a little more, and the daily budget starts again, so a restart loop could spend more than 2,000,000 tokens in a day. Running a second instance doubles every limit. Both are acceptable for a portfolio on one Railway instance and are the reason to move the counts to Redis if that changes. A visitor behind a shared address (an office, a university) shares the IP limit; 60 questions an hour leaves room for that. The budget refuses the chat for everyone, recruiters included, so it is set well above a normal day.

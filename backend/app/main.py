@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import chat, contact, health
 from app.api.errors import register_error_handlers
+from app.api.limits import Limits
 from app.config import Settings, get_settings
 
 
@@ -18,6 +19,7 @@ def create_app(settings: Settings) -> FastAPI:
         # The site reads it to say when asking works again
         expose_headers=["Retry-After"],
     )
+    app.state.limits = Limits.from_settings(settings)
     register_error_handlers(app)
     app.include_router(health.router)
     app.include_router(chat.router)
