@@ -1,5 +1,6 @@
 """Where the chunks live: a Store protocol and its Postgres implementation."""
 
+import re
 from importlib import resources
 from typing import Protocol
 
@@ -71,6 +72,37 @@ class PostgresStore:
     def delete(self, ids: list[str]) -> None:
         if ids:
             self._connection.execute("delete from chunks where id = any(%s)", (ids,))
+
+    def search_text(self, query: str, limit: int) -> list[Chunk]:
+        words = _WORD.findall(query)
+        if not words:
+            return []
+        # A question has many words and a chunk rarely holds them all, so any word may match.
+        # websearch_to_tsquery reads "or" as an operator and drops stop words like "the".
+        rows = self._connection.execute(
+            """
+            select id, source_id, title, section, content from chunks,
+                websearch_to_tsquery('english', %s) as query
+            where fts @@ query
+            order by ts_rank_cd(fts, query) desc, id
+            limit %s
+            """,
+            (" or ".join(words), limit),
+        ).fetchall()
+        return [Chunk(*row) for row in rows]
+
+    def search_vector(self, embedding: list[float], limit: int) -> list[Chunk]:
+        rows = self._connection.execute(
+            """
+            select id, source_id, title, section, content from chunks
+            order by embedding <=> %s::vector, id limit %s
+            """,
+            (_vector_literal(embedding), limit),
+        ).fetchall()
+        return [Chunk(*row) for row in rows]
+
+
+_WORD = re.compile(r"\w+")
 
 
 def _vector_literal(embedding: list[float]) -> str:

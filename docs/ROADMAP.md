@@ -125,7 +125,7 @@ Goal: build the approved design with a fake server that streams pre-written answ
 Goal: the real assistant answers questions about Leonardo with citations, safely and cheaply.
 
 - [x] 5.1 Ingestion: chunk case studies by heading, embed, upsert into Supabase pgvector. Idempotent, runs in CI when `content/` changes
-- [ ] 5.2 Hybrid retrieval (full-text + vector) with unit tests
+- [x] 5.2 Hybrid retrieval (full-text + vector) with unit tests
 - [ ] 5.3 Profile agent: core profile in a cached system prompt + `search_docs` tool; every claim cites its source
 - [ ] 5.4 Guardrail: prompt-injection and off-topic detection; `policies.md` enforced
 - [ ] 5.5 Abuse and cost protection: rate limit per IP/session, max message length, CORS locked to the domain, daily spend cap
