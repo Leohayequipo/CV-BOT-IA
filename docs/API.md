@@ -74,9 +74,9 @@ Every card has a `type` and a `data` object. Text inside cards may carry `[n]` c
   "name": "ServiME",
   "summary": "Digital menu SaaS with an AI chat",
   "role": "Lead developer",
-  "period": "Aug 2026 – present",
+  "period": "Jun 2025 – present",
   "highlight": "20% faster service at Azopardo Café Bar",
-  "stack": ["Laravel", "FilamentPHP", "React", "TypeScript", "PostgreSQL", "Redis", "OpenAI", "Gemini"],
+  "stack": ["Laravel", "Blade", "Tailwind CSS", "MySQL", "OpenAI", "Gemini"],
   "url": "https://servime.net",
   "brand": "servime"
 }
@@ -87,7 +87,7 @@ Every card has a `type` and a `data` object. Text inside cards may carry `[n]` c
 **`timeline`**
 
 ```json
-{ "items": [{ "role": "Lead developer", "company": "ServiME", "period": "Aug 2026 – present", "initials": "SM" }] }
+{ "items": [{ "role": "Lead developer", "company": "ServiME", "period": "Jun 2025 – present", "initials": "SM" }] }
 ```
 
 Newest first.
