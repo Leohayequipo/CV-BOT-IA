@@ -21,6 +21,7 @@ PROFILE_SECTIONS = {
     "projects": "Other projects",
     "education": "Education",
     "languages": "Languages",
+    "contact": "Contact",
 }
 
 

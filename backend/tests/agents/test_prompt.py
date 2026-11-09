@@ -22,7 +22,7 @@ def test_the_profile_text_carries_the_facts_the_assistant_must_know(content: Con
     text = render_profile(content.profile)
 
     assert "ServiME" in text
-    assert "Jun 2025 – present" in text
+    assert "Aug 2026 – present" in text
     assert "Italian" in text
 
 
@@ -58,3 +58,18 @@ def test_a_prompt_rejects_missing_or_extra_variables() -> None:
         render_prompt("profile_agent", policies="x")
     with pytest.raises(ValueError, match="takes"):
         render_prompt("profile_agent", policies="x", profile="y", extra="z")
+
+
+def test_the_configured_contact_details_reach_the_prompt(content: Content) -> None:
+    text = render_profile(content.profile, "name@example.com", "+00 0000 0000")
+
+    assert "Email: name@example.com" in text
+    assert "Phone and WhatsApp: +00 0000 0000" in text
+
+
+def test_a_contact_detail_that_isnt_configured_is_never_given(content: Content) -> None:
+    text = render_profile(content.profile)
+
+    assert "Email: not available, never invent one." in text
+    assert "Phone: not available, never invent one." in text
+    assert "@" not in text

@@ -49,9 +49,15 @@ class DocumentSearch(Protocol):
     async def search(self, query: str, limit: int) -> list[Hit]: ...
 
 
-def build_system_prompt(profile: Profile, policies: str) -> str:
+def build_system_prompt(
+    profile: Profile,
+    policies: str,
+    contact_email: str | None = None,
+    contact_phone: str | None = None,
+) -> str:
     """Everything stable goes in here, so the same text is sent, and cached, on every request."""
-    return render_prompt("profile_agent", policies=policies, profile=render_profile(profile))
+    profile_text = render_profile(profile, contact_email, contact_phone)
+    return render_prompt("profile_agent", policies=policies, profile=profile_text)
 
 
 def read_policies(content_dir: Path) -> str:

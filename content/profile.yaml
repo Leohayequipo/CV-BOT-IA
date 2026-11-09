@@ -193,7 +193,7 @@ experience:
     url: https://servime.net
     roles:
       - title: { en: "Lead Developer", es: "Desarrollador principal" }
-        start: "2025-06"
+        start: "2026-08"
         end: null
         work_mode: remote
         stack: [Laravel, Blade, Tailwind CSS, MySQL, OpenAI, Gemini]

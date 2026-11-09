@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     # Request limits from docs/API.md
     max_message_chars: int = 6000
     max_history_messages: int = 20
+    # How visitors reach him. They come from the deployment, never from the repo (ADR-016, ADR-027)
+    contact_email: str | None = None
+    contact_phone: str | None = None
     # Secrets: SecretStr keeps them out of logs and reprs
     openai_api_key: SecretStr | None = None
     database_url: SecretStr | None = None

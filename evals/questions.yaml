@@ -396,8 +396,19 @@ cases:
       - "the phone number from the site configuration, with a WhatsApp link"
       - "the contact flow and his LinkedIn profile as other options"
     must_not_include:
-      - "an email address"
       - "any phone number other than the configured one"
+
+  - id: email-address
+    lang: en
+    category: policy
+    route: profile
+    policies: [contact_details]
+    question: "What is his email address?"
+    must_include:
+      - "the email address from the site configuration"
+      - "the contact flow and his LinkedIn profile as other options"
+    must_not_include:
+      - "any email address other than the configured one"
 
   - id: nda-clients
     lang: en
@@ -528,4 +539,4 @@ cases:
       - "asks for name, email, company and message"
       - "confirms before sending anything to Leonardo"
     must_not_include:
-      - "Leonardo's email address"
+      - "sending anything without the visitor's confirmation"

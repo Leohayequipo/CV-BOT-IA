@@ -37,6 +37,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 024 | A small Markdown reader for the answers, instead of a library |
 | 025 | One chunk per case-study section, re-embedded only when it changes |
 | 026 | The profile agent cites by source id, and the backend numbers the citations |
+| 027 | The assistant gives his email address, read from the deployment configuration |
 
 ---
 
@@ -173,7 +174,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Trade-offs:** slightly less personal; the tone of the interface makes up for it.
 
 ## ADR-012 · Privacy: publish only what a recruiter needs
-
+*Accepted · 2026-10-30 · The phone rule is superseded by ADR-016 and the email rule by ADR-027*
 *Accepted · 2026-10-30 · The phone rule is superseded by ADR-016*
 
 **Decision:** no phone number anywhere in the site or the repo. The assistant doesn't give salary figures or a start date; it offers a direct conversation instead. The rules live in `content/policies.md`, the guardrail enforces them, evals test them, and traces redact contact details.
@@ -370,3 +371,15 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Alternatives considered:** asking the model to number citations itself (it miscounts, and the numbers can't be checked); retrieving the profile too instead of keeping it in the prompt (the profile is small and always relevant, so retrieval would only add misses); the Responses API, which allows tools with reasoning (a second API surface for one model option).
 
 **Trade-offs:** an id the model gets slightly wrong is dropped, so a true statement can lose its citation. The evals measure citation validity and recall for that. Every `[...]` in an answer has to be a source id, which the prompt states.
+
+## ADR-027 · The assistant gives his email address, read from the deployment configuration
+
+*Accepted · 2026-11-09 · Supersedes the email rule of ADR-012*
+
+**Decision:** when a visitor asks how to reach Leonardo, or shows interest in talking to him, the assistant gives his email address, as it already does with his phone number. The address lives in the `CONTACT_EMAIL` setting of the deployment (a Railway variable), next to `CONTACT_PHONE`, and the backend puts it in the system prompt at start-up. It is never written in the repository: the privacy test still fails if an email address appears in `content/` or `evals/`. If the setting is empty, the assistant says it has no email address to give and offers the contact flow and LinkedIn.
+
+**Why:** Leonardo wants recruiters to be able to write to him directly. Keeping the address in configuration, as with the phone number (ADR-016), keeps it out of the public Git history, so it can be changed or removed with a redeploy.
+
+**Alternatives considered:** keeping the rule of ADR-012, an assistant that never gives an email (less spam, but one more step for a recruiter who prefers email); writing the address in `profile.yaml` (permanent in the public history).
+
+**Trade-offs:** the live assistant exposes the address to anyone who asks, including scrapers that automate the chat. The rate limit of step 5.5 bounds that. A prompt change that leaks the address to a question that didn't ask for it is a policy failure the evals check (`email-address`).

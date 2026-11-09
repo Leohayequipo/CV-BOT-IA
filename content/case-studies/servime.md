@@ -2,7 +2,7 @@
 id: servime
 title: ServiME
 related: [servime]
-period: "2025-06"
+period: "2026-08"
 role: Lead developer
 stack: [Laravel, PHP, MySQL, Blade, Tailwind CSS, Alpine.js, OpenAI, Gemini]
 lang: en
@@ -61,5 +61,8 @@ Customer scans the QR -> search in PHP -> OpenAI answers -> dish cards with phot
 - ServiME is in production at Azopardo Café Bar, where it improved service speed by 20%.
 - The platform covers the whole cycle: menu, chat, pre-order, table, waiter and analytics.
 - Customers need no app and no registration: they scan the QR and enter.
-- The project has 433 commits since June 2025 and a PHPUnit test suite.
+- The project has a PHPUnit test suite and deploys automatically on every push to `main`.
+- Owners see what their customers ask for and what they look for that the menu doesn't have, and they can compare the session times of the AI chat and the classic menu, which the same system offers side by side.
+- Customers no longer depend on the waiter being free to ask about a dish, which saves time at the table. Owners see the improvement, most clearly with younger customers.
+- The panel can also prompt satisfied customers to leave a Google review.
 - The current goal is to start charging for the plans.

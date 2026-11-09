@@ -8,7 +8,9 @@ from app.content.format import format_period, localize
 from app.content.models import Experience, Profile, Role
 
 
-def render_profile(profile: Profile) -> str:
+def render_profile(
+    profile: Profile, contact_email: str | None = None, contact_phone: str | None = None
+) -> str:
     basics = profile.basics
     blocks = {
         "basics": [
@@ -46,11 +48,21 @@ def render_profile(profile: Profile) -> str:
             f"- {localize(language.name, 'en')}: {localize(language.level, 'en')}"
             for language in profile.languages
         ],
+        "contact": _contact(contact_email, contact_phone),
     }
     return "\n\n".join(
         f'<source id="profile:{key}">\n' + "\n".join(lines) + "\n</source>"
         for key, lines in blocks.items()
     )
+
+
+def _contact(email: str | None, phone: str | None) -> list[str]:
+    """Where the deployment says he can be reached; a detail that isn't set isn't given."""
+    return [
+        f"Email: {email}" if email else "Email: not available, never invent one.",
+        f"Phone and WhatsApp: {phone}" if phone else "Phone: not available, never invent one.",
+        "Other ways: the contact option in this chat, and his LinkedIn profile.",
+    ]
 
 
 def _experience(entry: Experience) -> list[str]:
