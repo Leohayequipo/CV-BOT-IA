@@ -36,6 +36,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 023 | The site reads the profile from a JSON copy the backend exports |
 | 024 | A small Markdown reader for the answers, instead of a library |
 | 025 | One chunk per case-study section, re-embedded only when it changes |
+| 026 | The profile agent cites by source id, and the backend numbers the citations |
 
 ---
 
@@ -357,3 +358,15 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Alternatives considered:** fixed-size chunks with overlap (they split a decision from its reasons); re-embedding everything on every run (simple, but it costs money and time for no change); the `pgvector` Python package (one more dependency for something a text literal does).
 
 **Trade-offs:** a very long section would be one big chunk, so the template keeps sections short. If a case study grows past a screen per section, sections will need splitting.
+
+## ADR-026 · The profile agent cites by source id, and the backend numbers the citations
+
+*Accepted · 2026-11-09*
+
+**Decision:** the system prompt holds the policies and the whole profile, split into blocks with a stable id (`profile:experience`). Case-study chunks come back from the `search_docs` tool with their own id (`servime#results`). The model cites by writing that id in brackets. The backend turns each id into `[1]`, `[2]`... in order of appearance, sends the `citation` event just before the first marker, and drops any id the model wasn't given. The model calls `search_docs` at most twice and then has to answer. The answer model is `gpt-5.4-mini` with reasoning off, a provisional choice until the evals of step 5.7.
+
+**Why:** the profile is the same text in every request, so OpenAI caches it, but that means it can't carry per-answer numbers. Ids keep the prompt byte-identical, and the numbering, the API's `citation` events and the check that a source was really retrieved all happen in code that tests can cover, not in the model's discipline. A citation the model invented never reaches the visitor. Reasoning is off because the chat endpoint rejects function tools together with `reasoning_effort` for this model, which a real call showed; the grounded answers don't need it.
+
+**Alternatives considered:** asking the model to number citations itself (it miscounts, and the numbers can't be checked); retrieving the profile too instead of keeping it in the prompt (the profile is small and always relevant, so retrieval would only add misses); the Responses API, which allows tools with reasoning (a second API surface for one model option).
+
+**Trade-offs:** an id the model gets slightly wrong is dropped, so a true statement can lose its citation. The evals measure citation validity and recall for that. Every `[...]` in an answer has to be a source id, which the prompt states.
