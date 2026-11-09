@@ -140,7 +140,7 @@ Goal: the real assistant answers questions about Leonardo with citations, safely
 Goal: the assistant does more than answer; each agent exists because its task really differs.
 
 - [ ] 6.1 LangGraph supervisor: typed state, fast-model router, guardrail as the entry node
-- [ ] 6.2 Job-fit analyst (subgraph): pasted job offer → requirements → evidence from the profile → honest fit report
+- [ ] 6.2 Job-fit analyst (subgraph): pasted or uploaded job offer (text, PDF or Word) → requirements → evidence from the profile → honest fit report
 - [ ] 6.3 Contact agent: collects name, email, company and message, confirms, and emails a summary to Leonardo (anti-spam included)
 - [ ] 6.4 Connect the agents to the cards built in 4.6 and to the live graph on the cover
 - [ ] 6.5 Graph tests with fake models: routing, every node, error paths
