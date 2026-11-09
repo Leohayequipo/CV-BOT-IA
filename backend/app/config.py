@@ -25,9 +25,9 @@ class Settings(BaseSettings):
     database_url: SecretStr | None = None
     # Its vector size must match rag/store.py; changing it re-embeds every chunk
     embedding_model: str = "text-embedding-3-small"
-    # Provisional until the evals of step 5.7 compare models. The chat endpoint doesn't allow
+    # Chosen by Leonardo (ADR-026). The chat endpoint may not allow
     # function tools together with reasoning, so reasoning is off ("none").
-    answer_model: str = "gpt-5.4-mini"
+    answer_model: str = "gpt-5.6-luna"
     answer_max_tokens: int = 1000
     answer_reasoning_effort: str = "none"
     # How many times the model may search before it must answer, and chunks per search
