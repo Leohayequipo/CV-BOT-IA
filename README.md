@@ -72,6 +72,17 @@ uv run python -m app.content.export
 
 A test fails until the copy matches the profile.
 
+### Search index
+
+The assistant retrieves from the case studies, which live as chunks in Postgres with pgvector (ADR-008, ADR-025). With `DATABASE_URL` and `OPENAI_API_KEY` in `backend/.env`, bring the index up to date after changing a case study:
+
+```bash
+cd backend
+uv run python -m app.rag.ingest
+```
+
+It embeds only the sections that changed, so running it again costs nothing. CI does the same on every change to `content/case-studies/`, once both secrets exist in the repository settings.
+
 ### Commit hooks
 
 [pre-commit](https://pre-commit.com) checks every commit before it enters the history. It formats and lints the files that changed, and blocks leaked secrets with gitleaks. When `content/` or `evals/` change, it also blocks phone numbers and email addresses that must not be published. Set it up once per clone, after installing both apps:

@@ -35,6 +35,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 022 | Mock answers from the real backend, built from the content |
 | 023 | The site reads the profile from a JSON copy the backend exports |
 | 024 | A small Markdown reader for the answers, instead of a library |
+| 025 | One chunk per case-study section, re-embedded only when it changes |
 
 ---
 
@@ -344,3 +345,15 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | Email provider for the contact agent | Step 0.5 |
 | CV PDFs: generated from `profile.yaml` at build time, or uploaded by hand | Step 1.7 |
 | Speech-to-text and text-to-speech providers | Phase 8 |
+
+## ADR-025 · One chunk per case-study section, re-embedded only when it changes
+
+*Accepted · 2026-11-09*
+
+**Decision:** each H2 section of a case study is one chunk, stored in Postgres with its embedding (`text-embedding-3-small`, 1536 numbers) and a generated full-text column. The embedded text starts with the project's title and the section's name. Each chunk keeps a hash of its text and of the model; ingestion embeds only the chunks whose hash changed and deletes the ones that no longer exist. The table has row-level security on and no policy, so Supabase's public API can't read it: only the backend's direct connection can. The vector goes to Postgres as text (`'[0.1,0.2]'::vector`), without a client library for pgvector.
+
+**Why:** the case-study template already writes each section to make sense on its own (ADR-008's retrieval depends on it), so sections are natural chunks and need no size-based splitting. Hashing makes ingestion idempotent, so CI can run it on every change to `content/` and pay only for what was edited, and changing the embedding model re-embeds everything by itself. Adding the title to the text lets a chunk about "Results" say whose results they are.
+
+**Alternatives considered:** fixed-size chunks with overlap (they split a decision from its reasons); re-embedding everything on every run (simple, but it costs money and time for no change); the `pgvector` Python package (one more dependency for something a text literal does).
+
+**Trade-offs:** a very long section would be one big chunk, so the template keeps sections short. If a case study grows past a screen per section, sections will need splitting.
