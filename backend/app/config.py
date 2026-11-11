@@ -28,6 +28,12 @@ class Settings(BaseSettings):
     chat_ip_window: int = 3600
     contact_ip_limit: int = 3
     contact_ip_window: int = 3600
+    # Langfuse traces (ADR-030). Without both keys nothing is traced.
+    langfuse_public_key: SecretStr | None = None
+    langfuse_secret_key: SecretStr | None = None
+    langfuse_base_url: str = "https://cloud.langfuse.com"
+    # Tells traces from development apart from production ones
+    langfuse_environment: str = "development"
     # Tokens all the models together may use per UTC day, whatever the visitors do
     daily_token_budget: int = 2_000_000
     # Proxies of ours in front of the API. Railway's edge is one: set it to 1 there, because

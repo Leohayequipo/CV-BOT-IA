@@ -40,6 +40,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 027 | The assistant gives his email address, read from the deployment configuration |
 | 028 | The guardrail: rules first, a model second, fixed redirects |
 | 029 | Abuse and cost protection: in-memory limits and a daily token budget |
+| 030 | Traces in Langfuse Cloud, with contact details masked before they leave the API |
 
 ---
 
@@ -411,3 +412,15 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Alternatives considered:** Redis or a database for the counts (shared across instances and surviving restarts, but one more service to run for a single-instance API); a library such as slowapi (one more dependency for forty lines that need their own tests anyway); a budget in dollars (needs the prices of every model); trusting `X-Forwarded-For` as is (a visitor sets it, and gets a new IP on every request).
 
 **Trade-offs:** a restart forgets the counts, which can only let a visitor ask a little more, and the daily budget starts again, so a restart loop could spend more than 2,000,000 tokens in a day. Running a second instance doubles every limit. Both are acceptable for a portfolio on one Railway instance and are the reason to move the counts to Redis if that changes. A visitor behind a shared address (an office, a university) shares the IP limit; 60 questions an hour leaves room for that. The budget refuses the chat for everyone, recruiters included, so it is set well above a normal day.
+
+## ADR-030 · Traces in Langfuse Cloud, with contact details masked before they leave the API
+
+*Accepted · 2026-11-10*
+
+**Decision:** each chat request becomes one trace in Langfuse Cloud (EU region, free Hobby plan). The trace holds the question and the answer, the nodes it went through, every model call as a generation (model, input, output, tokens) and every document search (the query, and the ids and scores found, never the text). The Langfuse client is built with a `mask` function that replaces email addresses and phone numbers in everything it sends, and the system prompt is replaced by its size, so neither the policies nor the contact details in the configuration leave the API. The conversation history is not sent, only how long it is. Without the two keys nothing is traced and nothing else changes. Traces carry the environment (`development` or `production`) and the commit that served them.
+
+**Why:** a wrong answer can't be fixed if nobody can see how it was made: which documents came back, what the model was sent, what it cost. The recruiter's words can hold a name or an address, so the contact details are masked at the one place every observation passes through, instead of trusting each call site to remember. The system prompt is the same on every request and already in the repository, so sending it 5,000 tokens at a time would only add noise.
+
+**Alternatives considered:** Langfuse's OpenAI wrapper (traces calls automatically, but sends the system prompt and the visitor's words as they are, and gives no place to attach retrieval); self-hosting Langfuse (free, but ClickHouse, Redis and Postgres to run for a portfolio that has to be reachable from Railway); tracing the contact form too (it carries a name and an email by design, so it is left out).
+
+**Trade-offs:** the masks catch emails and phone numbers, not a name typed in a question, so the chat has to tell visitors that conversations may be logged (step 5.8). Over-masking is possible: a run of nine or more digits counts as a phone. Traces are sent in the background in batches, and the API sends the last batch when it stops; a crash can lose a few. The Hobby plan keeps data for 30 days, which is enough to debug and to read the evals' runs.
