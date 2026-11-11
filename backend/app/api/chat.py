@@ -16,7 +16,8 @@ from app.config import Settings, get_settings
 from app.content.loader import load_content
 from app.content.models import Content
 from app.core.errors import ApiError, InvalidRequestError, MessageTooLongError
-from app.schemas.chat import ChatRequest, ErrorEvent, StreamEvent
+from app.observability.tracing import Tracing, current_trace
+from app.schemas.chat import ChatRequest, ErrorEvent, NodeEvent, StreamEvent, TokenEvent
 
 logger = logging.getLogger(__name__)
 
@@ -54,22 +55,39 @@ async def accepted_question(
     return question
 
 
+def get_tracing(request: Request) -> Tracing:
+    tracing: Tracing = request.app.state.tracing
+    return tracing
+
+
 @router.post("/chat", response_class=EventSourceResponse)
 async def chat(
     question: Annotated[ChatRequest, Depends(accepted_question)],
     mock: Annotated[MockChat, Depends(get_mock_chat)],
+    tracing: Annotated[Tracing, Depends(get_tracing)],
 ) -> AsyncIterator[ServerSentEvent]:
+    trace = tracing.start(question)
+    current_trace.set(trace)
+    answer, nodes, failure = "", [], None
     # Once streaming, the status is already 200: a failure becomes the stream's last event
     try:
         async for event in mock.answer(question):
+            if isinstance(event, TokenEvent):
+                answer += event.text
+            elif isinstance(event, NodeEvent):
+                nodes.append(event.node)
             yield _to_sse(event)
     except ApiError as error:
+        failure = error.code
         message = error_message(error.code, question.locale)
         yield _to_sse(ErrorEvent(code=error.code, message=message, retry_after=error.retry_after))
     except Exception:
+        failure = "internal_error"
         logger.exception("An answer failed partway")
         message = error_message("internal_error", question.locale)
         yield _to_sse(ErrorEvent(code="internal_error", message=message))
+    finally:
+        trace.end(answer, {"nodes": nodes}, error=failure)
 
 
 def _to_sse(event: StreamEvent) -> ServerSentEvent:

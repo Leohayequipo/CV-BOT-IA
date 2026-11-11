@@ -1,5 +1,8 @@
 """Build the FastAPI app: wiring only, no logic."""
 
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -7,10 +10,20 @@ from app.api import chat, contact, health
 from app.api.errors import register_error_handlers
 from app.api.limits import Limits
 from app.config import Settings, get_settings
+from app.observability.tracing import Tracing
 
 
 def create_app(settings: Settings) -> FastAPI:
-    app = FastAPI(title="CV-BOT-IA API")
+    tracing = Tracing.from_settings(settings)
+
+    @asynccontextmanager
+    async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+        yield
+        # Traces are sent in batches; this sends the last one
+        tracing.shutdown()
+
+    app = FastAPI(title="CV-BOT-IA API", lifespan=lifespan)
+    app.state.tracing = tracing
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
