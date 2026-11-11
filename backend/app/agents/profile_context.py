@@ -79,6 +79,8 @@ def _experience(entry: Experience) -> list[str]:
     heading = f"## {entry.company}"
     if entry.formerly:
         heading += f" (formerly {entry.formerly})"
+    if entry.url:
+        heading += f" (site: {entry.url})"
     lines = [heading]
     if entry.description:
         lines.append(localize(entry.description, "en"))

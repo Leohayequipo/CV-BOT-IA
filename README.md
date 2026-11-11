@@ -72,6 +72,18 @@ uv run python -m app.content.export
 
 A test fails until the copy matches the profile.
 
+### Evals
+
+The assistant is scored on the recruiter questions in `evals/questions.yaml`. From `backend/` (needs the keys in `.env`; a run costs a few cents):
+
+```bash
+uv run python -m app.evals.run              # print the scores
+uv run python -m app.evals.run --write      # also record the run in evals/RESULTS.md
+uv run python -m app.evals.run --only servime,email-address
+```
+
+`evals/RESULTS.md` holds the latest run and the history; see ADR-031 for how a case is scored.
+
 ### Search index
 
 The assistant retrieves from the case studies, which live as chunks in Postgres with pgvector (ADR-008, ADR-025). With `DATABASE_URL` and `OPENAI_API_KEY` in `backend/.env`, bring the index up to date after changing a case study:

@@ -1,15 +1,21 @@
 """A chat model that reports what each call used, so the daily budget can be spent."""
 
 from collections.abc import AsyncIterator
+from typing import Protocol
 
-from app.core.limits import DailyBudget
 from app.llm.chat import ChatModel, Message, ModelEvent, Usage
 
 
-class MeteredModel:
-    """Wraps a model: spends its Usage events from the budget and keeps them from the agents."""
+class TokenSink(Protocol):
+    """Where used tokens go: the daily budget in production, a counter in the evals."""
 
-    def __init__(self, model: ChatModel, budget: DailyBudget) -> None:
+    def record(self, tokens: int) -> None: ...
+
+
+class MeteredModel:
+    """Wraps a model: reports its Usage events to a sink and keeps them from the agents."""
+
+    def __init__(self, model: ChatModel, budget: TokenSink) -> None:
         self._model = model
         self._budget = budget
 

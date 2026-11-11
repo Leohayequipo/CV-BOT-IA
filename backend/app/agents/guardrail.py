@@ -12,7 +12,7 @@ from typing import Literal
 from app.content.models import Locale
 from app.llm.chat import ChatModel, TextDelta
 from app.prompts import render_prompt
-from app.schemas.chat import ChatRequest, DoneEvent, NodeEvent, StreamEvent, TokenEvent
+from app.schemas.chat import ChatRequest, DoneEvent, StreamEvent, TokenEvent
 
 Verdict = Literal["on_topic", "off_topic", "injection"]
 Refused = Literal["off_topic", "injection"]
@@ -118,9 +118,8 @@ def parse_verdict(text: str) -> Verdict:
 
 
 def redirect_events(verdict: Refused, locale: Locale) -> list[StreamEvent]:
-    """The stream for a message that is not answered: the node, the redirect and done."""
+    """The stream for a message that is not answered: the redirect, then done."""
     return [
-        NodeEvent(node="guardrail"),
         TokenEvent(text=REDIRECTS[verdict][locale]),
         DoneEvent(suggestions=[]),
     ]

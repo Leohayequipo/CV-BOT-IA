@@ -130,7 +130,7 @@ Goal: the real assistant answers questions about Leonardo with citations, safely
 - [x] 5.4 Guardrail: prompt-injection and off-topic detection; `policies.md` enforced
 - [x] 5.5 Abuse and cost protection: rate limit per IP/session, max message length, CORS locked to the domain, daily spend cap
 - [x] 5.6 Langfuse tracing on every request (no personal data in traces)
-- [ ] 5.7 Eval runner over `evals/questions.yaml` (faithfulness, citation correctness, policy compliance); record the baseline score
+- [x] 5.7 Eval runner over `evals/questions.yaml` (faithfulness, citation correctness, policy compliance); record the baseline score
 - [ ] 5.8 Connect the frontend to the real backend
 
 **Done when:** it runs in production, the eval baseline is recorded in `evals/RESULTS.md`, and the prompt-injection test set passes.
