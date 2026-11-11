@@ -29,7 +29,7 @@ def contact_body() -> dict[str, Any]:
 
 
 def app_with(settings: Settings, **changes: Any) -> FastAPI:
-    limited = settings.model_copy(update=changes)
+    limited = settings.model_copy(update={"chat_mode": "mock"} | changes)
     app = create_app(limited)
     app.dependency_overrides[get_settings] = lambda: limited
     return app

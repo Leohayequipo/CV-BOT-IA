@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from httpx import AsyncClient
 
 from app.agents.mock import FAIL_AFTER_TOKENS, LIMIT_RETRY_AFTER, MockChat
-from app.api.chat import get_mock_chat
+from app.api.chat import get_chat
 from app.api.errors import error_message
 from app.config import Settings
 from app.content.models import Content
@@ -142,7 +142,7 @@ async def test_unexpected_failure_partway_hides_its_details(
             yield TokenEvent(text="Leonardo ")
             raise RuntimeError("internal detail that must not leak")
 
-    app.dependency_overrides[get_mock_chat] = lambda: BrokenChat(content)
+    app.dependency_overrides[get_chat] = lambda: BrokenChat(content)
 
     events = await ask(client, "Tell me about Leonardo")
 

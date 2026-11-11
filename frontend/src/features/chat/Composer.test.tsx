@@ -16,6 +16,14 @@ function setup(props: { busy?: boolean; limited?: boolean } = {}) {
 }
 
 describe('Composer', () => {
+  it('tells visitors that conversations may be logged', () => {
+    setup();
+
+    expect(
+      screen.getByText('Conversations may be logged to improve the assistant.'),
+    ).toBeInTheDocument();
+  });
+
   it('sends with Enter and clears the box', async () => {
     const { user, onSend, box } = setup();
 

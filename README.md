@@ -32,14 +32,14 @@ uv run uvicorn app.main:app --reload --port 8001
 
 Then open <http://localhost:8001/health>, or <http://localhost:8001/docs> for the interactive API docs.
 
-Until the agents exist (Phase 5), `POST /chat` answers from scripts built from `content/` (ADR-022):
+`POST /chat` answers with the real assistant, so `backend/.env` needs `OPENAI_API_KEY` and `DATABASE_URL` (copy `.env.example`); without them the API refuses to start. To work on the site without spending tokens, set `CHAT_MODE=mock` in `backend/.env`: the API then answers from scripts built from `content/` (ADR-022, ADR-032):
 
 - questions about ServiME, his experience or his stack get their cards;
 - a pasted job offer (400 characters or more) gets the job-fit report of the approved design;
 - asking to contact him shows a sample summary to confirm, and `POST /contact` accepts it without sending anything;
 - salary, start dates and unrelated topics get their redirect.
 
-These messages force the cases a real model can't produce on demand. `mock: fail` and `mock: limit` also work as the message of `POST /contact`.
+In mock mode these messages force the cases a real model can't produce on demand. `mock: fail` and `mock: limit` also work as the message of `POST /contact`.
 
 | Message | Answer |
 |---|---|

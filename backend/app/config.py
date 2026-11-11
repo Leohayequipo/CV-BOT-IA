@@ -2,6 +2,7 @@
 
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -17,6 +18,9 @@ class Settings(BaseSettings):
     # Origins of the site; browsers block calls to the API from any other page
     cors_origins: tuple[str, ...] = ("http://localhost:5180",)
     content_dir: Path = _REPO_ROOT / "content"
+    # "live" answers with the assistant; "mock" with the scripted answers, for working on the
+    # site without spending tokens (ADR-032)
+    chat_mode: Literal["live", "mock"] = "live"
     # Request limits from docs/API.md
     max_message_chars: int = 6000
     max_history_messages: int = 20

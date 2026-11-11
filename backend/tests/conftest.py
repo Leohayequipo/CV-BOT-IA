@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
 from app.agents.mock import MockChat, Pace
-from app.api.chat import get_mock_chat
+from app.api.chat import get_chat
 from app.config import Settings, get_settings
 from app.content.loader import load_content
 from app.content.models import Content
@@ -39,7 +39,7 @@ def app(settings: Settings, content: Content) -> FastAPI:
     app = create_app(settings)
     app.dependency_overrides[get_settings] = lambda: settings
     # Answers stream without pauses, so the tests stay fast
-    app.dependency_overrides[get_mock_chat] = lambda: MockChat(content, Pace(step=0, token=0))
+    app.dependency_overrides[get_chat] = lambda: MockChat(content, Pace(step=0, token=0))
     return app
 
 

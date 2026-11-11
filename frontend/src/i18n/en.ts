@@ -76,6 +76,8 @@ export const en = {
     analyseOffer: 'Analyse a job offer',
     contactHim: 'Contact him',
     onlyCv: 'Only uses data from his CV',
+    // Required by the privacy rules: what visitors type is traced, with contact details masked
+    logged: 'Conversations may be logged to improve the assistant.',
     retry: 'Retry',
     retrying: 'Retrying…',
     source: 'Source',
