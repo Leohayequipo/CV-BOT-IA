@@ -109,6 +109,7 @@ export function Composer({ busy, limited, onSend, onStop }: ComposerProps) {
           <span className="ml-auto text-label text-muted">{chat.onlyCv}</span>
         </div>
       )}
+      <p className="mt-2 text-center text-label text-muted">{chat.logged}</p>
     </div>
   );
 }

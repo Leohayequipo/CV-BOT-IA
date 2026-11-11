@@ -77,6 +77,7 @@ export const es: Messages = {
     analyseOffer: 'Analizar una oferta',
     contactHim: 'Contactarlo',
     onlyCv: 'Solo usa datos de su CV',
+    logged: 'Las conversaciones pueden registrarse para mejorar el asistente.',
     retry: 'Reintentar',
     retrying: 'Reintentando…',
     source: 'Fuente',

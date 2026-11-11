@@ -17,13 +17,16 @@ def create_app(settings: Settings) -> FastAPI:
     tracing = Tracing.from_settings(settings)
 
     @asynccontextmanager
-    async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+        # Build the assistant now, so a missing key stops the deploy instead of the first visitor
+        chat.chat_for(app, settings)
         yield
         # Traces are sent in batches; this sends the last one
         tracing.shutdown()
 
     app = FastAPI(title="CV-BOT-IA API", lifespan=lifespan)
     app.state.tracing = tracing
+    app.state.chat = None
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,

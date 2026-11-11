@@ -4,11 +4,12 @@ import logging
 from collections.abc import AsyncIterator
 from functools import lru_cache
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Protocol
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, FastAPI, Request
 from fastapi.sse import EventSourceResponse, ServerSentEvent
 
+from app.agents.assistant import build_assistant
 from app.agents.mock import MockChat
 from app.api.errors import error_message
 from app.api.limits import Limits, get_limits, visitor_ip
@@ -29,15 +30,34 @@ def _load_content(content_dir: Path) -> Content:
     return load_content(content_dir)
 
 
-def get_mock_chat(settings: Annotated[Settings, Depends(get_settings)]) -> MockChat:
-    return MockChat(_load_content(settings.content_dir))
+class Chat(Protocol):
+    """What answers a question: the assistant, or the mock that stands in for it (ADR-032)."""
+
+    def answer(self, question: ChatRequest) -> AsyncIterator[StreamEvent]: ...
+
+
+def chat_for(app: FastAPI, settings: Settings) -> Chat:
+    """The app's chat, built on first use; the app builds it at start-up to fail early."""
+    if app.state.chat is None:
+        content = _load_content(settings.content_dir)
+        if settings.chat_mode == "mock":
+            app.state.chat = MockChat(content)
+        else:
+            # Every model call spends from the daily budget
+            app.state.chat = build_assistant(settings, content, app.state.limits.budget)
+    chat: Chat = app.state.chat
+    return chat
+
+
+def get_chat(request: Request, settings: Annotated[Settings, Depends(get_settings)]) -> Chat:
+    return chat_for(request.app, settings)
 
 
 async def accepted_question(
     request: Request,
     question: ChatRequest,
     settings: Annotated[Settings, Depends(get_settings)],
-    mock: Annotated[MockChat, Depends(get_mock_chat)],
+    chat: Annotated[Chat, Depends(get_chat)],
     limits: Annotated[Limits, Depends(get_limits)],
     ip: Annotated[str, Depends(visitor_ip)],
 ) -> ChatRequest:
@@ -51,7 +71,8 @@ async def accepted_question(
     limits.budget.check()
     limits.chat_by_session.check(str(question.session_id))
     limits.chat_by_ip.check(ip)
-    mock.check_limit(question)
+    if isinstance(chat, MockChat):
+        chat.check_limit(question)
     return question
 
 
@@ -63,7 +84,7 @@ def get_tracing(request: Request) -> Tracing:
 @router.post("/chat", response_class=EventSourceResponse)
 async def chat(
     question: Annotated[ChatRequest, Depends(accepted_question)],
-    mock: Annotated[MockChat, Depends(get_mock_chat)],
+    chat: Annotated[Chat, Depends(get_chat)],
     tracing: Annotated[Tracing, Depends(get_tracing)],
 ) -> AsyncIterator[ServerSentEvent]:
     trace = tracing.start(question)
@@ -71,7 +92,7 @@ async def chat(
     answer, nodes, failure = "", [], None
     # Once streaming, the status is already 200: a failure becomes the stream's last event
     try:
-        async for event in mock.answer(question):
+        async for event in chat.answer(question):
             if isinstance(event, TokenEvent):
                 answer += event.text
             elif isinstance(event, NodeEvent):

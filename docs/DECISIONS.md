@@ -42,6 +42,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 029 | Abuse and cost protection: in-memory limits and a daily token budget |
 | 030 | Traces in Langfuse Cloud, with contact details masked before they leave the API |
 | 031 | Evals: the real assistant, a judge with a written rubric, and one pass rule per case |
+| 032 | The chat answers with the assistant; the mock stays behind a setting |
 
 ---
 
@@ -303,7 +304,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 
 ## ADR-022 · Mock answers from the real backend, built from the content
 
-*Accepted · 2026-10-31*
+*Accepted · 2026-10-31 · The mock now runs only with `CHAT_MODE=mock` (ADR-032)*
 
 **Decision:** until the agents exist (Phase 5), the backend's real `POST /chat` answers from scripts in `backend/app/agents/mock.py`. The request checks, the error responses, CORS and the event stream are the production code; only the part that writes the answer is a stand-in. The scripts build every answer from `content/`, and a message such as `mock: slow` picks the cases a real model can't produce on demand: a slow answer, a very long one, a failure partway through and the question limit. `POST /contact` accepts confirmed messages without sending them until the email provider arrives (step 6.3). The stream uses FastAPI's built-in Server-Sent Events, with no extra dependency.
 
@@ -437,3 +438,15 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Alternatives considered:** string and regex checks only (fast and free, but they fail correct answers in the other language or in other words); a judge that sees only the retrieved chunks (it would call the profile's facts unsupported, since the profile isn't retrieved); a different model family as judge (less self-preference, but it adds a provider and a key that Leonardo's setup doesn't have yet); an evals framework such as Ragas or DeepEval (a large dependency for one rubric).
 
 **Trade-offs:** the judge is the same model as the assistant, so it may favour its own style; the rubric asks for strictness and the pass rule is conjunctive, so a score is more likely too low than too high. A model judge moves a little between runs, so small differences are noise and a change counts when it is larger than a case or two. A run costs a few cents and about two minutes. The first rubric flagged paraphrases and refusals as unsupported claims; tightening it (and reading the judge's JSON leniently) is how the baseline became meaningful, which is why a judge change deserves a note in the PR like a prompt change does.
+
+## ADR-032 · The chat answers with the assistant; the mock stays behind a setting
+
+*Accepted · 2026-11-11 · Replaces the stand-in of ADR-022 in production*
+
+**Decision:** `POST /chat` answers with the `Assistant` (the guardrail, then the profile agent), and the site, which already followed the contract of `docs/API.md`, needed no change to talk to it. The scripted answers of ADR-022 remain for working on the site without spending tokens: `CHAT_MODE=mock` selects them, `live` is the default. The assistant is built once, when the API starts, so a missing key or database address stops the deploy before a visitor sees an error; every model call spends from the daily budget of ADR-029. The mock's special messages (`mock: slow`, `mock: limit`) work only in mock mode; in live mode they are ordinary questions. The site now says under the question box, in both languages, that conversations may be logged to improve the assistant, because what visitors type is traced (ADR-030).
+
+**Why:** ADR-022 planned this swap as one module, and it was: the request checks, limits, errors, CORS and the event stream are the same code that served the mock. Failing at start-up is cheaper than failing on a recruiter's first question. The notice is a privacy requirement the masks can't cover on their own, since a name typed in a question isn't a contact detail they can recognise.
+
+**Alternatives considered:** removing the mock (the site's designed states, such as the limit notice and a failure partway, couldn't be reached on demand any more); building the assistant on the first request (a broken deploy would look healthy until someone asked).
+
+**Trade-offs:** a deploy and a local start need the keys, and anything in CI that starts the app must set `CHAT_MODE=mock`. The notice adds one line under the question box on every screen size.
