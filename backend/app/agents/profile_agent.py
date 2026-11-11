@@ -14,7 +14,7 @@ from app.agents.citations import CitationStream
 from app.agents.profile_context import render_profile
 from app.agents.sources import Source, chunk_source, profile_sources
 from app.content.models import Profile
-from app.llm.chat import ChatModel, Message, TextDelta, ToolCall
+from app.llm.chat import ChatModel, Message, TextDelta, ToolCall, ToolCalls
 from app.prompts import render_prompt
 from app.rag.retrieval import Hit
 from app.schemas.chat import ChatRequest, DoneEvent, NodeEvent, StreamEvent
@@ -100,7 +100,7 @@ class ProfileAgent:
                     text += event.text
                     for out in citations.feed(event.text):
                         yield out
-                else:
+                elif isinstance(event, ToolCalls):
                     calls = event.calls
             if not calls:
                 break

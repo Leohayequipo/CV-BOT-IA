@@ -10,7 +10,7 @@ The contract between the site and the backend. The mock server (step 4.3) and th
 - Production: `https://api.<domain>`; locally: `http://localhost:8001`. CORS allows only the site's origin (`http://localhost:5180` in development).
 - The server keeps no conversation state. The site sends the recent history with each question, so any backend instance can answer it.
 - `session_id` is a random UUID the site creates when the page loads and keeps in memory. It's used only for rate limiting, never to identify a person.
-- Limits live in the backend configuration. Their defaults: a message of up to 6,000 characters (a pasted job offer fits) and a history of up to 20 messages.
+- Limits live in the backend configuration. Their defaults: a message of up to 6,000 characters (a pasted job offer fits) and a history of up to 20 messages. A session may ask 15 questions in 10 minutes and an IP address 60 in an hour; the contact form allows an IP 3 messages in an hour. When the models' daily token budget is spent, `/chat` answers `rate_limited` with the seconds left until midnight UTC (ADR-029).
 
 ## `POST /chat`
 

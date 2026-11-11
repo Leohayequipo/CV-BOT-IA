@@ -128,7 +128,7 @@ Goal: the real assistant answers questions about Leonardo with citations, safely
 - [x] 5.2 Hybrid retrieval (full-text + vector) with unit tests
 - [x] 5.3 Profile agent: core profile in a cached system prompt + `search_docs` tool; every claim cites its source
 - [x] 5.4 Guardrail: prompt-injection and off-topic detection; `policies.md` enforced
-- [ ] 5.5 Abuse and cost protection: rate limit per IP/session, max message length, CORS locked to the domain, daily spend cap
+- [x] 5.5 Abuse and cost protection: rate limit per IP/session, max message length, CORS locked to the domain, daily spend cap
 - [ ] 5.6 Langfuse tracing on every request (no personal data in traces)
 - [ ] 5.7 Eval runner over `evals/questions.yaml` (faithfulness, citation correctness, policy compliance); record the baseline score
 - [ ] 5.8 Connect the frontend to the real backend
@@ -140,7 +140,7 @@ Goal: the real assistant answers questions about Leonardo with citations, safely
 Goal: the assistant does more than answer; each agent exists because its task really differs.
 
 - [ ] 6.1 LangGraph supervisor: typed state, fast-model router, guardrail as the entry node
-- [ ] 6.2 Job-fit analyst (subgraph): pasted job offer → requirements → evidence from the profile → honest fit report
+- [ ] 6.2 Job-fit analyst (subgraph): pasted or uploaded job offer (text, PDF or Word) → requirements → evidence from the profile → honest fit report
 - [ ] 6.3 Contact agent: collects name, email, company and message, confirms, and emails a summary to Leonardo (anti-spam included)
 - [ ] 6.4 Connect the agents to the cards built in 4.6 and to the live graph on the cover
 - [ ] 6.5 Graph tests with fake models: routing, every node, error paths

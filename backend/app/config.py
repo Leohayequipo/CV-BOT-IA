@@ -20,6 +20,19 @@ class Settings(BaseSettings):
     # Request limits from docs/API.md
     max_message_chars: int = 6000
     max_history_messages: int = 20
+    # Abuse and cost protection (ADR-029). A session is one page load; the limits count requests
+    # in a sliding window. Contact is stricter because it sends an email.
+    chat_session_limit: int = 15
+    chat_session_window: int = 600
+    chat_ip_limit: int = 60
+    chat_ip_window: int = 3600
+    contact_ip_limit: int = 3
+    contact_ip_window: int = 3600
+    # Tokens all the models together may use per UTC day, whatever the visitors do
+    daily_token_budget: int = 2_000_000
+    # Proxies of ours in front of the API. Railway's edge is one: set it to 1 there, because
+    # with 0 every visitor would share the edge's IP; with too many a visitor could pick theirs.
+    trusted_proxy_hops: int = 0
     # How visitors reach him. They come from the deployment, never from the repo (ADR-016, ADR-027)
     contact_email: str | None = None
     contact_phone: str | None = None
@@ -34,7 +47,7 @@ class Settings(BaseSettings):
     answer_max_tokens: int = 1000
     answer_reasoning_effort: str = "none"
     # The guardrail runs on every message and answers one word, so it takes a small fast model
-    guardrail_model: str = "gpt-5.4-mini"
+    guardrail_model: str = "gpt-5.6-luna"
     guardrail_max_tokens: int = 10
     guardrail_reasoning_effort: str = "none"
     # How many times the model may search before it must answer, and chunks per search
