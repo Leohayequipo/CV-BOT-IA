@@ -11,7 +11,7 @@ from app.agents.guardrail import (
     redirect_events,
 )
 from app.llm.chat import Message, ModelEvent, TextDelta
-from app.schemas.chat import ChatRequest, DoneEvent, HistoryMessage, NodeEvent, TokenEvent
+from app.schemas.chat import ChatRequest, DoneEvent, HistoryMessage, TokenEvent
 
 
 class FixedModel:
@@ -121,14 +121,14 @@ async def test_a_very_long_message_is_cut_before_it_reaches_the_model() -> None:
 
 @pytest.mark.parametrize("verdict", ["off_topic", "injection"])
 @pytest.mark.parametrize("locale", ["en", "es"])
-def test_a_redirect_is_the_node_one_message_and_done(verdict: str, locale: str) -> None:
+def test_a_redirect_is_one_message_and_done(verdict: str, locale: str) -> None:
     events = redirect_events(verdict, locale)  # type: ignore[arg-type]
 
     kinds: list[type] = [type(event) for event in events]
-    expected: list[type] = [NodeEvent, TokenEvent, DoneEvent]
+    expected: list[type] = [TokenEvent, DoneEvent]
     assert kinds == expected
-    assert isinstance(events[1], TokenEvent)
-    assert events[1].text == REDIRECTS[verdict][locale]  # type: ignore[index]
+    assert isinstance(events[0], TokenEvent)
+    assert events[0].text == REDIRECTS[verdict][locale]  # type: ignore[index]
 
 
 def test_the_redirects_neither_lecture_nor_reveal_the_rules() -> None:

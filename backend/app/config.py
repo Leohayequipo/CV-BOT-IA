@@ -56,6 +56,12 @@ class Settings(BaseSettings):
     guardrail_model: str = "gpt-5.6-luna"
     guardrail_max_tokens: int = 10
     guardrail_reasoning_effort: str = "none"
+    # The evals' judge reads each answer against the content with a written rubric; its model is
+    # pinned here so scores stay comparable between runs
+    judge_model: str = "gpt-5.6-luna"
+    # Room for the reasoning, which counts toward the limit
+    judge_max_tokens: int = 4000
+    judge_reasoning_effort: str = "low"
     # How many times the model may search before it must answer, and chunks per search
     max_tool_rounds: int = 2
     search_results: int = 4

@@ -41,6 +41,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 028 | The guardrail: rules first, a model second, fixed redirects |
 | 029 | Abuse and cost protection: in-memory limits and a daily token budget |
 | 030 | Traces in Langfuse Cloud, with contact details masked before they leave the API |
+| 031 | Evals: the real assistant, a judge with a written rubric, and one pass rule per case |
 
 ---
 
@@ -424,3 +425,15 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Alternatives considered:** Langfuse's OpenAI wrapper (traces calls automatically, but sends the system prompt and the visitor's words as they are, and gives no place to attach retrieval); self-hosting Langfuse (free, but ClickHouse, Redis and Postgres to run for a portfolio that has to be reachable from Railway); tracing the contact form too (it carries a name and an email by design, so it is left out).
 
 **Trade-offs:** the masks catch emails and phone numbers, not a name typed in a question, so the chat has to tell visitors that conversations may be logged (step 5.8). Over-masking is possible: a run of nine or more digits counts as a phone. Traces are sent in the background in batches, and the API sends the last batch when it stops; a crash can lose a few. The Hobby plan keeps data for 30 days, which is enough to debug and to read the evals' runs.
+
+## ADR-031 · Evals: the real assistant, a judge with a written rubric, and one pass rule per case
+
+*Accepted · 2026-11-11*
+
+**Decision:** `uv run python -m app.evals.run` (from `backend/`) sends every question of `evals/questions.yaml` through the same `Assistant` the chat will use (guardrail, then the profile agent, with the real models and the real search) and scores each answer. A case passes only if every listed fact is said, no listed claim is made, nothing is stated that the content doesn't support, every citation marker has its citation (and an answer about the content cites at least one source), the guardrail let it through or stopped it as the case expects, and the language matches the question. Routing and citations are checked in code; the rest is graded by a judge model (`JUDGE_MODEL`, pinned in the settings) that reads the answer against the whole content and a rubric in `prompts/eval_judge.md`, and replies in JSON. The run adds up fact recall, policy compliance, faithfulness, citation validity, routing accuracy, language match, latency and tokens per case, and `--write` records it in `evals/RESULTS.md` (the latest run in detail, one row per run in a history table). Runs use made-up contact details, so scores don't depend on the developer's `.env` and the published file never holds a real address. Cases for agents that don't exist yet (job fit, contact) are listed as not run until Phase 6.
+
+**Why:** the evals score what visitors get, so they run the same code path instead of a copy of it. Facts are judged by meaning because the model rewords them; a string match would punish a correct answer and reward a keyword. The judge sees the full content so it can tell an invented fact from a paraphrase, which is the hallucination metric the standards ask for.
+
+**Alternatives considered:** string and regex checks only (fast and free, but they fail correct answers in the other language or in other words); a judge that sees only the retrieved chunks (it would call the profile's facts unsupported, since the profile isn't retrieved); a different model family as judge (less self-preference, but it adds a provider and a key that Leonardo's setup doesn't have yet); an evals framework such as Ragas or DeepEval (a large dependency for one rubric).
+
+**Trade-offs:** the judge is the same model as the assistant, so it may favour its own style; the rubric asks for strictness and the pass rule is conjunctive, so a score is more likely too low than too high. A model judge moves a little between runs, so small differences are noise and a change counts when it is larger than a case or two. A run costs a few cents and about two minutes. The first rubric flagged paraphrases and refusals as unsupported claims; tightening it (and reading the judge's JSON leniently) is how the baseline became meaningful, which is why a judge change deserves a note in the PR like a prompt change does.

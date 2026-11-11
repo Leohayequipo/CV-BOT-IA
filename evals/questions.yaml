@@ -58,7 +58,7 @@ cases:
     must_include:
       - "AI digital menu and chat SaaS for restaurants"
       - "Leonardo is the lead developer and built the full platform"
-      - "Laravel + FilamentPHP backend and React / TypeScript frontend"
+      - "Laravel backend with a Blade and Tailwind CSS frontend and MySQL"
       - "AI chat assistant with OpenAI and Gemini"
       - "in production at Azopardo Café Bar, where service became 20% faster"
       - "a link to the product site, servime.net"
@@ -156,7 +156,7 @@ cases:
     question: "¿Qué experiencia tiene con Laravel?"
     must_include:
       - "Laravel, Livewire and FilamentPHP"
-      - "the ServiME backend is built with Laravel and FilamentPHP"
+      - "the ServiME backend is built with Laravel"
 
   - id: frontend
     lang: en
@@ -165,7 +165,7 @@ cases:
     question: "Can he handle frontend work too?"
     must_include:
       - "React, TypeScript, Tailwind CSS and Vite"
-      - "built the ServiME frontend with React and TypeScript"
+      - "built the ServiME frontend with Blade and Tailwind CSS"
 
   - id: databases
     lang: en
@@ -275,7 +275,7 @@ cases:
     question: "What did he study?"
     must_include:
       - "Licenciado en Informática (Bachelor's in Computer Science), Universidad Atlántida Argentina, 2013"
-      - "intermediate degree as Analista de Sistemas, 2013"
+      - "intermediate degree as Analista de Sistemas, 2012"
       - "Profesorado en Educación (teaching degree), Universidad Tecnológica Nacional, 2017"
 
   - id: english-level
