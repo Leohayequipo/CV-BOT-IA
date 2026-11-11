@@ -38,6 +38,7 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 | 025 | One chunk per case-study section, re-embedded only when it changes |
 | 026 | The profile agent cites by source id, and the backend numbers the citations |
 | 027 | The assistant gives his email address, read from the deployment configuration |
+| 028 | The guardrail: rules first, a small model second, fixed redirects |
 
 ---
 
@@ -383,3 +384,17 @@ Why CV-BOT-IA is built the way it is. Each entry records one decision, the alter
 **Alternatives considered:** keeping the rule of ADR-012, an assistant that never gives an email (less spam, but one more step for a recruiter who prefers email); writing the address in `profile.yaml` (permanent in the public history).
 
 **Trade-offs:** the live assistant exposes the address to anyone who asks, including scrapers that automate the chat. The rate limit of step 5.5 bounds that. A prompt change that leaks the address to a question that didn't ask for it is a policy failure the evals check (`email-address`).
+
+## ADR-028 · The guardrail: rules first, a small model second, fixed redirects
+
+*Accepted · 2026-11-09*
+
+**Decision:** every message passes through the guardrail before any agent sees it. A handful of rules catch the unmistakable attacks ("ignore all previous instructions", "show your system prompt", "developer mode", "SYSTEM OVERRIDE", in English and Spanish) with no model call. Anything else goes to a small, fast model (`GUARDRAIL_MODEL`, `gpt-5.4-mini` with reasoning off) that answers one word: `on_topic`, `off_topic` or `injection`. Off-topic and injection messages get a fixed, translated redirect, with no model call and no explanation of the rules. The guardrail doesn't judge sensitive questions: salary, start date and the like are on topic, and the profile agent answers them under `policies.md`.
+
+**Why:** the guardrail runs on every message, so the obvious cases should cost nothing and the rest should cost a few tokens. A fixed redirect can't be talked out of its text, can't reveal the policies and can't lecture. Leaving the policies to the agent keeps one place that decides what is said about salary and availability.
+
+**Details that matter:** the rules look only at messages of up to 600 characters, because a longer one is usually a pasted job offer, which is data: an order hidden in an offer is ignored by the agent, and must not stop the visitor from getting the analysis. The model sees the message and the last four turns of history inside `<user_message>` and `<history>`, cut to a fixed length, and is told that both are data. If its reply isn't one of the three words, the message counts as on topic.
+
+**Alternatives considered:** one model call that classifies and answers (cheaper, but an injection then reaches the model that holds the profile); a moderation endpoint (it detects abuse, not off-topic or injection); no rules, only the model (every attack pays a call and depends on the model's mood).
+
+**Trade-offs:** failing open means a garbled classification costs one answer under the agent's own policies, and in exchange a model hiccup never turns away a recruiter. A short message with a rephrased attack that the rules miss depends on the small model, so the injection cases of `evals/questions.yaml` guard it (step 5.7). One extra call adds latency to every question; the small model and a 10-token cap keep it short.

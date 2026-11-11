@@ -33,6 +33,10 @@ class Settings(BaseSettings):
     answer_model: str = "gpt-5.6-luna"
     answer_max_tokens: int = 1000
     answer_reasoning_effort: str = "none"
+    # The guardrail runs on every message and answers one word, so it takes a small fast model
+    guardrail_model: str = "gpt-5.4-mini"
+    guardrail_max_tokens: int = 10
+    guardrail_reasoning_effort: str = "none"
     # How many times the model may search before it must answer, and chunks per search
     max_tool_rounds: int = 2
     search_results: int = 4
